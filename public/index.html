@@ -151,7 +151,7 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 .lvl-B1{background:rgba(255,107,53,.12);color:#FF9A7A;}
 .mod-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;}
 .badge-free{background:rgba(45,212,160,.12);color:var(--green);}
-.badge-prem{background:rgba(124,92,191,.14);color:#C4A9FF;}
+.badge-free{background:rgba(124,92,191,.14);color:#C4A9FF;}
 .mod-stars{font-size:12px;flex-shrink:0;}
 .mod-retention{font-size:9px;color:var(--muted);display:flex;align-items:center;gap:3px;}
 
@@ -279,6 +279,10 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 <div class="screen on" id="sOnboard">
   <div class="ob-wrap">
     <div class="ob-logo-row"><span style="font-size:72px;line-height:1;display:block">🐉</span><div class="ob-title">Drac</div></div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(45,212,160,.15);border:1px solid rgba(45,212,160,.3);border-radius:20px;padding:5px 14px;margin-bottom:14px;">
+      <span style="font-size:12px">✨</span>
+      <span style="font-size:12px;font-weight:800;color:#2DD4A0;">BÊTA — Accès 100% gratuit</span>
+    </div>
     <p class="ob-sub">Apprends le catalan et l'espagnol depuis le français, à Majorque.</p>
     <div class="feat-list">
       <div class="feat"><span class="feat-ico">🧠</span><div class="feat-txt"><strong>Algorithme FSRS — le meilleur au monde</strong><span>Chaque mot revu au bon moment, avant que tu l'oublies</span></div></div>
@@ -1028,7 +1032,7 @@ function renderMap() {
         <div class="mod-sub">${mod.desc}</div>
         <div class="mod-meta">
           <span class="mod-lvl ${lvCls}">${mod.level}</span>
-          <span class="mod-badge ${mod.free ? "badge-free" : "badge-prem"}">${mod.free ? "✓ Gratuit" : "⭐ Premium"}</span>
+          <span class="mod-badge ${mod.free ? "badge-free" : "badge-free"}">${mod.free ? "✓ Gratuit" : "🆓 Bêta"}</span>
         </div>
         ${modLearned > 0 ? `<div class="mod-retention">🧠 ${modLearned}/${mod.words.length} vus · ${modMature} mémorisés</div>` : ""}
       </div>
@@ -1569,7 +1573,31 @@ else { selId = profiles[0].id; goHome(); }
 initCreate();
 
 window.addEventListener("load", () => {
-  if ("serviceWorker" in navigator) setTimeout(() => navigator.serviceWorker.register("/sw.js").catch(() => {}), 3000);
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").then(reg => {
+      // Vérifier les mises à jour toutes les 30 secondes
+      setInterval(() => reg.update(), 30000);
+      
+      // Quand un nouveau SW est prêt, l'activer immédiatement
+      reg.addEventListener("updatefound", () => {
+        const newSW = reg.installing;
+        if (!newSW) return;
+        newSW.addEventListener("statechange", () => {
+          if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+            // Nouveau contenu disponible — recharger automatiquement
+            newSW.postMessage("skipWaiting");
+            window.location.reload();
+          }
+        });
+      });
+    }).catch(() => {});
+    
+    // Si le SW prend le contrôle → recharger pour avoir la dernière version
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!refreshing) { refreshing = true; window.location.reload(); }
+    });
+  }
 });
 </script>
 </body>
