@@ -326,430 +326,90 @@ body.m-adult .btn-prim,body.m-bien .btn-prim{background:linear-gradient(135deg,#
 <script>
 // ═══════ DONNÉES ═══════
 const MODULES = [
-  {
-    id:'m1',title:'Bonjour Majorque',icon:'👋',
-    level:'Pré-A1',free:true,age:"all",
-    desc:'Salutations essentielles',
-    words:[
-      {fr:'Bonjour (matin)',ca:'Bon dia',caP:'bon DI-a',es:'Buenos días',esP:'BUEN-os DI-as',em:'☀️',sim:true,tip:'Utilisé jusqu\'à midi. Après : \'Bona tarda\'.'},
-      {fr:'Bonjour (après-midi)',ca:'Bona tarda',caP:'BO-na TAR-da',es:'Buenas tardes',esP:'BUEN-as TAR-des',em:'🌤️',sim:true,tip:'\'Tarda\' en catalan = après-midi ET soir.'},
-      {fr:'Bonne nuit',ca:'Bona nit',caP:'BO-na nit',es:'Buenas noches',esP:'BUEN-as NO-ches',em:'🌙',sim:true,tip:'\'Nit\' ressemble à \'night\' en anglais. Même racine indo-européenne.'},
-      {fr:'Salut',ca:'Hola',caP:'O-la',es:'Hola',esP:'O-la',em:'👋',sim:true,tip:'Identique en catalan et espagnol ! Universel sur l\'île.'},
-      {fr:'Merci',ca:'Gràcies',caP:'GRA-si-es',es:'Gracias',esP:'GRA-si-as',em:'🙏',sim:true,tip:'Le \'c\' catalan = \'s\' devant i/e. Vient du latin \'gratia\'.'},
-      {fr:'S\'il vous plaît',ca:'Si us plau',caP:'si us PLAU',es:'Por favor',esP:'por fa-VOR',em:'🤲',sim:false,tip:'\'Si us plau\' = \'si ça vous plaît\'. Unique au catalan.'},
-      {fr:'Au revoir',ca:'Adéu',caP:'a-DEU',es:'Adiós',esP:'a-DIOS',em:'👋',sim:true,tip:'Du latin \'ad deum\'. Les deux langues ont gardé cette étymologie.'},
-      {fr:'Excusez-moi',ca:'Perdona',caP:'per-DO-na',es:'Perdón',esP:'per-DON',em:'🙋',sim:true,tip:'Même racine \'perdonar\'. Le catalan ajoute le -a final.'},
-      {fr:'Oui',ca:'Sí',caP:'si',es:'Sí',esP:'si',em:'✅',sim:true,tip:'Identique dans les deux langues !'},
-      {fr:'Non',ca:'No',caP:'no',es:'No',esP:'no',em:'❌',sim:true,tip:'Universel dans toutes les langues romanes.'},
-      {fr:'Comment vas-tu ?',ca:'Com estàs?',caP:'kom es-TAS',es:'¿Cómo estás?',esP:'KO-mo es-TAS',em:'😊',sim:true,tip:'\'Estàs / estás\' — même verbe \'estar\'. Quasi identique !'},
-      {fr:'Je m\'appelle…',ca:'Em dic…',caP:'em dik',es:'Me llamo…',esP:'me LYA-mo',em:'🙋',sim:false,tip:'\'Em dic\' = je me dis. \'Me llamo\' = je m\'appelle.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Bon dia\' ?',em:'☀️',opts:["Bonjour (matin)", "Bonjour (apr\u00e8s-midi)", "Bonne nuit", "Salut"],ans:0},
-      {q:'Comment dit-on \'Bonjour (après-midi)\' en catalan ?',em:'🌤️',opts:["Hola", "Bona tarda", "Bona nit", "Bon dia"],ans:1},
-      {q:'\'Buenas noches\' en espagnol veut dire ?',em:'🌙',opts:["Bonne nuit", "Bonjour (apr\u00e8s-midi)", "Bonjour (matin)", "Salut"],ans:0},
-      {q:'Comment dit-on \'Salut\' en espagnol ?',em:'👋',opts:["Buenos d\u00edas", "Buenas tardes", "Hola", "Buenas noches"],ans:2}
-    ]
-  },
-  {
-    id:'m2',title:'La famille',icon:'👨‍👩‍👧',
-    level:'Pré-A1',free:true,age:"all",
-    desc:'Père, mère, enfants, grands-parents',
-    words:[
-      {fr:'Père',ca:'Pare',caP:'PA-re',es:'Padre',esP:'PA-dre',em:'👨',sim:true,tip:'Latin \'pater\'. À Majorque on entend souvent \'mon pare\'.'},
-      {fr:'Mère',ca:'Mare',caP:'MA-re',es:'Madre',esP:'MA-dre',em:'👩',sim:true,tip:'Latin \'mater\'. Le catalan est plus court que l\'espagnol.'},
-      {fr:'Fils',ca:'Fill',caP:'fi-LY',es:'Hijo',esP:'I-ho',em:'👦',sim:false,tip:'Le \'ll\' catalan = son mouillé (comme \'y\' dans \'yeux\').'},
-      {fr:'Fille',ca:'Filla',caP:'fi-LYA',es:'Hija',esP:'I-ha',em:'👧',sim:false,tip:'\'Filla\' = féminin de \'fill\'. La -a marque le féminin.'},
-      {fr:'Frère',ca:'Germà',caP:'jer-MA',es:'Hermano',esP:'er-MA-no',em:'🤝',sim:true,tip:'Latin \'germanus\'. Le catalan est plus court !'},
-      {fr:'Sœur',ca:'Germana',caP:'jer-MA-na',es:'Hermana',esP:'er-MA-na',em:'👭',sim:true,tip:'Presque identique à l\'espagnol. Une lettre de différence.'},
-      {fr:'Grand-père',ca:'Avi',caP:'A-vi',es:'Abuelo',esP:'a-BUEL-o',em:'👴',sim:false,tip:'\'Avi\' est court et affectueux. \'Abuelo\' du latin \'avuculus\'.'},
-      {fr:'Grand-mère',ca:'Àvia',caP:'A-vi-a',es:'Abuela',esP:'a-BUEL-a',em:'👵',sim:false,tip:'L\'accent grave sur \'à\' = son ouvert. Très entendu à Majorque.'},
-      {fr:'Bébé',ca:'Bebè',caP:'be-BE',es:'Bebé',esP:'be-BE',em:'👶',sim:true,tip:'Quasi identique dans toutes les langues romanes.'},
-      {fr:'Famille',ca:'Família',caP:'fa-MI-lia',es:'Familia',esP:'fa-MI-lia',em:'👨‍👩‍👧',sim:true,tip:'Identique en catalan et espagnol. Du latin \'familia\'.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Pare\' ?',em:'👨',opts:["P\u00e8re", "M\u00e8re", "Fils", "Fille"],ans:0},
-      {q:'Comment dit-on \'Mère\' en catalan ?',em:'👩',opts:["Mare", "Filla", "Fill", "Pare"],ans:0},
-      {q:'\'Hijo\' en espagnol veut dire ?',em:'👦',opts:["M\u00e8re", "Fille", "P\u00e8re", "Fils"],ans:3},
-      {q:'Comment dit-on \'Fille\' en espagnol ?',em:'👧',opts:["Madre", "Padre", "Hija", "Hijo"],ans:2}
-    ]
-  },
-  {
-    id:'m3',title:'Les couleurs',icon:'🎨',
-    level:'Pré-A1',free:false,age:"all",
-    desc:'Rouge, bleu, vert, jaune…',
-    words:[
-      {fr:'Rouge',ca:'Vermell',caP:'ver-MELL',es:'Rojo',esP:'RO-ho',em:'🔴',sim:false,tip:'\'Vermell\' du latin \'vermiculus\'. \'Rojo\' de \'russus\'. Deux origines différentes.'},
-      {fr:'Bleu',ca:'Blau',caP:'blau',es:'Azul',esP:'a-ZUL',em:'🔵',sim:false,tip:'\'Blau\' germanique. \'Azul\' de l\'arabe \'lazaward\' (lapis-lazuli) !'},
-      {fr:'Vert',ca:'Verd',caP:'bert',es:'Verde',esP:'BER-de',em:'🟢',sim:true,tip:'Très proches ! Le d final est muet en catalan.'},
-      {fr:'Jaune',ca:'Groc',caP:'grok',es:'Amarillo',esP:'a-ma-RI-yo',em:'🟡',sim:false,tip:'\'Groc\' est unique au catalan. \'Amarillo\' du latin \'amarellus\'.'},
-      {fr:'Noir',ca:'Negre',caP:'NE-gre',es:'Negro',esP:'NE-gro',em:'⚫',sim:true,tip:'Latin \'niger\'. Presque identiques.'},
-      {fr:'Blanc',ca:'Blanc',caP:'blan',es:'Blanco',esP:'BLAN-ko',em:'⚪',sim:true,tip:'Identique en catalan et français !'},
-      {fr:'Orange',ca:'Taronja',caP:'ta-RON-ja',es:'Naranja',esP:'na-RAN-ha',em:'🟠',sim:true,tip:'Même racine arabe \'naranj\'. \'Taronja\' a donné \'orange\' en français.'},
-      {fr:'Violet',ca:'Morat',caP:'mo-RAT',es:'Morado',esP:'mo-RA-do',em:'🟣',sim:true,tip:'Latin \'moratus\' (couleur de mûre). \'Mûre\' = \'mora\' en catalan.'},
-      {fr:'Rose',ca:'Rosa',caP:'RO-za',es:'Rosa',esP:'RO-sa',em:'🌸',sim:true,tip:'Identique dans les deux langues et proche du français !'},
-      {fr:'Gris',ca:'Gris',caP:'gris',es:'Gris',esP:'gris',em:'🩶',sim:true,tip:'Identique en catalan, espagnol et français. Du germanique.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Vermell\' ?',em:'🔴',opts:["Rouge", "Bleu", "Vert", "Jaune"],ans:0},
-      {q:'Comment dit-on \'Bleu\' en catalan ?',em:'🔵',opts:["Blau", "Groc", "Verd", "Vermell"],ans:0},
-      {q:'\'Verde\' en espagnol veut dire ?',em:'🟢',opts:["Rouge", "Vert", "Jaune", "Bleu"],ans:1},
-      {q:'Comment dit-on \'Jaune\' en espagnol ?',em:'🟡',opts:["Rojo", "Azul", "Amarillo", "Verde"],ans:2}
-    ]
-  },
-  {
-    id:'m4',title:'Les chiffres 1-20',icon:'🔢',
-    level:'Pré-A1',free:false,age:"all",
-    desc:'Compter jusqu\'à 20',
-    words:[
-      {fr:'Un',ca:'Un',caP:'un',es:'Uno',esP:'U-no',em:'1️⃣',sim:true,tip:'Identique en catalan et français !'},
-      {fr:'Deux',ca:'Dos',caP:'dos',es:'Dos',esP:'dos',em:'2️⃣',sim:true,tip:'Identique en catalan et espagnol !'},
-      {fr:'Trois',ca:'Tres',caP:'tres',es:'Tres',esP:'tres',em:'3️⃣',sim:true,tip:'Identique en catalan et espagnol, proche du français.'},
-      {fr:'Quatre',ca:'Quatre',caP:'KWA-tre',es:'Cuatro',esP:'KWA-tro',em:'4️⃣',sim:true,tip:'Identique en catalan et français !'},
-      {fr:'Cinq',ca:'Cinc',caP:'sink',es:'Cinco',esP:'SINK-o',em:'5️⃣',sim:true,tip:'\'Cinc\' et \'Cinco\' — presque identiques !'},
-      {fr:'Six',ca:'Sis',caP:'sis',es:'Seis',esP:'seis',em:'6️⃣',sim:true,tip:'\'Sis\' catalan, \'seis\' espagnol. Proches !'},
-      {fr:'Sept',ca:'Set',caP:'set',es:'Siete',esP:'si-ETE',em:'7️⃣',sim:false,tip:'\'Set\' ultra-court en catalan. Même racine latine \'septem\'.'},
-      {fr:'Huit',ca:'Vuit',caP:'buit',es:'Ocho',esP:'O-cho',em:'8️⃣',sim:false,tip:'\'Vuit\' unique au catalan — le v se prononce b !'},
-      {fr:'Neuf',ca:'Nou',caP:'nou',es:'Nueve',esP:'NWEV-e',em:'9️⃣',sim:false,tip:'Piège : \'nou\' ressemble à \'nouveau\' mais signifie NEUF.'},
-      {fr:'Dix',ca:'Deu',caP:'DEU',es:'Diez',esP:'dies',em:'🔟',sim:false,tip:'\'Deu\' ressemble à \'deux\' mais signifie DIX ! Piège classique.'},
-      {fr:'Onze',ca:'Onze',caP:'ON-ze',es:'Once',esP:'ON-se',em:'1️⃣1️⃣',sim:true,tip:'Très proches ! Latin \'undecim\'.'},
-      {fr:'Douze',ca:'Dotze',caP:'DOT-ze',es:'Doce',esP:'DO-se',em:'1️⃣2️⃣',sim:true,tip:'\'Dotze/Doce\' — même racine. Le catalan est plus proche du français.'},
-      {fr:'Treize',ca:'Tretze',caP:'TRET-ze',es:'Trece',esP:'TRE-se',em:'1️⃣3️⃣',sim:true,tip:'Latin \'tredecim\'. Toutes proches.'},
-      {fr:'Quatorze',ca:'Catorze',caP:'ka-TOR-ze',es:'Catorce',esP:'ka-TOR-se',em:'1️⃣4️⃣',sim:true,tip:'Très proches entre elles et avec le français.'},
-      {fr:'Quinze',ca:'Quinze',caP:'KWIN-ze',es:'Quince',esP:'KIN-se',em:'1️⃣5️⃣',sim:true,tip:'Identique en catalan et français !'},
-      {fr:'Vingt',ca:'Vint',caP:'bint',es:'Veinte',esP:'BEIN-te',em:'2️⃣0️⃣',sim:true,tip:'Latin \'viginti\'. Le v catalan se prononce b.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Un\' ?',em:'1️⃣',opts:["Un", "Deux", "Trois", "Quatre"],ans:0},
-      {q:'Comment dit-on \'Deux\' en catalan ?',em:'2️⃣',opts:["Dos", "Tres", "Un", "Quatre"],ans:0},
-      {q:'\'Tres\' en espagnol veut dire ?',em:'3️⃣',opts:["Quatre", "Deux", "Un", "Trois"],ans:3},
-      {q:'Comment dit-on \'Quatre\' en espagnol ?',em:'4️⃣',opts:["Uno", "Tres", "Cuatro", "Dos"],ans:2}
-    ]
-  },
-  {
-    id:'m5',title:'La nourriture',icon:'🍽️',
-    level:'Pré-A1',free:false,age:"all",
-    desc:'Pain, eau, fruits, restaurant',
-    words:[
-      {fr:'Pain',ca:'Pa',caP:'pa',es:'Pan',esP:'pan',em:'🍞',sim:true,tip:'\'Pa amb tomàquet\' = le plat typique majorquin (pain frotté à la tomate).'},
-      {fr:'Eau',ca:'Aigua',caP:'AIG-ua',es:'Agua',esP:'A-gua',em:'💧',sim:true,tip:'\'Aigua\' garde le -i- du latin \'aqua\'.'},
-      {fr:'Vin',ca:'Vi',caP:'vi',es:'Vino',esP:'VI-no',em:'🍷',sim:true,tip:'Ultra-court en catalan. Du latin \'vinum\'. Le DO Mallorca est réputé.'},
-      {fr:'Eau minérale',ca:'Aigua mineral',caP:'AIG-ua mi-ne-RAL',es:'Agua mineral',esP:'A-gua mi-ne-RAL',em:'🫧',sim:true,tip:'Identique ! \'Sense gas\' = sans bulles, \'amb gas\' = avec bulles.'},
-      {fr:'Bière',ca:'Cervesa',caP:'ser-BE-za',es:'Cerveza',esP:'ser-BE-za',em:'🍺',sim:true,tip:'Presque identique ! Du latin \'cerevisia\'. Très commun à Majorque.'},
-      {fr:'Café',ca:'Cafè',caP:'ca-FE',es:'Café',esP:'ca-FE',em:'☕',sim:true,tip:'Identique en catalan, espagnol et français !'},
-      {fr:'Lait',ca:'Llet',caP:'lyet',es:'Leche',esP:'LE-che',em:'🥛',sim:false,tip:'\'Llet\' catalan unique. \'Leche\' espagnol du latin \'lactem\'.'},
-      {fr:'Fromage',ca:'Formatge',caP:'for-MAT-je',es:'Queso',esP:'KE-so',em:'🧀',sim:false,tip:'\'Formatge\' ressemble au français ! \'Queso\' du latin \'caseus\'.'},
-      {fr:'Pain-tomate',ca:'Pa amb tomàquet',caP:'pa am to-MA-ket',es:'Pan con tomate',esP:'pan kon to-MA-te',em:'🍅',sim:true,tip:'LE plat signature de Majorque. Huile d\'olive, ail, tomate frottée. Incontournable.'},
-      {fr:'Poisson',ca:'Peix',caP:'pech',es:'Pescado',esP:'pes-KA-do',em:'🐟',sim:false,tip:'\'Peix\' du latin \'piscis\'. Majorque = île → le poisson est partout.'},
-      {fr:'Fruits de mer',ca:'Marisc',caP:'ma-RISK',es:'Marisco',esP:'ma-RIS-ko',em:'🦞',sim:true,tip:'Presque identique ! \'Mar\' = mer dans les deux langues.'},
-      {fr:'Huile d\'olive',ca:'Oli d\'oliva',caP:'O-li do-LI-va',es:'Aceite de oliva',esP:'a-SEI-te de o-LI-va',em:'🫒',sim:false,tip:'\'Oli\' catalan = huile. L\'huile d\'olive de Mallorca est une IGP protégée.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Pa\' ?',em:'🍞',opts:["Pain", "Eau", "Vin", "Eau min\u00e9rale"],ans:0},
-      {q:'Comment dit-on \'Eau\' en catalan ?',em:'💧',opts:["Pa", "Aigua", "Vi", "Aigua mineral"],ans:1},
-      {q:'\'Vino\' en espagnol veut dire ?',em:'🍷',opts:["Eau", "Eau min\u00e9rale", "Pain", "Vin"],ans:3},
-      {q:'Comment dit-on \'Eau minérale\' en espagnol ?',em:'🫧',opts:["Vino", "Pan", "Agua mineral", "Agua"],ans:2}
-    ]
-  },
-  {
-    id:'m6',title:'À l\'école',icon:'🏫',
-    level:'Pré-A1',free:false,age:"all",
-    desc:'Pour les enfants à Majorque',
-    words:[
-      {fr:'École',ca:'Escola',caP:'es-KO-la',es:'Escuela',esP:'es-KWE-la',em:'🏫',sim:true,tip:'À Majorque, l\'instruction publique est en catalan dès la maternelle.'},
-      {fr:'Professeur',ca:'Mestre',caP:'MES-tre',es:'Maestro',esP:'ma-ES-tro',em:'👩‍🏫',sim:true,tip:'Du latin \'magister\'. \'Maestro\' est entré dans de nombreuses langues.'},
-      {fr:'Livre',ca:'Llibre',caP:'LY-bre',es:'Libro',esP:'LI-bro',em:'📚',sim:true,tip:'Le \'ll\' catalan = son mouillé. Presque identique à l\'espagnol.'},
-      {fr:'Crayon',ca:'Llapis',caP:'LYA-pis',es:'Lápiz',esP:'LA-pis',em:'✏️',sim:true,tip:'Même racine. Le \'ll\' catalan se prononce différemment du \'l\'.'},
-      {fr:'Cahier',ca:'Quadern',caP:'qua-DERN',es:'Cuaderno',esP:'cua-DER-no',em:'📓',sim:true,tip:'Quasi identiques ! Du latin \'quaternus\' (4 feuilles).'},
-      {fr:'Sac à dos',ca:'Motxilla',caP:'mo-CHIL-la',es:'Mochila',esP:'mo-CHI-la',em:'🎒',sim:true,tip:'Quasi identique en catalan et espagnol.'},
-      {fr:'Ami',ca:'Amic',caP:'a-MIC',es:'Amigo',esP:'a-MI-go',em:'🤝',sim:true,tip:'\'Amic\' et \'amigo\' du latin \'amicus\'. Le c final catalan = k.'},
-      {fr:'Récréation',ca:'Pati',caP:'PA-ti',es:'Patio',esP:'PA-tio',em:'🛝',sim:true,tip:'\'Pati\' — le mot que tous les enfants de Campos connaissent.'},
-      {fr:'Devoirs',ca:'Deures',caP:'DEU-res',es:'Deberes',esP:'de-BE-res',em:'📝',sim:true,tip:'Du latin \'debere\' (devoir). Mot universel des familles à Majorque.'},
-      {fr:'Classe',ca:'Classe',caP:'KLA-se',es:'Clase',esP:'KLA-se',em:'🏛️',sim:true,tip:'Identique en catalan et français ! Espagnol légèrement différent.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Escola\' ?',em:'🏫',opts:["\u00c9cole", "Professeur", "Livre", "Crayon"],ans:0},
-      {q:'Comment dit-on \'Professeur\' en catalan ?',em:'👩‍🏫',opts:["Llibre", "Llapis", "Mestre", "Escola"],ans:2},
-      {q:'\'Libro\' en espagnol veut dire ?',em:'📚',opts:["Crayon", "\u00c9cole", "Professeur", "Livre"],ans:3},
-      {q:'Comment dit-on \'Crayon\' en espagnol ?',em:'✏️',opts:["Escuela", "Libro", "Maestro", "L\u00e1piz"],ans:3}
-    ]
-  },
-  {
-    id:'a1m1',title:'Se présenter',icon:'🙋',
-    level:'A1',free:false,age:"all",
-    desc:'Dire qui on est, d\'où on vient',
-    words:[
-      {fr:'Je suis français(e)',ca:'Sóc francès/francesa',caP:'SOK fran-SES/fran-SE-za',es:'Soy francés/francesa',esP:'soi fran-SES/fran-SE-sa',em:'🇫🇷',sim:true,tip:'\'Sóc/Soy\' = je suis. Même racine \'essere\' latin.'},
-      {fr:'J\'habite à Majorque',ca:'Visc a Mallorca',caP:'bisk a ma-LOR-ka',es:'Vivo en Mallorca',esP:'BI-bo en ma-LOR-ka',em:'🏝️',sim:true,tip:'\'Visc/Vivo\' du latin \'vivere\'. \'Mallorca\' s\'écrit avec ll en catalan.'},
-      {fr:'J\'ai X ans',ca:'Tinc X anys',caP:'tink X ANS',es:'Tengo X años',esP:'TEN-go X A-nyos',em:'🎂',sim:true,tip:'\'Tinc/Tengo\' = j\'ai. Du latin \'tenere\'. \'Anys/años\' = années.'},
-      {fr:'Je parle un peu catalan',ca:'Parlo una mica de català',caP:'PAR-lo U-na MI-ka de ka-ta-LA',es:'Hablo un poco de catalán',esP:'A-blo un PO-ko de ka-ta-LAN',em:'🗣️',sim:true,tip:'\'Parlo/Hablo\' du latin \'parabolare\'. \'Una mica\' = un peu, expression typique.'},
-      {fr:'Je comprends',ca:'Entenc',caP:'en-TENK',es:'Entiendo',esP:'en-TIEN-do',em:'🤔',sim:true,tip:'Du latin \'intelligere\'. \'Entenc\' est plus court et direct.'},
-      {fr:'Je ne comprends pas',ca:'No entenc',caP:'no en-TENK',es:'No entiendo',esP:'no en-TIEN-do',em:'😕',sim:true,tip:'Phrase-clé ! Très utile dès les premiers jours à Majorque.'},
-      {fr:'Répétez s\'il vous plaît',ca:'Pot repetir, si us plau?',caP:'pot re-pe-TIR si us PLAU',es:'¿Puede repetir, por favor?',esP:'PWE-de re-pe-TIR por fa-VOR',em:'🔁',sim:true,tip:'Phrase de survie absolue pour les nouveaux arrivants.'},
-      {fr:'Plus lentement',ca:'Més a poc a poc',caP:'mes a pok a pok',es:'Más despacio',esP:'mas des-PA-sio',em:'🐢',sim:false,tip:'\'A poc a poc\' = petit à petit. Expression charmante du catalan.'},
-      {fr:'Comment dit-on… ?',ca:'Com es diu… ?',caP:'kom es DIU',es:'¿Cómo se dice… ?',esP:'KO-mo se DI-se',em:'💬',sim:true,tip:'Question-clé pour apprendre. \'Es diu / se dice\' = ça se dit.'},
-      {fr:'Quel est ton prénom ?',ca:'Com et dius?',caP:'kom et DIUS',es:'¿Cómo te llamas?',esP:'KO-mo te LYA-mas',em:'❓',sim:false,tip:'\'Com et dius\' = comment tu te dis. \'Te llamas\' = tu t\'appelles.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Sóc francès/francesa\' ?',em:'🇫🇷',opts:["Je suis fran\u00e7ais(e)", "J'habite \u00e0 Majorque", "J'ai X ans", "Je parle un peu catalan"],ans:0},
-      {q:'Comment dit-on \'J'habite à Majorque\' en catalan ?',em:'🏝️',opts:["S\u00f3c franc\u00e8s/francesa", "Visc a Mallorca", "Parlo una mica de catal\u00e0", "Tinc X anys"],ans:1},
-      {q:'\'Tengo X años\' en espagnol veut dire ?',em:'🎂',opts:["J'habite \u00e0 Majorque", "Je suis fran\u00e7ais(e)", "J'ai X ans", "Je parle un peu catalan"],ans:2},
-      {q:'Comment dit-on \'Je parle un peu catalan\' en espagnol ?',em:'🗣️',opts:["Vivo en Mallorca", "Tengo X a\u00f1os", "Hablo un poco de catal\u00e1n", "Soy franc\u00e9s/francesa"],ans:2}
-    ]
-  },
-  {
-    id:'a1m2',title:'Le corps',icon:'🧍',
-    level:'A1',free:false,age:"all",
-    desc:'Tête, bras, ventre, jambes…',
-    words:[
-      {fr:'Tête',ca:'Cap',caP:'kap',es:'Cabeza',esP:'ka-BE-za',em:'🗣️',sim:false,tip:'\'Cap\' en catalan = tête ET cap (direction). \'Cabo\' en espagnol = cap géographique.'},
-      {fr:'Yeux',ca:'Ulls',caP:'ulls',es:'Ojos',esP:'O-hos',em:'👁️',sim:false,tip:'\'Ulls\' du latin \'oculus\'. \'Ojos\' aussi mais très différent en apparence.'},
-      {fr:'Oreille',ca:'Orella',caP:'o-RE-lla',es:'Oreja',esP:'o-RE-ha',em:'👂',sim:true,tip:'\'Orella/Oreja\' — très proches ! Du latin \'auricula\'.'},
-      {fr:'Bouche',ca:'Boca',caP:'BO-ka',es:'Boca',esP:'BO-ka',em:'👄',sim:true,tip:'Identique en catalan et espagnol ! Du latin \'bucca\'.'},
-      {fr:'Nez',ca:'Nas',caP:'nas',es:'Nariz',esP:'na-RIS',em:'👃',sim:false,tip:'\'Nas\' très court en catalan. \'Nariz\' du latin \'naris\'.'},
-      {fr:'Main',ca:'Mà',caP:'ma',es:'Mano',esP:'MA-no',em:'🤚',sim:true,tip:'\'Mà/Mano\' — même racine latine \'manus\'. Le catalan est plus court.'},
-      {fr:'Pied',ca:'Peu',caP:'peu',es:'Pie',esP:'pie',em:'🦶',sim:true,tip:'\'Peu/Pie\' — très proches ! Du latin \'pedem\'.'},
-      {fr:'Ventre',ca:'Panxa',caP:'PAN-cha',es:'Barriga',esP:'ba-RI-ga',em:'🫃',sim:false,tip:'\'Panxa\' est familier en catalan. \'Barriga\' aussi en espagnol. Deux mots populaires.'},
-      {fr:'Dos',ca:'Esquena',caP:'es-KE-na',es:'Espalda',esP:'es-PAL-da',em:'🫁',sim:false,tip:'\'Esquena\' unique au catalan. \'Espalda\' de \'spatula\' (omoplate).'},
-      {fr:'J\'ai mal à la tête',ca:'Em fa mal el cap',caP:'em fa mal el kap',es:'Me duele la cabeza',esP:'me DWEL-e la ka-BE-za',em:'🤕',sim:false,tip:'\'Fa mal\' = fait mal en catalan. \'Duele\' du latin \'dolere\'. Phrases utiles chez le médecin.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Cap\' ?',em:'🗣️',opts:["T\u00eate", "Yeux", "Oreille", "Bouche"],ans:0},
-      {q:'Comment dit-on \'Yeux\' en catalan ?',em:'👁️',opts:["Boca", "Ulls", "Orella", "Cap"],ans:1},
-      {q:'\'Oreja\' en espagnol veut dire ?',em:'👂',opts:["T\u00eate", "Yeux", "Oreille", "Bouche"],ans:2},
-      {q:'Comment dit-on \'Bouche\' en espagnol ?',em:'👄',opts:["Ojos", "Cabeza", "Oreja", "Boca"],ans:3}
-    ]
-  },
-  {
-    id:'a1m3',title:'La maison',icon:'🏠',
-    level:'A1',free:false,age:"all",
-    desc:'Pièces, meubles, vie quotidienne',
-    words:[
-      {fr:'Maison',ca:'Casa',caP:'KA-za',es:'Casa',esP:'KA-sa',em:'🏠',sim:true,tip:'Identique en catalan et espagnol ! Du latin \'casa\'.'},
-      {fr:'Chambre',ca:'Habitació',caP:'a-bi-ta-SIO',es:'Habitación',esP:'a-bi-ta-SION',em:'🛏️',sim:true,tip:'Très proches. Du latin \'habitatio\'. À Majorque, les maisons ont souvent des volets en bois.'},
-      {fr:'Salle de bain',ca:'Bany',caP:'ban',es:'Baño',esP:'BA-nyo',em:'🛁',sim:true,tip:'\'Bany/Baño\' — presque identiques ! Latin \'balneum\'.'},
-      {fr:'Cuisine',ca:'Cuina',caP:'KUI-na',es:'Cocina',esP:'ko-SI-na',em:'🍳',sim:true,tip:'\'Cuina\' vient du latin \'coquina\'. Proche de \'cuisine\' français !'},
-      {fr:'Salon',ca:'Sala d\'estar',caP:'SA-la des-TAR',es:'Salón',esP:'sa-LON',em:'🛋️',sim:false,tip:'\'Sala d\'estar\' = pièce pour être. \'Salón\' du latin \'sala\'.'},
-      {fr:'Jardin',ca:'Jardí',caP:'jar-DI',es:'Jardín',esP:'jar-DIN',em:'🌿',sim:true,tip:'Identiques ! Les maisons majorquines ont souvent un jardí avec orangers.'},
-      {fr:'Piscine',ca:'Piscina',caP:'pis-SI-na',es:'Piscina',esP:'pis-SI-na',em:'🏊',sim:true,tip:'Identique dans les deux langues ! Incontournable à Majorque.'},
-      {fr:'Fenêtre',ca:'Finestra',caP:'fi-NES-tra',es:'Ventana',esP:'ben-TA-na',em:'🪟',sim:false,tip:'\'Finestra\' proche du français \'fenêtre\'. \'Ventana\' de \'ventus\' (vent).'},
-      {fr:'Porte',ca:'Porta',caP:'POR-ta',es:'Puerta',esP:'PWER-ta',em:'🚪',sim:true,tip:'\'Porta/Puerta\' — même racine latine \'porta\'.'},
-      {fr:'Escalier',ca:'Escala',caP:'es-KA-la',es:'Escalera',esP:'es-ka-LE-ra',em:'🪜',sim:true,tip:'\'Escala\' catalan est plus court. Les vieilles demeures de Palma ont de belles \'escales\' en pierre.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Casa\' ?',em:'🏠',opts:["Maison", "Chambre", "Salle de bain", "Cuisine"],ans:0},
-      {q:'Comment dit-on \'Chambre\' en catalan ?',em:'🛏️',opts:["Cuina", "Bany", "Casa", "Habitaci\u00f3"],ans:3},
-      {q:'\'Baño\' en espagnol veut dire ?',em:'🛁',opts:["Cuisine", "Chambre", "Maison", "Salle de bain"],ans:3},
-      {q:'Comment dit-on \'Cuisine\' en espagnol ?',em:'🍳',opts:["Casa", "Cocina", "Ba\u00f1o", "Habitaci\u00f3n"],ans:1}
-    ]
-  },
-  {
-    id:'a1m4',title:'Les transports',icon:'🚗',
-    level:'A1',free:false,age:"all",
-    desc:'Voiture, bus, train, bateau',
-    words:[
-      {fr:'Voiture',ca:'Cotxe',caP:'KO-che',es:'Coche',esP:'KO-che',em:'🚗',sim:true,tip:'Quasi identique ! Essentiel à Majorque où les transports en commun sont limités.'},
-      {fr:'Bus',ca:'Autobús',caP:'au-to-BUS',es:'Autobús',esP:'au-to-BUS',em:'🚌',sim:true,tip:'Identique dans les deux langues. Le réseau TIB relie toute l\'île.'},
-      {fr:'Train',ca:'Tren',caP:'tren',es:'Tren',esP:'tren',em:'🚂',sim:true,tip:'Identique ! La ligne Palma-Sóller est un train historique magnifique.'},
-      {fr:'Bateau',ca:'Vaixell',caP:'ba-CHELL',es:'Barco',esP:'BAR-ko',em:'⛴️',sim:false,tip:'\'Vaixell\' unique au catalan. \'Barco\' du germanique. Majorque = île, le bateau est essentiel.'},
-      {fr:'Avion',ca:'Avió',caP:'a-bio',es:'Avión',esP:'a-BION',em:'✈️',sim:true,tip:'Identiques ! L\'aéroport de Palma est l\'un des plus fréquentés d\'Europe.'},
-      {fr:'Vélo',ca:'Bicicleta',caP:'bi-si-KLE-ta',es:'Bicicleta',esP:'bi-si-KLE-ta',em:'🚴',sim:true,tip:'Identique. Majorque est un paradis du cyclisme — Tour de France y vient souvent.'},
-      {fr:'À pied',ca:'A peu',caP:'a peu',es:'A pie',esP:'a pie',em:'🚶',sim:true,tip:'\'A peu / a pie\' — même racine \'pedem\'. Expression courante.'},
-      {fr:'Arrêt de bus',ca:'Parada de bus',caP:'pa-RA-da de bus',es:'Parada de autobús',esP:'pa-RA-da de au-to-BUS',em:'🛑',sim:true,tip:'\'Parada\' = arrêt dans les deux langues. Du latin \'parare\'.'},
-      {fr:'Aéroport',ca:'Aeroport',caP:'a-e-ro-PORT',es:'Aeropuerto',esP:'a-e-ro-PWER-to',em:'🛫',sim:true,tip:'Proches ! \'Aeroport\' catalan = aéroport. \'Aeropuerto\' = aéro + puerta (porte).'},
-      {fr:'Je voudrais un billet',ca:'Voldria un bitllet',caP:'bol-DRIA un bit-LLET',es:'Quisiera un billete',esP:'ki-SIERA un bi-LLE-te',em:'🎫',sim:true,tip:'\'Voldria/Quisiera\' = je voudrais. Formes de politesse. \'Bitllet/billete\' = billet.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Cotxe\' ?',em:'🚗',opts:["Voiture", "Bus", "Train", "Bateau"],ans:0},
-      {q:'Comment dit-on \'Bus\' en catalan ?',em:'🚌',opts:["Autob\u00fas", "Tren", "Cotxe", "Vaixell"],ans:0},
-      {q:'\'Tren\' en espagnol veut dire ?',em:'🚂',opts:["Voiture", "Bus", "Bateau", "Train"],ans:3},
-      {q:'Comment dit-on \'Bateau\' en espagnol ?',em:'⛴️',opts:["Coche", "Tren", "Barco", "Autob\u00fas"],ans:2}
-    ]
-  },
-  {
-    id:'a1m5',title:'Les métiers',icon:'💼',
-    level:'A1',free:false,age:"adult",
-    desc:'Professions courantes à Majorque',
-    words:[
-      {fr:'Médecin',ca:'Metge',caP:'MET-je',es:'Médico',esP:'ME-di-ko',em:'👨‍⚕️',sim:false,tip:'\'Metge\' du grec \'iatros\'. \'Médico\' du latin \'medicus\'. Deux origines.'},
-      {fr:'Infirmier',ca:'Infermer',caP:'in-fer-ME',es:'Enfermero',esP:'en-fer-ME-ro',em:'🏥',sim:true,tip:'\'Infermer/Enfermero\' — même racine. \'Enfermo\' = malade en espagnol.'},
-      {fr:'Enseignant',ca:'Professor',caP:'pro-fe-SOR',es:'Profesor',esP:'pro-fe-SOR',em:'👩‍🏫',sim:true,tip:'Quasi identique ! Du latin \'professor\'. Très important : les profs à Majorque enseignent en catalan.'},
-      {fr:'Agriculteur',ca:'Pagès',caP:'pa-JES',es:'Agricultor',esP:'a-gri-kul-TOR',em:'👨‍🌾',sim:false,tip:'\'Pagès\' très catalan — vient de \'pagus\' (village). À Majorque, l\'agriculture est forte.'},
-      {fr:'Hôtelier',ca:'Hoteler',caP:'o-te-LE',es:'Hotelero',esP:'o-te-LE-ro',em:'🏨',sim:true,tip:'Quasi identique. Le tourisme = 1er secteur de l\'économie majorquine.'},
-      {fr:'Cuisinier',ca:'Cuiner',caP:'kui-NE',es:'Cocinero',esP:'ko-si-NE-ro',em:'👨‍🍳',sim:true,tip:'\'Cuiner/Cocinero\' de la même racine. La gastronomie majorquine est réputée.'},
-      {fr:'Artisan',ca:'Artesà',caP:'ar-te-ZA',es:'Artesano',esP:'ar-te-ZA-no',em:'🔨',sim:true,tip:'Presque identiques. Les marchés artisanaux de Majorque sont excellents.'},
-      {fr:'Travailleur indépendant',ca:'Autònom',caP:'au-TO-nom',es:'Autónomo',esP:'au-TO-no-mo',em:'💻',sim:true,tip:'\'Autònom/Autónomo\' — identiques ! C\'est le statut d\'Amely et de nombreux expatriés.'},
-      {fr:'Tatouer',ca:'Tatuador',caP:'ta-tua-DOR',es:'Tatuador',esP:'ta-tua-DOR',em:'🎨',sim:true,tip:'Identique dans les deux langues. Comme Tony au Blackthorn Tattoo à Campos !'},
-      {fr:'Restaurateur',ca:'Restaurador',caP:'res-tau-ra-DOR',es:'Restaurador',esP:'res-tau-ra-DOR',em:'🍴',sim:true,tip:'Identique. Important pour la clientèle francophone des restaurants de Majorque.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Metge\' ?',em:'👨‍⚕️',opts:["M\u00e9decin", "Infirmier", "Enseignant", "Agriculteur"],ans:0},
-      {q:'Comment dit-on \'Infirmier\' en catalan ?',em:'🏥',opts:["Pag\u00e8s", "Professor", "Metge", "Infermer"],ans:3},
-      {q:'\'Profesor\' en espagnol veut dire ?',em:'👩‍🏫',opts:["M\u00e9decin", "Agriculteur", "Enseignant", "Infirmier"],ans:2},
-      {q:'Comment dit-on \'Agriculteur\' en espagnol ?',em:'👨‍🌾',opts:["Agricultor", "Profesor", "Enfermero", "M\u00e9dico"],ans:0}
-    ]
-  },
-  {
-    id:'a1m6',title:'Les émotions',icon:'😊',
-    level:'A1',free:false,age:"all",
-    desc:'Exprimer ce qu\'on ressent',
-    words:[
-      {fr:'Content(e)',ca:'Content/Contenta',caP:'kon-TEN/kon-TEN-ta',es:'Contento/Contenta',esP:'kon-TEN-to/ta',em:'😊',sim:true,tip:'Quasi identique dans toutes les langues romanes !'},
-      {fr:'Triste',ca:'Trist/Trista',caP:'trist/TRIS-ta',es:'Triste',esP:'TRIS-te',em:'😢',sim:true,tip:'Identique en catalan et espagnol. Du latin \'tristis\'.'},
-      {fr:'Fatigué(e)',ca:'Cansat/Cansada',caP:'kan-SAT/kan-SA-da',es:'Cansado/Cansada',esP:'kan-SA-do/da',em:'😴',sim:true,tip:'\'Cansat/Cansado\' — très proches. Du latin \'campsare\'.'},
-      {fr:'Stressé(e)',ca:'Estressat/Estressada',caP:'es-tre-SAT',es:'Estresado/Estresada',esP:'es-tre-SA-do',em:'😰',sim:true,tip:'Mot international ! Vient de l\'anglais \'stress\'.'},
-      {fr:'Heureux/heureuse',ca:'Feliç',caP:'fe-LIS',es:'Feliz',esP:'fe-LIS',em:'😄',sim:true,tip:'\'Feliç/Feliz\' — presque identiques ! Du latin \'felix\'.'},
-      {fr:'En colère',ca:'Enfadat/Enfadada',caP:'en-fa-DAT',es:'Enfadado/Enfadada',esP:'en-fa-DA-do',em:'😠',sim:true,tip:'Quasi identique dans les deux langues. \'Enfadat\' = fâché.'},
-      {fr:'Surpris(e)',ca:'Sorprès/Sorpresa',caP:'sor-PRES',es:'Sorprendido',esP:'sor-pren-DI-do',em:'😲',sim:true,tip:'\'Sorprès/Sorprendido\' — même racine. Du latin \'subprehendere\'.'},
-      {fr:'J\'ai peur',ca:'Tinc por',caP:'tink por',es:'Tengo miedo',esP:'TEN-go MIE-do',em:'😨',sim:false,tip:'\'Por\' catalan = peur. \'Miedo\' espagnol du latin \'metus\'. Deux mots différents.'},
-      {fr:'Je suis bien',ca:'Estic bé',caP:'es-TIK be',es:'Estoy bien',esP:'es-TOI bien',em:'🙂',sim:true,tip:'\'Estic/Estoy\' = je suis (état). \'Bé/Bien\' = bien. Réponse au \'Com estàs?\'.'},
-      {fr:'Super / Très bien',ca:'Molt bé',caP:'molt be',es:'Muy bien',esP:'mui bien',em:'🤩',sim:true,tip:'\'Molt/Muy\' = très. \'Molt bé\' s\'entend partout à Majorque.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Content/Contenta\' ?',em:'😊',opts:["Content(e)", "Triste", "Fatigu\u00e9(e)", "Stress\u00e9(e)"],ans:0},
-      {q:'Comment dit-on \'Triste\' en catalan ?',em:'😢',opts:["Cansat/Cansada", "Trist/Trista", "Estressat/Estressada", "Content/Contenta"],ans:1},
-      {q:'\'Cansado/Cansada\' en espagnol veut dire ?',em:'😴',opts:["Triste", "Fatigu\u00e9(e)", "Content(e)", "Stress\u00e9(e)"],ans:1},
-      {q:'Comment dit-on \'Stressé(e)\' en espagnol ?',em:'😰',opts:["Cansado/Cansada", "Triste", "Contento/Contenta", "Estresado/Estresada"],ans:3}
-    ]
-  },
-  {
-    id:'a1m7',title:'La nourriture avancée',icon:'🥘',
-    level:'A1',free:false,age:"all",
-    desc:'Légumes, viandes, plats majorquins',
-    words:[
-      {fr:'Sobrassada',ca:'Sobrassada',caP:'so-bra-SA-da',es:'Sobrasada',esP:'so-bra-SA-da',em:'🌭',sim:true,tip:'LA charcuterie emblématique de Majorque. Saucisson rouge épicé. IGP protégée.'},
-      {fr:'Ensaïmada',ca:'Ensaïmada',caP:'en-sai-MA-da',es:'Ensaimada',esP:'en-sai-MA-da',em:'🍩',sim:true,tip:'LA pâtisserie de Majorque. Viennoiserie en spirale. Incontournable à l\'aéroport.'},
-      {fr:'Légumes',ca:'Verdures',caP:'ber-DU-res',es:'Verduras',esP:'ber-DU-ras',em:'🥦',sim:true,tip:'\'Verdures/Verduras\' — quasi identiques. Du latin \'viridis\' (vert).'},
-      {fr:'Tomate',ca:'Tomàquet',caP:'to-MA-ket',es:'Tomate',esP:'to-MA-te',em:'🍅',sim:true,tip:'\'Tomàquet\' est unique au catalan. \'Tomate\' plus proche du français. Du náhuatl \'tomatl\'.'},
-      {fr:'Poulet',ca:'Pollastre',caP:'po-LLAS-tre',es:'Pollo',esP:'PO-yo',em:'🍗',sim:true,tip:'\'Pollastre\' ressemble plus au français \'poulet\' ! Latin \'pullus\'.'},
-      {fr:'Agneau',ca:'Xai',caP:'chai',es:'Cordero',esP:'kor-DE-ro',em:'🐑',sim:false,tip:'\'Xai\' est unique au catalan majorquin. Le xot (agneau rôti) est plat de fête à Majorque.'},
-      {fr:'Pomme de terre',ca:'Patata',caP:'pa-TA-ta',es:'Patata',esP:'pa-TA-ta',em:'🥔',sim:true,tip:'Identique dans les deux langues. Du quechua \'papa\'. \'Patatas\' dans les tapas.'},
-      {fr:'Ail',ca:'All',caP:'all',es:'Ajo',esP:'A-ho',em:'🧄',sim:false,tip:'\'All\' unique au catalan (2 lettres !). \'Ajo\' espagnol du latin \'allium\'.'},
-      {fr:'Amande',ca:'Ametlla',caP:'a-MET-la',es:'Almendra',esP:'al-MEN-dra',em:'🌰',sim:false,tip:'Les amandiers de Majorque fleurissent en janvier — spectacle magnifique.'},
-      {fr:'Je suis végétarien',ca:'Sóc vegetarià',caP:'SOK be-je-ta-RIA',es:'Soy vegetariano',esP:'soi be-he-ta-RIA-no',em:'🥗',sim:true,tip:'Phrase utile au restaurant. Les menus majorquins sont très centrés viande/poisson.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Sobrassada\' ?',em:'🌭',opts:["Sobrassada", "Ensa\u00efmada", "L\u00e9gumes", "Tomate"],ans:0},
-      {q:'Comment dit-on \'Ensaïmada\' en catalan ?',em:'🍩',opts:["Ensa\u00efmada", "Verdures", "Tom\u00e0quet", "Sobrassada"],ans:0},
-      {q:'\'Verduras\' en espagnol veut dire ?',em:'🥦',opts:["Ensa\u00efmada", "L\u00e9gumes", "Sobrassada", "Tomate"],ans:1},
-      {q:'Comment dit-on \'Tomate\' en espagnol ?',em:'🍅',opts:["Ensaimada", "Tomate", "Sobrasada", "Verduras"],ans:1}
-    ]
-  },
-  {
-    id:'a1m8',title:'Les nombres & l\'argent',icon:'💰',
-    level:'A1',free:false,age:"all",
-    desc:'Compter, payer, marchander',
-    words:[
-      {fr:'Combien ça coûte ?',ca:'Quant val?',caP:'kwant bal',es:'¿Cuánto cuesta?',esP:'KWAN-to KWES-ta',em:'💶',sim:true,tip:'\'Quant/Cuánto\' = combien. \'Val/cuesta\' = ça vaut/coûte. Phrase de survie au marché.'},
-      {fr:'C\'est trop cher',ca:'És massa car',caP:'es MA-sa kar',es:'Es demasiado caro',esP:'es de-ma-SIA-do KA-ro',em:'😮',sim:true,tip:'\'Car/Caro\' = cher dans les deux langues. \'Massa/Demasiado\' = trop.'},
-      {fr:'L\'addition',ca:'El compte',caP:'el KOM-te',es:'La cuenta',esP:'la KWEN-ta',em:'🧾',sim:true,tip:'\'Compte/Cuenta\' — proches ! Du latin \'computare\'. \'Pot portar el compte?\' = L\'addition s\'il vous plaît.'},
-      {fr:'Carte bancaire',ca:'Targeta',caP:'tar-JE-ta',es:'Tarjeta',esP:'tar-HE-ta',em:'💳',sim:true,tip:'Quasi identique ! Du latin \'charta\'. \'Targeta de crèdit\' = carte de crédit.'},
-      {fr:'Euros',ca:'Euros',caP:'EU-ros',es:'Euros',esP:'EU-ros',em:'€',sim:true,tip:'Identique partout ! L\'euro est la monnaie de Majorque.'},
-      {fr:'Cent (100)',ca:'Cent',caP:'sen',es:'Cien',esP:'sien',em:'💯',sim:true,tip:'\'Cent/Cien\' du latin \'centum\'. Le catalan = le français !'},
-      {fr:'Mille (1000)',ca:'Mil',caP:'mil',es:'Mil',esP:'mil',em:'💰',sim:true,tip:'Identique en catalan et espagnol. Latin \'mille\'.'},
-      {fr:'Marché',ca:'Mercat',caP:'mer-KAT',es:'Mercado',esP:'mer-KA-do',em:'🛒',sim:true,tip:'\'Mercat/Mercado\' — proches. Le marché de Sineu (mercredi) est le plus grand de Majorque.'},
-      {fr:'Fermé',ca:'Tancat',caP:'tan-KAT',es:'Cerrado',esP:'se-RA-do',em:'🚫',sim:false,tip:'\'Tancat\' unique au catalan. \'Cerrado\' du latin \'serrare\'. Important pour les horaires majorquins.'},
-      {fr:'Ouvert',ca:'Obert',caP:'o-BERT',es:'Abierto',esP:'a-BIER-to',em:'✅',sim:true,tip:'\'Obert/Abierto\' — même racine \'aperire\'. Les commerces ferment souvent 13h-17h.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Quant val?\' ?',em:'💶',opts:["Combien \u00e7a co\u00fbte ?", "C'est trop cher", "L'addition", "Carte bancaire"],ans:0},
-      {q:'Comment dit-on \'C'est trop cher\' en catalan ?',em:'😮',opts:["El compte", "Quant val?", "Targeta", "\u00c9s massa car"],ans:3},
-      {q:'\'La cuenta\' en espagnol veut dire ?',em:'🧾',opts:["C'est trop cher", "Carte bancaire", "Combien \u00e7a co\u00fbte ?", "L'addition"],ans:3},
-      {q:'Comment dit-on \'Carte bancaire\' en espagnol ?',em:'💳',opts:["\u00bfCu\u00e1nto cuesta?", "Es demasiado caro", "Tarjeta", "La cuenta"],ans:2}
-    ]
-  },
-  {
-    id:'a2m1',title:'La santé',icon:'🏥',
-    level:'A2',free:false,age:"all",
-    desc:'Médecin, pharmacie, urgences',
-    words:[
-      {fr:'J\'ai de la fièvre',ca:'Tinc febre',caP:'tink FE-bre',es:'Tengo fiebre',esP:'TEN-go FIEBRE',em:'🤒',sim:true,tip:'\'Febre/Fiebre\' du latin \'febris\'. En Espagne, le médecin de famille = médico de cabecera.'},
-      {fr:'J\'ai mal à l\'estomac',ca:'Em fa mal l\'estómac',caP:'em fa mal les-TO-mak',es:'Me duele el estómago',esP:'me DWEL-e el es-TO-ma-go',em:'🤢',sim:true,tip:'\'Em fa mal / me duele\' = j\'ai mal. Phrases essentielles à la pharmacie.'},
-      {fr:'Ordonnance',ca:'Recepta',caP:'re-SEP-ta',es:'Receta',esP:'re-SE-ta',em:'📋',sim:true,tip:'\'Recepta/Receta\' — quasi identiques. À Majorque, la carte SIP est la carte santé.'},
-      {fr:'Pharmacie',ca:'Farmàcia',caP:'far-MA-sia',es:'Farmacia',esP:'far-MA-sia',em:'💊',sim:true,tip:'Identique dans les deux langues ! Croix verte = pharmacie. Ouvertes par roulement.'},
-      {fr:'Urgences',ca:'Urgències',caP:'ur-JEN-sies',es:'Urgencias',esP:'ur-HEN-sias',em:'🚑',sim:true,tip:'Quasi identique ! À Palma : Hôpital Son Espases pour les urgences.'},
-      {fr:'Allergie',ca:'Al·lèrgia',caP:'a-LER-jia',es:'Alergia',esP:'a-LER-hia',em:'🤧',sim:true,tip:'Presque identique. Important à mentionner avant toute ordonnance.'},
-      {fr:'Médecin de famille',ca:'Metge de capçalera',caP:'MET-je de kap-sa-LE-ra',es:'Médico de cabecera',esP:'ME-di-ko de ka-be-SE-ra',em:'👨‍⚕️',sim:true,tip:'Le médecin traitant espagnol. Pour les expatriés, s\'inscrire au centre de santé local.'},
-      {fr:'Carte de santé',ca:'Targeta SIP',caP:'tar-JE-ta sip',es:'Tarjeta SIP',esP:'tar-HE-ta sip',em:'💳',sim:true,tip:'La SIP (Sistema d\'Informació Poblacional) est la carte santé des Baléares. Gratuite.'},
-      {fr:'Assurance maladie',ca:'Seguretat Social',caP:'se-gu-re-TAT so-SIAL',es:'Seguridad Social',esP:'se-gu-ri-DAD so-SIAL',em:'🛡️',sim:true,tip:'La SS espagnole couvre médecin, hôpital, médicaments. Les autónomos cotisent ~300€/mois.'},
-      {fr:'J\'ai besoin d\'aide',ca:'Necessito ajuda',caP:'ne-se-SI-to a-JU-da',es:'Necesito ayuda',esP:'ne-se-SI-to a-JU-da',em:'🆘',sim:true,tip:'\'Necessito/Necesito\' — quasi identiques. \'Ajuda/Ayuda\' = aide. Phrase de secours.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Tinc febre\' ?',em:'🤒',opts:["J'ai de la fi\u00e8vre", "J'ai mal \u00e0 l'estomac", "Ordonnance", "Pharmacie"],ans:0},
-      {q:'Comment dit-on \'J'ai mal à l'estomac\' en catalan ?',em:'🤢',opts:["Tinc febre", "Em fa mal l'est\u00f3mac", "Farm\u00e0cia", "Recepta"],ans:1},
-      {q:'\'Receta\' en espagnol veut dire ?',em:'📋',opts:["J'ai de la fi\u00e8vre", "Ordonnance", "J'ai mal \u00e0 l'estomac", "Pharmacie"],ans:1},
-      {q:'Comment dit-on \'Pharmacie\' en espagnol ?',em:'💊',opts:["Receta", "Tengo fiebre", "Me duele el est\u00f3mago", "Farmacia"],ans:3}
-    ]
-  },
-  {
-    id:'a2m2',title:'La vie admin',icon:'📋',
-    level:'A2',free:false,age:"adult",
-    desc:'NIE, empadronamiento, banque',
-    words:[
-      {fr:'Numéro d\'identification',ca:'Número d\'identificació',caP:'NU-me-ro di-den-ti-fi-ka-SIO',es:'Número de identificación',esP:'NU-me-ro de i-den-ti-fi-ka-SION',em:'🪪',sim:true,tip:'Le NIE (Número de Identificación de Extranjero) est obligatoire pour tout résident étranger.'},
-      {fr:'Inscription au registre',ca:'Empadronament',caP:'em-pa-dro-na-MEN',es:'Empadronamiento',esP:'em-pa-dro-na-MIEN-to',em:'📝',sim:true,tip:'L\'empadronamiento = inscription à la mairie de ta commune. Obligatoire pour accès aux services.'},
-      {fr:'Mairie',ca:'Ajuntament',caP:'a-jun-ta-MEN',es:'Ayuntamiento',esP:'a-jun-ta-MIEN-to',em:'🏛️',sim:true,tip:'\'Ajuntament/Ayuntamiento\' — quasi identiques. À Campos, tu peux t\'adresser en catalan.'},
-      {fr:'Compte bancaire',ca:'Compte bancari',caP:'KOM-te ban-KA-ri',es:'Cuenta bancaria',esP:'KWEN-ta ban-KA-ria',em:'🏦',sim:true,tip:'Les banques espagnoles demandent le NIE + passeport + justificatif de domicile.'},
-      {fr:'Déclaration d\'impôts',ca:'Declaració d\'impostos',caP:'de-kla-ra-SIO dim-POS-tos',es:'Declaración de impuestos',esP:'de-kla-ra-SION de im-PWES-tos',em:'📊',sim:true,tip:'En Espagne, la déclaration de revenus = \'declaración de la renta\'. Avril-juin chaque année.'},
-      {fr:'Certificat de résidence',ca:'Certificat de residència',caP:'ser-ti-fi-KAT de re-zi-DEN-sia',es:'Certificado de residencia',esP:'ser-ti-fi-KA-do de re-si-DEN-sia',em:'📄',sim:true,tip:'Le \'certificado de residencia\' s\'obtient à la police nationale ou en ligne sur sede.policia.gob.es'},
-      {fr:'Contrat de location',ca:'Contracte de lloguer',caP:'kon-TRAK-te de lyo-GE',es:'Contrato de alquiler',esP:'kon-TRA-to de al-ki-LER',em:'🏡',sim:true,tip:'\'Lloguer/Alquiler\' = location. Les prix à Campos sont bien plus bas qu\'à Palma.'},
-      {fr:'Facture',ca:'Factura',caP:'fak-TU-ra',es:'Factura',esP:'fak-TU-ra',em:'🧾',sim:true,tip:'Identique dans les deux langues ! Les autónomos doivent émettre des factures avec TVA (IVA).'},
-      {fr:'Assurance habitation',ca:'Assegurança de llar',caP:'a-se-gu-RAN-sa de lyar',es:'Seguro de hogar',esP:'se-GU-ro de o-GAR',em:'🏠',sim:false,tip:'Obligatoire si prêt immobilier. \'Llar\' catalan = foyer. \'Hogar\' espagnol = même sens.'},
-      {fr:'Je voudrais ouvrir un compte',ca:'Voldria obrir un compte',caP:'bol-DRIA o-BRIR un KOM-te',es:'Quisiera abrir una cuenta',esP:'ki-SIERA a-BRIR una KWEN-ta',em:'💼',sim:true,tip:'Phrase utile à la banque. Amener NIE + passeport + justificatif de domicile.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Número d'identificació\' ?',em:'🪪',opts:["Num\u00e9ro d'identification", "Inscription au registre", "Mairie", "Compte bancaire"],ans:0},
-      {q:'Comment dit-on \'Inscription au registre\' en catalan ?',em:'📝',opts:["N\u00famero d'identificaci\u00f3", "Empadronament", "Compte bancari", "Ajuntament"],ans:1},
-      {q:'\'Ayuntamiento\' en espagnol veut dire ?',em:'🏛️',opts:["Compte bancaire", "Num\u00e9ro d'identification", "Inscription au registre", "Mairie"],ans:3},
-      {q:'Comment dit-on \'Compte bancaire\' en espagnol ?',em:'🏦',opts:["N\u00famero de identificaci\u00f3n", "Cuenta bancaria", "Empadronamiento", "Ayuntamiento"],ans:1}
-    ]
-  },
-  {
-    id:'a2m3',title:'La météo & la nature',icon:'🌤️',
-    level:'A2',free:false,age:"all",
-    desc:'Soleil, mer, montagne, saisons',
-    words:[
-      {fr:'Il fait beau',ca:'Fa bon temps',caP:'fa bon TENS',es:'Hace buen tiempo',esP:'A-se bwen TIEM-po',em:'☀️',sim:true,tip:'\'Temps/Tiempo\' = temps (météo). \'Fa/Hace\' = il fait. Majorque = 300 jours de soleil.'},
-      {fr:'Il fait chaud',ca:'Fa calor',caP:'fa ka-LOR',es:'Hace calor',esP:'A-se ka-LOR',em:'🥵',sim:true,tip:'\'Calor\' identique dans les deux langues. Été à Majorque = 35°C régulièrement.'},
-      {fr:'Il pleut',ca:'Plou',caP:'plou',es:'Llueve',esP:'LWUE-be',em:'🌧️',sim:false,tip:'\'Plou\' catalan est court. Automne = saison des pluies à Majorque, parfois torrentielles.'},
-      {fr:'Mer',ca:'Mar',caP:'mar',es:'Mar',esP:'mar',em:'🌊',sim:true,tip:'Identique dans les deux langues ! Latin \'mare\'. Majorque = 555 km de côtes.'},
-      {fr:'Montagne',ca:'Muntanya',caP:'mun-TAN-ya',es:'Montaña',esP:'mon-TAN-ya',em:'⛰️',sim:true,tip:'\'Muntanya/Montaña\' — quasi identiques. La Serra de Tramuntana est au Patrimoine UNESCO.'},
-      {fr:'Plage',ca:'Platja',caP:'PLAT-ja',es:'Playa',esP:'PLA-ya',em:'🏖️',sim:true,tip:'\'Platja/Playa\' — quasi identiques ! Majorque compte plus de 200 plages.'},
-      {fr:'Vent',ca:'Vent',caP:'ben',es:'Viento',esP:'BIEN-to',em:'💨',sim:true,tip:'\'Tramuntana\' est le vent du nord emblématique de Majorque. Il peut dépasser 100 km/h.'},
-      {fr:'Coucher de soleil',ca:'Posta de sol',caP:'POS-ta de sol',es:'Puesta de sol',esP:'PWES-ta de sol',em:'🌅',sim:true,tip:'\'Posta/Puesta\' — quasi identiques. Cap de Formentor = meilleur coucher de soleil de Majorque.'},
-      {fr:'Printemps',ca:'Primavera',caP:'pri-ma-VE-ra',es:'Primavera',esP:'pri-ma-VE-ra',em:'🌸',sim:true,tip:'Identique ! Latin \'prima vera\' (premier vrai). Saison des amandiers en fleurs à Majorque.'},
-      {fr:'La tramontane',ca:'Tramuntana',caP:'tra-mun-TA-na',es:'Tramontana',esP:'tra-mon-TA-na',em:'🌬️',sim:true,tip:'Le vent du nord de Majorque. Donne son nom à la chaîne de montagnes. Classé Patrimoine UNESCO.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Fa bon temps\' ?',em:'☀️',opts:["Il fait beau", "Il fait chaud", "Il pleut", "Mer"],ans:0},
-      {q:'Comment dit-on \'Il fait chaud\' en catalan ?',em:'🥵',opts:["Fa calor", "Fa bon temps", "Mar", "Plou"],ans:0},
-      {q:'\'Llueve\' en espagnol veut dire ?',em:'🌧️',opts:["Il fait chaud", "Mer", "Il fait beau", "Il pleut"],ans:3},
-      {q:'Comment dit-on \'Mer\' en espagnol ?',em:'🌊',opts:["Hace calor", "Mar", "Hace buen tiempo", "Llueve"],ans:1}
-    ]
-  },
-  {
-    id:'a2m4',title:'Le mallorquí',icon:'🏴',
-    level:'A2',free:false,age:"all",
-    desc:'Expressions typiques de Majorque',
-    words:[
-      {fr:'Bonjour (mallorquin)',ca:'Bon dia (mallorquí)',caP:'bon DI-a',es:'—',esP:'—',em:'🌅',sim:true,tip:'Le mallorquí est la variante du catalan parlée aux Baléares. Reconnue et protégée officiellement.'},
-      {fr:'Merci (mallorquin)',ca:'Gràcies / Mercès',caP:'GRA-sies / mer-SES',es:'—',esP:'—',em:'🙏',sim:true,tip:'\'Mercès\' est une forme plus ancienne, encore utilisée par les anciens de Majorque.'},
-      {fr:'Le mouton',ca:'Es mè',caP:'es me',es:'El cordero',esP:'el kor-DE-ro',em:'🐑',sim:false,tip:'En mallorquí, l\'article est \'es/sa\' au lieu de \'el/la\'. \'Es mè\' = le mouton. Typique du parler local.'},
-      {fr:'La maison (mallorquin)',ca:'Sa casa',caP:'sa KA-za',es:'La casa',esP:'la KA-sa',em:'🏠',sim:false,tip:'\'Sa\' = \'la\' en mallorquí. \'Es\' = \'le\'. Exemples : \'es sol\' (le soleil), \'sa mar\' (la mer).'},
-      {fr:'Le marché (Sineu)',ca:'Es mercat de Sineu',caP:'es mer-KAT de SI-neu',es:'—',esP:'—',em:'🛒',sim:true,tip:'Le marché de Sineu (mercredi) est le plus important et le plus authentique de Majorque.'},
-      {fr:'Le village',ca:'Es poble',caP:'es PO-ble',es:'El pueblo',esP:'el PWEB-lo',em:'🏘️',sim:true,tip:'\'Poble/Pueblo\' — proches. Les villages de l\'intérieur (Campos, Santanyí) gardent le dialecte.'},
-      {fr:'Une chose (populaire)',ca:'Una cosa',caP:'U-na KO-za',es:'Una cosa',esP:'U-na KO-sa',em:'💡',sim:true,tip:'\'Una cosa\' s\'utilise aussi dans l\'expression \'Ja t\'ho diré\' (Je te le dirai). Typiquement majorquin.'},
-      {fr:'Va bien !',ca:'Ja va bé!',caP:'ja ba be',es:'¡Ya va bien!',esP:'ya ba bien',em:'👌',sim:true,tip:'Expression très utilisée à Majorque. \'Ja va bé\' = ça va bien, c\'est bon.'},
-      {fr:'À tout à l\'heure',ca:'Fins ara',caP:'fins A-ra',es:'Hasta ahora',esP:'AS-ta a-O-ra',em:'👋',sim:true,tip:'\'Fins ara\' = jusqu\'à maintenant/tout à l\'heure. Très courant dans les villages.'},
-      {fr:'C\'est magnifique',ca:'Quina meravella!',caP:'KI-na me-ra-VEL-la',es:'¡Qué maravilla!',esP:'ke ma-ra-BI-ya',em:'😍',sim:true,tip:'\'Meravella\' = merveille. Une expression qui sonne très naturelle quand on découvre Majorque.'}
-    ],
-    quiz:[
-      {q:'Que signifie \'Bon dia (mallorquí)\' ?',em:'🌅',opts:["Bonjour (mallorquin)", "Merci (mallorquin)", "Le mouton", "La maison (mallorquin)"],ans:0},
-      {q:'Comment dit-on \'Merci (mallorquin)\' en catalan ?',em:'🙏',opts:["Gr\u00e0cies / Merc\u00e8s", "Es m\u00e8", "Sa casa", "Bon dia (mallorqu\u00ed)"],ans:0},
-      {q:'\'El cordero\' en espagnol veut dire ?',em:'🐑',opts:["La maison (mallorquin)", "Le mouton", "Bonjour (mallorquin)", "Merci (mallorquin)"],ans:1},
-      {q:'Comment dit-on \'La maison (mallorquin)\' en espagnol ?',em:'🏠',opts:["La casa", "\u2014", "\u2014", "El cordero"],ans:0}
-    ]
-  },
+  {id:'m1',title:'Bonjour Majorque',icon:'👋',level:'Pré-A1',free:true,age:'all',desc:'Salutations essentielles',
+   words:[{fr:'Bonjour (matin)',ca:'Bon dia',caP:'bon DI-a',es:'Buenos días',esP:'BUEN-os DI-as',em:'☀️',sim:true,tip:'Utilisé jusqu\'à midi. Après : \'Bona tarda\'.'},{fr:'Bonjour (après-midi)',ca:'Bona tarda',caP:'BO-na TAR-da',es:'Buenas tardes',esP:'BUEN-as TAR-des',em:'🌤️',sim:true,tip:'\'Tarda\' en catalan = après-midi ET soir.'},{fr:'Bonne nuit',ca:'Bona nit',caP:'BO-na nit',es:'Buenas noches',esP:'BUEN-as NO-ches',em:'🌙',sim:true,tip:'\'Nit\' ressemble à \'night\' en anglais. Même racine indo-européenne.'},{fr:'Salut',ca:'Hola',caP:'O-la',es:'Hola',esP:'O-la',em:'👋',sim:true,tip:'Identique en catalan et espagnol ! Universel sur l\'île.'},{fr:'Merci',ca:'Gràcies',caP:'GRA-si-es',es:'Gracias',esP:'GRA-si-as',em:'🙏',sim:true,tip:'Le \'c\' catalan = \'s\' devant i/e. Vient du latin \'gratia\'.'},{fr:'S\'il vous plaît',ca:'Si us plau',caP:'si us PLAU',es:'Por favor',esP:'por fa-VOR',em:'🤲',sim:false,tip:'\'Si us plau\' = \'si ça vous plaît\'. Unique au catalan.'},{fr:'Au revoir',ca:'Adéu',caP:'a-DEU',es:'Adiós',esP:'a-DIOS',em:'👋',sim:true,tip:'Du latin \'ad deum\'. Les deux langues ont gardé cette étymologie.'},{fr:'Excusez-moi',ca:'Perdona',caP:'per-DO-na',es:'Perdón',esP:'per-DON',em:'🙋',sim:true,tip:'Même racine \'perdonar\'. Le catalan ajoute le -a final.'},{fr:'Oui',ca:'Sí',caP:'si',es:'Sí',esP:'si',em:'✅',sim:true,tip:'Identique dans les deux langues !'},{fr:'Non',ca:'No',caP:'no',es:'No',esP:'no',em:'❌',sim:true,tip:'Universel dans toutes les langues romanes.'},{fr:'Comment vas-tu ?',ca:'Com estàs?',caP:'kom es-TAS',es:'¿Cómo estás?',esP:'KO-mo es-TAS',em:'😊',sim:true,tip:'\'Estàs / estás\' — même verbe \'estar\'. Quasi identique !'},{fr:'Je m\'appelle…',ca:'Em dic…',caP:'em dik',es:'Me llamo…',esP:'me LYA-mo',em:'🙋',sim:false,tip:'\'Em dic\' = je me dis. \'Me llamo\' = je m\'appelle.'}],
+   phrases:[],
+   quiz:[{q:'Que signifie \'Bon dia\' ?',em:'☀️',opts:["Salut", "Bonjour (matin)", "Bonne nuit", "Bonjour (apr\u00e8s-midi)"],ans:1},{q:'Comment dit-on \'Bonjour (après-midi)\' en catalan ?',em:'🌤️',opts:["Hola", "Bona nit", "Bon dia", "Bona tarda"],ans:3},{q:'\'Buenas noches\' en espagnol veut dire ?',em:'🌙',opts:["Bonjour (apr\u00e8s-midi)", "Bonjour (matin)", "Bonne nuit", "Salut"],ans:2}]},
+  {id:'m2',title:'La famille',icon:'👨‍👩‍👧',level:'Pré-A1',free:true,age:'all',desc:'Père, mère, enfants, grands-parents',
+   words:[{fr:'Père',ca:'Pare',caP:'PA-re',es:'Padre',esP:'PA-dre',em:'👨',sim:true,tip:'Latin \'pater\'. À Majorque on entend souvent \'mon pare\'.'},{fr:'Mère',ca:'Mare',caP:'MA-re',es:'Madre',esP:'MA-dre',em:'👩',sim:true,tip:'Latin \'mater\'. Le catalan est plus court que l\'espagnol.'},{fr:'Fils',ca:'Fill',caP:'fi-LY',es:'Hijo',esP:'I-ho',em:'👦',sim:false,tip:'Le \'ll\' catalan = son mouillé (comme \'y\' dans \'yeux\').'},{fr:'Fille',ca:'Filla',caP:'fi-LYA',es:'Hija',esP:'I-ha',em:'👧',sim:false,tip:'\'Filla\' = féminin de \'fill\'. La -a marque le féminin.'},{fr:'Frère',ca:'Germà',caP:'jer-MA',es:'Hermano',esP:'er-MA-no',em:'🤝',sim:true,tip:'Latin \'germanus\'. Le catalan est plus court !'},{fr:'Sœur',ca:'Germana',caP:'jer-MA-na',es:'Hermana',esP:'er-MA-na',em:'👭',sim:true,tip:'Presque identique à l\'espagnol. Une lettre de différence.'},{fr:'Grand-père',ca:'Avi',caP:'A-vi',es:'Abuelo',esP:'a-BUEL-o',em:'👴',sim:false,tip:'\'Avi\' est court et affectueux. \'Abuelo\' du latin \'avuculus\'.'},{fr:'Grand-mère',ca:'Àvia',caP:'A-vi-a',es:'Abuela',esP:'a-BUEL-a',em:'👵',sim:false,tip:'L\'accent grave sur \'à\' = son ouvert. Très entendu à Majorque.'},{fr:'Bébé',ca:'Bebè',caP:'be-BE',es:'Bebé',esP:'be-BE',em:'👶',sim:true,tip:'Quasi identique dans toutes les langues romanes.'},{fr:'Famille',ca:'Família',caP:'fa-MI-lia',es:'Familia',esP:'fa-MI-lia',em:'👨‍👩‍👧',sim:true,tip:'Identique en catalan et espagnol. Du latin \'familia\'.'}],
+   phrases:[],
+   quiz:[{q:'Que signifie \'Pare\' ?',em:'👨',opts:["P\u00e8re", "Fille", "Fils", "M\u00e8re"],ans:0},{q:'Comment dit-on \'Mère\' en catalan ?',em:'👩',opts:["Filla", "Mare", "Fill", "Pare"],ans:1},{q:'\'Hijo\' en espagnol veut dire ?',em:'👦',opts:["Fille", "M\u00e8re", "P\u00e8re", "Fils"],ans:3}]},
+  {id:'m3',title:'Les couleurs',icon:'🎨',level:'Pré-A1',free:false,age:'all',desc:'Rouge, bleu, vert, jaune…',
+   words:[{fr:'Rouge',ca:'Vermell',caP:'ver-MELL',es:'Rojo',esP:'RO-ho',em:'🔴',sim:false,tip:'\'Vermell\' du latin \'vermiculus\'. \'Rojo\' de \'russus\'. Deux origines différentes.'},{fr:'Bleu',ca:'Blau',caP:'blau',es:'Azul',esP:'a-ZUL',em:'🔵',sim:false,tip:'\'Blau\' germanique. \'Azul\' de l\'arabe \'lazaward\' (lapis-lazuli) !'},{fr:'Vert',ca:'Verd',caP:'bert',es:'Verde',esP:'BER-de',em:'🟢',sim:true,tip:'Très proches ! Le d final est muet en catalan.'},{fr:'Jaune',ca:'Groc',caP:'grok',es:'Amarillo',esP:'a-ma-RI-yo',em:'🟡',sim:false,tip:'\'Groc\' est unique au catalan. \'Amarillo\' du latin \'amarellus\'.'},{fr:'Noir',ca:'Negre',caP:'NE-gre',es:'Negro',esP:'NE-gro',em:'⚫',sim:true,tip:'Latin \'niger\'. Presque identiques.'},{fr:'Blanc',ca:'Blanc',caP:'blan',es:'Blanco',esP:'BLAN-ko',em:'⚪',sim:true,tip:'Identique en catalan et français !'},{fr:'Orange',ca:'Taronja',caP:'ta-RON-ja',es:'Naranja',esP:'na-RAN-ha',em:'🟠',sim:true,tip:'Même racine arabe \'naranj\'. \'Taronja\' a donné \'orange\' en français.'},{fr:'Violet',ca:'Morat',caP:'mo-RAT',es:'Morado',esP:'mo-RA-do',em:'🟣',sim:true,tip:'Latin \'moratus\' (couleur de mûre). \'Mûre\' = \'mora\' en catalan.'},{fr:'Rose',ca:'Rosa',caP:'RO-za',es:'Rosa',esP:'RO-sa',em:'🌸',sim:true,tip:'Identique dans les deux langues et proche du français !'},{fr:'Gris',ca:'Gris',caP:'gris',es:'Gris',esP:'gris',em:'🩶',sim:true,tip:'Identique en catalan, espagnol et français. Du germanique.'}],
+   phrases:[],
+   quiz:[{q:'Que signifie \'Vermell\' ?',em:'🔴',opts:["Jaune", "Rouge", "Bleu", "Vert"],ans:1},{q:'Comment dit-on \'Bleu\' en catalan ?',em:'🔵',opts:["Verd", "Vermell", "Blau", "Groc"],ans:2},{q:'\'Verde\' en espagnol veut dire ?',em:'🟢',opts:["Vert", "Jaune", "Rouge", "Bleu"],ans:0}]},
+  {id:'m4',title:'Les chiffres 1-20',icon:'🔢',level:'Pré-A1',free:false,age:'all',desc:'Compter jusqu\'à 20',
+   words:[{fr:'Un',ca:'Un',caP:'un',es:'Uno',esP:'U-no',em:'1️⃣',sim:true,tip:'Identique en catalan et français !'},{fr:'Deux',ca:'Dos',caP:'dos',es:'Dos',esP:'dos',em:'2️⃣',sim:true,tip:'Identique en catalan et espagnol !'},{fr:'Trois',ca:'Tres',caP:'tres',es:'Tres',esP:'tres',em:'3️⃣',sim:true,tip:'Identique en catalan et espagnol, proche du français.'},{fr:'Quatre',ca:'Quatre',caP:'KWA-tre',es:'Cuatro',esP:'KWA-tro',em:'4️⃣',sim:true,tip:'Identique en catalan et français !'},{fr:'Cinq',ca:'Cinc',caP:'sink',es:'Cinco',esP:'SINK-o',em:'5️⃣',sim:true,tip:'\'Cinc\' et \'Cinco\' — presque identiques !'},{fr:'Six',ca:'Sis',caP:'sis',es:'Seis',esP:'seis',em:'6️⃣',sim:true,tip:'\'Sis\' catalan, \'seis\' espagnol. Proches !'},{fr:'Sept',ca:'Set',caP:'set',es:'Siete',esP:'si-ETE',em:'7️⃣',sim:false,tip:'\'Set\' ultra-court en catalan. Même racine latine \'septem\'.'},{fr:'Huit',ca:'Vuit',caP:'buit',es:'Ocho',esP:'O-cho',em:'8️⃣',sim:false,tip:'\'Vuit\' unique au catalan — le v se prononce b !'},{fr:'Neuf',ca:'Nou',caP:'nou',es:'Nueve',esP:'NWEV-e',em:'9️⃣',sim:false,tip:'Piège : \'nou\' ressemble à \'nouveau\' mais signifie NEUF.'},{fr:'Dix',ca:'Deu',caP:'DEU',es:'Diez',esP:'dies',em:'🔟',sim:false,tip:'\'Deu\' ressemble à \'deux\' mais signifie DIX ! Piège classique.'},{fr:'Onze',ca:'Onze',caP:'ON-ze',es:'Once',esP:'ON-se',em:'1️⃣1️⃣',sim:true,tip:'Très proches ! Latin \'undecim\'.'},{fr:'Douze',ca:'Dotze',caP:'DOT-ze',es:'Doce',esP:'DO-se',em:'1️⃣2️⃣',sim:true,tip:'\'Dotze/Doce\' — même racine. Le catalan est plus proche du français.'},{fr:'Treize',ca:'Tretze',caP:'TRET-ze',es:'Trece',esP:'TRE-se',em:'1️⃣3️⃣',sim:true,tip:'Latin \'tredecim\'. Toutes proches.'},{fr:'Quatorze',ca:'Catorze',caP:'ka-TOR-ze',es:'Catorce',esP:'ka-TOR-se',em:'1️⃣4️⃣',sim:true,tip:'Très proches entre elles et avec le français.'},{fr:'Quinze',ca:'Quinze',caP:'KWIN-ze',es:'Quince',esP:'KIN-se',em:'1️⃣5️⃣',sim:true,tip:'Identique en catalan et français !'},{fr:'Vingt',ca:'Vint',caP:'bint',es:'Veinte',esP:'BEIN-te',em:'2️⃣0️⃣',sim:true,tip:'Latin \'viginti\'. Le v catalan se prononce b.'}],
+   phrases:[],
+   quiz:[{q:'Que signifie \'Un\' ?',em:'1️⃣',opts:["Un", "Quatre", "Trois", "Deux"],ans:0},{q:'Comment dit-on \'Deux\' en catalan ?',em:'2️⃣',opts:["Un", "Tres", "Quatre", "Dos"],ans:3},{q:'\'Tres\' en espagnol veut dire ?',em:'3️⃣',opts:["Un", "Trois", "Deux", "Quatre"],ans:1}]},
+  {id:'m5',title:'La nourriture',icon:'🍽️',level:'Pré-A1',free:false,age:'all',desc:'Pain, eau, fruits, restaurant',
+   words:[{fr:'Pain',ca:'Pa',caP:'pa',es:'Pan',esP:'pan',em:'🍞',sim:true,tip:'\'Pa amb tomàquet\' = le plat typique majorquin (pain frotté à la tomate).'},{fr:'Eau',ca:'Aigua',caP:'AIG-ua',es:'Agua',esP:'A-gua',em:'💧',sim:true,tip:'\'Aigua\' garde le -i- du latin \'aqua\'.'},{fr:'Vin',ca:'Vi',caP:'vi',es:'Vino',esP:'VI-no',em:'🍷',sim:true,tip:'Ultra-court en catalan. Du latin \'vinum\'. Le DO Mallorca est réputé.'},{fr:'Eau minérale',ca:'Aigua mineral',caP:'AIG-ua mi-ne-RAL',es:'Agua mineral',esP:'A-gua mi-ne-RAL',em:'🫧',sim:true,tip:'Identique ! \'Sense gas\' = sans bulles, \'amb gas\' = avec bulles.'},{fr:'Bière',ca:'Cervesa',caP:'ser-BE-za',es:'Cerveza',esP:'ser-BE-za',em:'🍺',sim:true,tip:'Presque identique ! Du latin \'cerevisia\'. Très commun à Majorque.'},{fr:'Café',ca:'Cafè',caP:'ca-FE',es:'Café',esP:'ca-FE',em:'☕',sim:true,tip:'Identique en catalan, espagnol et français !'},{fr:'Lait',ca:'Llet',caP:'lyet',es:'Leche',esP:'LE-che',em:'🥛',sim:false,tip:'\'Llet\' catalan unique. \'Leche\' espagnol du latin \'lactem\'.'},{fr:'Fromage',ca:'Formatge',caP:'for-MAT-je',es:'Queso',esP:'KE-so',em:'🧀',sim:false,tip:'\'Formatge\' ressemble au français ! \'Queso\' du latin \'caseus\'.'},{fr:'Pain-tomate',ca:'Pa amb tomàquet',caP:'pa am to-MA-ket',es:'Pan con tomate',esP:'pan kon to-MA-te',em:'🍅',sim:true,tip:'LE plat signature de Majorque. Huile d\'olive, ail, tomate frottée. Incontournable.'},{fr:'Poisson',ca:'Peix',caP:'pech',es:'Pescado',esP:'pes-KA-do',em:'🐟',sim:false,tip:'\'Peix\' du latin \'piscis\'. Majorque = île → le poisson est partout.'},{fr:'Fruits de mer',ca:'Marisc',caP:'ma-RISK',es:'Marisco',esP:'ma-RIS-ko',em:'🦞',sim:true,tip:'Presque identique ! \'Mar\' = mer dans les deux langues.'},{fr:'Huile d\'olive',ca:'Oli d\'oliva',caP:'O-li do-LI-va',es:'Aceite de oliva',esP:'a-SEI-te de o-LI-va',em:'🫒',sim:false,tip:'\'Oli\' catalan = huile. L\'huile d\'olive de Mallorca est une IGP protégée.'}],
+   phrases:[],
+   quiz:[{q:'Que signifie \'Pa\' ?',em:'🍞',opts:["Eau min\u00e9rale", "Pain", "Vin", "Eau"],ans:1},{q:'Comment dit-on \'Eau\' en catalan ?',em:'💧',opts:["Vi", "Aigua mineral", "Pa", "Aigua"],ans:3},{q:'\'Vino\' en espagnol veut dire ?',em:'🍷',opts:["Eau", "Pain", "Eau min\u00e9rale", "Vin"],ans:3}]},
+  {id:'m6',title:'À l\'école',icon:'🏫',level:'Pré-A1',free:false,age:'all',desc:'Pour les enfants à Majorque',
+   words:[{fr:'École',ca:'Escola',caP:'es-KO-la',es:'Escuela',esP:'es-KWE-la',em:'🏫',sim:true,tip:'À Majorque, l\'instruction publique est en catalan dès la maternelle.'},{fr:'Professeur',ca:'Mestre',caP:'MES-tre',es:'Maestro',esP:'ma-ES-tro',em:'👩‍🏫',sim:true,tip:'Du latin \'magister\'. \'Maestro\' est entré dans de nombreuses langues.'},{fr:'Livre',ca:'Llibre',caP:'LY-bre',es:'Libro',esP:'LI-bro',em:'📚',sim:true,tip:'Le \'ll\' catalan = son mouillé. Presque identique à l\'espagnol.'},{fr:'Crayon',ca:'Llapis',caP:'LYA-pis',es:'Lápiz',esP:'LA-pis',em:'✏️',sim:true,tip:'Même racine. Le \'ll\' catalan se prononce différemment du \'l\'.'},{fr:'Cahier',ca:'Quadern',caP:'qua-DERN',es:'Cuaderno',esP:'cua-DER-no',em:'📓',sim:true,tip:'Quasi identiques ! Du latin \'quaternus\' (4 feuilles).'},{fr:'Sac à dos',ca:'Motxilla',caP:'mo-CHIL-la',es:'Mochila',esP:'mo-CHI-la',em:'🎒',sim:true,tip:'Quasi identique en catalan et espagnol.'},{fr:'Ami',ca:'Amic',caP:'a-MIC',es:'Amigo',esP:'a-MI-go',em:'🤝',sim:true,tip:'\'Amic\' et \'amigo\' du latin \'amicus\'. Le c final catalan = k.'},{fr:'Récréation',ca:'Pati',caP:'PA-ti',es:'Patio',esP:'PA-tio',em:'🛝',sim:true,tip:'\'Pati\' — le mot que tous les enfants de Campos connaissent.'},{fr:'Devoirs',ca:'Deures',caP:'DEU-res',es:'Deberes',esP:'de-BE-res',em:'📝',sim:true,tip:'Du latin \'debere\' (devoir). Mot universel des familles à Majorque.'},{fr:'Classe',ca:'Classe',caP:'KLA-se',es:'Clase',esP:'KLA-se',em:'🏛️',sim:true,tip:'Identique en catalan et français ! Espagnol légèrement différent.'}],
+   phrases:[],
+   quiz:[{q:'Que signifie \'Escola\' ?',em:'🏫',opts:["Professeur", "\u00c9cole", "Crayon", "Livre"],ans:1},{q:'Comment dit-on \'Professeur\' en catalan ?',em:'👩‍🏫',opts:["Llapis", "Escola", "Mestre", "Llibre"],ans:2},{q:'\'Libro\' en espagnol veut dire ?',em:'📚',opts:["Crayon", "Livre", "Professeur", "\u00c9cole"],ans:1}]},
+  {id:'a1_pres',title:'Se présenter',icon:'🙋',level:'A1',free:false,age:'all',desc:'Dire qui on est, d\'où on vient',
+   words:[{fr:'Je suis français(e)',ca:'Sóc francès/francesa',caP:'SOK fran-SES',es:'Soy francés/francesa',esP:'soi fran-SES',em:'🇫🇷',sim:true,tip:'\'Sóc/Soy\' = je suis. Même racine latine \'esse\'.'},{fr:'J\'habite à Majorque',ca:'Visc a Mallorca',caP:'bisk a ma-LOR-ka',es:'Vivo en Mallorca',esP:'BI-bo en ma-LOR-ka',em:'🏝️',sim:true,tip:'\'Visc/Vivo\' du latin \'vivere\'. \'Mallorca\' s\'écrit avec ll en catalan.'},{fr:'J\'ai X ans',ca:'Tinc X anys',caP:'tink X ANS',es:'Tengo X años',esP:'TEN-go X A-nyos',em:'🎂',sim:true,tip:'\'Tinc/Tengo\' = j\'ai. \'Anys/años\' = années.'},{fr:'Je comprends',ca:'Entenc',caP:'en-TENK',es:'Entiendo',esP:'en-TIEN-do',em:'🤔',sim:true,tip:'Du latin \'intelligere\'. Phrase de survie absolue.'},{fr:'Je ne comprends pas',ca:'No entenc',caP:'no en-TENK',es:'No entiendo',esP:'no en-TIEN-do',em:'😕',sim:true,tip:'Très utile dès les premiers jours à Majorque.'},{fr:'Répétez s\'il vous plaît',ca:'Pot repetir, si us plau?',caP:'pot re-pe-TIR',es:'¿Puede repetir, por favor?',esP:'PWE-de re-pe-TIR',em:'🔁',sim:true,tip:'Phrase de survie pour les nouveaux arrivants.'},{fr:'Plus lentement',ca:'Més a poc a poc',caP:'mes a pok a pok',es:'Más despacio',esP:'mas des-PA-sio',em:'🐢',sim:false,tip:'\'A poc a poc\' = petit à petit. Expression charmante du catalan.'},{fr:'Comment dit-on… ?',ca:'Com es diu… ?',caP:'kom es DIU',es:'¿Cómo se dice… ?',esP:'KO-mo se DI-se',em:'💬',sim:true,tip:'Question essentielle pour apprendre.'},{fr:'Je parle un peu catalan',ca:'Parlo una mica de català',caP:'PAR-lo U-na MI-ka',es:'Hablo un poco de catalán',esP:'A-blo un PO-ko',em:'🗣️',sim:true,tip:'\'Una mica\' = un peu. Expression typiquement majorquine.'},{fr:'Quel est ton prénom ?',ca:'Com et dius?',caP:'kom et DIUS',es:'¿Cómo te llamas?',esP:'KO-mo te LYA-mas',em:'❓',sim:false,tip:'\'Com et dius\' = comment tu te dis. Très naturel en catalan.'}],
+   phrases:[{fr:'Bonjour, je m\'appelle Lenny. J\'ai 9 ans et j\'habite à Campos.',ca:'Bon dia, em dic Lenny. Tinc 9 anys i visc a Campos.',es:'Buenos días, me llamo Lenny. Tengo 9 años y vivo en Campos.',note:'Structure de base pour se présenter à l\'école.'},{fr:'Je suis français(e) mais j\'apprends le catalan.',ca:'Sóc francès/francesa però estic aprenent català.',es:'Soy francés/francesa pero estoy aprendiendo catalán.',note:'\'Però/Pero\' = mais. \'Estic aprenent\' = je suis en train d\'apprendre.'},{fr:'Excusez-moi, je ne comprends pas. Pouvez-vous répéter ?',ca:'Perdona, no entenc. Pots repetir?',es:'Perdón, no entiendo. ¿Puedes repetir?',note:'Phrases de survie en classe ou au marché.'}],
+   quiz:[{q:'Que signifie \'Sóc francès/francesa\' ?',em:'🇫🇷',opts:["J'ai X ans", "Je suis fran\u00e7ais(e)", "Je comprends", "J'habite \u00e0 Majorque"],ans:1},{q:'Comment dit-on \'J\'habite à Majorque\' en catalan ?',em:'🏝️',opts:["S\u00f3c franc\u00e8s/francesa", "Tinc X anys", "Entenc", "Visc a Mallorca"],ans:3},{q:'\'Tengo X años\' en espagnol veut dire ?',em:'🎂',opts:["J'habite \u00e0 Majorque", "J'ai X ans", "Je suis fran\u00e7ais(e)", "Je comprends"],ans:1},{q:'Complète : \'Bonjour, je m\'appelle Lenny. J\'ai 9 ans et j\'habite à Campos...\'',em:'💬',opts:["S\u00f3c franc\u00e8s/francesa", "Bon dia, em dic Lenny. Tinc 9 anys i visc a Campos.", "Tinc X anys", "Visc a Mallorca"],ans:1}]},
+  {id:'a1_corps',title:'Le corps',icon:'🧍',level:'A1',free:false,age:'all',desc:'Tête, bras, ventre, jambes…',
+   words:[{fr:'Tête',ca:'Cap',caP:'kap',es:'Cabeza',esP:'ka-BE-za',em:'🗣️',sim:false,tip:'\'Cap\' = tête ET cap (direction). Attention au double sens !'},{fr:'Yeux',ca:'Ulls',caP:'ulls',es:'Ojos',esP:'O-hos',em:'👁️',sim:false,tip:'\'Ulls\' du latin \'oculos\'. Prononciation unique.'},{fr:'Oreille',ca:'Orella',caP:'o-RE-lla',es:'Oreja',esP:'o-RE-ha',em:'👂',sim:true,tip:'\'Orella/Oreja\' — très proches ! Du latin \'auricula\'.'},{fr:'Bouche',ca:'Boca',caP:'BO-ka',es:'Boca',esP:'BO-ka',em:'👄',sim:true,tip:'Identique en catalan et espagnol !'},{fr:'Nez',ca:'Nas',caP:'nas',es:'Nariz',esP:'na-RIS',em:'👃',sim:false,tip:'\'Nas\' ultra-court en catalan. Du latin \'nasus\'.'},{fr:'Main',ca:'Mà',caP:'ma',es:'Mano',esP:'MA-no',em:'🤚',sim:true,tip:'\'Mà/Mano\' — même racine latine \'manus\'.'},{fr:'Bras',ca:'Braç',caP:'bras',es:'Brazo',esP:'BRA-so',em:'💪',sim:true,tip:'\'Braç/Brazo\' — quasi identiques. Le ç catalan = s.'},{fr:'Jambe',ca:'Cama',caP:'KA-ma',es:'Pierna',esP:'PIER-na',em:'🦵',sim:false,tip:'\'Cama\' catalan = jambe. En espagnol \'cama\' = lit ! Faux-ami.'},{fr:'Pied',ca:'Peu',caP:'peu',es:'Pie',esP:'pie',em:'🦶',sim:true,tip:'\'Peu/Pie\' — très proches ! Du latin \'pedem\'.'},{fr:'J\'ai mal à la tête',ca:'Em fa mal el cap',caP:'em fa mal el kap',es:'Me duele la cabeza',esP:'me DWEL-e la ka-BE-za',em:'🤕',sim:false,tip:'\'Fa mal\' = fait mal. Utile chez le médecin.'}],
+   phrases:[{fr:'Montre-moi ta main droite.',ca:'Ensenya\'m la mà dreta.',es:'Enséñame la mano derecha.',note:'\'Dreta/Derecha\' = droite. \'Esquerra/Izquierda\' = gauche.'},{fr:'J\'ai mal au ventre depuis ce matin.',ca:'Em fa mal la panxa des de aquest matí.',es:'Me duele el estómago desde esta mañana.',note:'\'Des de\' = depuis. \'Matí/Mañana\' = matin.'}],
+   quiz:[{q:'Que signifie \'Cap\' ?',em:'🗣️',opts:["Bouche", "Yeux", "T\u00eate", "Oreille"],ans:2},{q:'Comment dit-on \'Yeux\' en catalan ?',em:'👁️',opts:["Boca", "Orella", "Cap", "Ulls"],ans:3},{q:'\'Oreja\' en espagnol veut dire ?',em:'👂',opts:["Bouche", "Oreille", "T\u00eate", "Yeux"],ans:1},{q:'Complète : \'Montre-moi ta main droite.\'',em:'💬',opts:["Ensenya'm la m\u00e0 dreta.", "Ulls", "Orella", "Cap"],ans:0}]},
+  {id:'a1_maison',title:'La maison',icon:'🏠',level:'A1',free:false,age:'all',desc:'Pièces, meubles, vie quotidienne',
+   words:[{fr:'Maison',ca:'Casa',caP:'KA-za',es:'Casa',esP:'KA-sa',em:'🏠',sim:true,tip:'Identique en catalan et espagnol !'},{fr:'Chambre',ca:'Habitació',caP:'a-bi-ta-SIO',es:'Habitación',esP:'a-bi-ta-SION',em:'🛏️',sim:true,tip:'Du latin \'habitatio\'. À Majorque, les maisons ont des volets en bois.'},{fr:'Salle de bain',ca:'Bany',caP:'ban',es:'Baño',esP:'BA-nyo',em:'🛁',sim:true,tip:'\'Bany/Baño\' — presque identiques ! Latin \'balneum\'.'},{fr:'Cuisine',ca:'Cuina',caP:'KUI-na',es:'Cocina',esP:'ko-SI-na',em:'🍳',sim:true,tip:'\'Cuina\' proche du français \'cuisine\' !'},{fr:'Salon',ca:'Sala d\'estar',caP:'SA-la des-TAR',es:'Salón',esP:'sa-LON',em:'🛋️',sim:false,tip:'\'Sala d\'estar\' = pièce pour être.'},{fr:'Jardin',ca:'Jardí',caP:'jar-DI',es:'Jardín',esP:'jar-DIN',em:'🌿',sim:true,tip:'Identiques ! Les maisons majorquines ont souvent un jardí.'},{fr:'Piscine',ca:'Piscina',caP:'pis-SI-na',es:'Piscina',esP:'pis-SI-na',em:'🏊',sim:true,tip:'Identique dans les deux langues. Incontournable à Majorque.'},{fr:'Fenêtre',ca:'Finestra',caP:'fi-NES-tra',es:'Ventana',esP:'ben-TA-na',em:'🪟',sim:false,tip:'\'Finestra\' proche du français \'fenêtre\'.'},{fr:'Porte',ca:'Porta',caP:'POR-ta',es:'Puerta',esP:'PWER-ta',em:'🚪',sim:true,tip:'\'Porta/Puerta\' — même racine latine.'},{fr:'Escalier',ca:'Escala',caP:'es-KA-la',es:'Escalera',esP:'es-ka-LE-ra',em:'🪜',sim:true,tip:'\'Escala\' catalan est plus court. Les vieilles demeures de Palma ont de belles escales.'}],
+   phrases:[{fr:'Ma chambre est au premier étage.',ca:'La meva habitació és al primer pis.',es:'Mi habitación está en el primer piso.',note:'\'Meva/Mi\' = ma. \'Primer pis\' = premier étage (pas \'première floor\').'},{fr:'La cuisine est petite mais la terrasse est grande.',ca:'La cuina és petita però la terrassa és gran.',es:'La cocina es pequeña pero la terraza es grande.',note:'\'Petit/Pequeño\' = petit. \'Gran/Grande\' = grand.'},{fr:'Est-ce qu\'il y a un jardin ?',ca:'Hi ha jardí?',es:'¿Hay jardín?',note:'\'Hi ha / Hay\' = il y a. Construction très utilisée.'}],
+   quiz:[{q:'Que signifie \'Casa\' ?',em:'🏠',opts:["Maison", "Cuisine", "Chambre", "Salle de bain"],ans:0},{q:'Comment dit-on \'Chambre\' en catalan ?',em:'🛏️',opts:["Casa", "Habitaci\u00f3", "Cuina", "Bany"],ans:1},{q:'\'Baño\' en espagnol veut dire ?',em:'🛁',opts:["Maison", "Salle de bain", "Cuisine", "Chambre"],ans:1},{q:'Complète : \'Ma chambre est au premier étage.\'',em:'💬',opts:["La meva habitaci\u00f3 \u00e9s al primer pis.", "Casa", "Bany", "Habitaci\u00f3"],ans:0}]},
+  {id:'a1_transport',title:'Les transports',icon:'🚗',level:'A1',free:false,age:'all',desc:'Voiture, bus, train, bateau',
+   words:[{fr:'Voiture',ca:'Cotxe',caP:'KO-che',es:'Coche',esP:'KO-che',em:'🚗',sim:true,tip:'Quasi identique ! Essentiel à Majorque où les transports en commun sont limités.'},{fr:'Bus',ca:'Autobús',caP:'au-to-BUS',es:'Autobús',esP:'au-to-BUS',em:'🚌',sim:true,tip:'Identique. Le réseau TIB relie toute l\'île.'},{fr:'Train',ca:'Tren',caP:'tren',es:'Tren',esP:'tren',em:'🚂',sim:true,tip:'Identique ! La ligne Palma-Sóller est un train historique magnifique.'},{fr:'Bateau',ca:'Vaixell',caP:'ba-CHELL',es:'Barco',esP:'BAR-ko',em:'⛴️',sim:false,tip:'\'Vaixell\' unique au catalan. Majorque = île, le bateau est essentiel.'},{fr:'Avion',ca:'Avió',caP:'a-bio',es:'Avión',esP:'a-BION',em:'✈️',sim:true,tip:'Identiques ! L\'aéroport de Palma est l\'un des plus fréquentés d\'Europe.'},{fr:'Vélo',ca:'Bicicleta',caP:'bi-si-KLE-ta',es:'Bicicleta',esP:'bi-si-KLE-ta',em:'🚴',sim:true,tip:'Identique. Majorque est un paradis du cyclisme.'},{fr:'À pied',ca:'A peu',caP:'a peu',es:'A pie',esP:'a pie',em:'🚶',sim:true,tip:'\'A peu / a pie\' — même racine \'pedem\'.'},{fr:'Arrêt de bus',ca:'Parada de bus',caP:'pa-RA-da de bus',es:'Parada de autobús',esP:'pa-RA-da de au-to-BUS',em:'🛑',sim:true,tip:'\'Parada\' = arrêt dans les deux langues.'},{fr:'Je voudrais un billet',ca:'Voldria un bitllet',caP:'bol-DRIA un bit-LLET',es:'Quisiera un billete',esP:'ki-SIERA un bi-LLE-te',em:'🎫',sim:true,tip:'\'Voldria/Quisiera\' = je voudrais. Formes de politesse.'},{fr:'À quelle heure part le bus ?',ca:'A quina hora surt el bus?',caP:'a KI-na O-ra surt',es:'¿A qué hora sale el bus?',esP:'a ke O-ra SA-le',em:'🕐',sim:true,tip:'\'Surt/Sale\' = part. \'Quina/Qué\' = quelle.'}],
+   phrases:[{fr:'Le bus pour Palma part à 8h30.',ca:'El bus per a Palma surt a les 8 i mitja.',es:'El bus para Palma sale a las 8 y media.',note:'\'I mitja / y media\' = et demie. Les heures se construisent pareil.'},{fr:'C\'est loin d\'ici ? On peut y aller à pied ?',ca:'És lluny d\'aquí? Hi podem anar a peu?',es:'¿Está lejos de aquí? ¿Podemos ir a pie?',note:'\'Lluny/Lejos\' = loin. \'Hi podem anar\' = on peut y aller.'}],
+   quiz:[{q:'Que signifie \'Cotxe\' ?',em:'🚗',opts:["Bus", "Voiture", "Bateau", "Train"],ans:1},{q:'Comment dit-on \'Bus\' en catalan ?',em:'🚌',opts:["Autob\u00fas", "Vaixell", "Tren", "Cotxe"],ans:0},{q:'\'Tren\' en espagnol veut dire ?',em:'🚂',opts:["Bus", "Train", "Voiture", "Bateau"],ans:1},{q:'Complète : \'Le bus pour Palma part à 8h30.\'',em:'💬',opts:["El bus per a Palma surt a les 8 i mitja.", "Tren", "Autob\u00fas", "Cotxe"],ans:0}]},
+  {id:'a1_metiers',title:'Les métiers',icon:'💼',level:'A1',free:false,age:'adult',desc:'Professions courantes à Majorque',
+   words:[{fr:'Médecin',ca:'Metge',caP:'MET-je',es:'Médico',esP:'ME-di-ko',em:'👨‍⚕️',sim:false,tip:'\'Metge\' du grec. \'Médico\' du latin. Deux origines.'},{fr:'Enseignant',ca:'Professor',caP:'pro-fe-SOR',es:'Profesor',esP:'pro-fe-SOR',em:'👩‍🏫',sim:true,tip:'Quasi identique ! Les profs à Majorque enseignent en catalan.'},{fr:'Hôtelier',ca:'Hoteler',caP:'o-te-LE',es:'Hotelero',esP:'o-te-LE-ro',em:'🏨',sim:true,tip:'Tourisme = 1er secteur de l\'économie majorquine.'},{fr:'Cuisinier',ca:'Cuiner',caP:'kui-NE',es:'Cocinero',esP:'ko-si-NE-ro',em:'👨‍🍳',sim:true,tip:'La gastronomie majorquine est réputée.'},{fr:'Travailleur indépendant',ca:'Autònom',caP:'au-TO-nom',es:'Autónomo',esP:'au-TO-no-mo',em:'💻',sim:true,tip:'Le statut d\'Amely et de nombreux expatriés !'},{fr:'Artisan',ca:'Artesà',caP:'ar-te-ZA',es:'Artesano',esP:'ar-te-ZA-no',em:'🔨',sim:true,tip:'Les marchés artisanaux de Majorque sont excellents.'},{fr:'Tatoueur',ca:'Tatuador',caP:'ta-tua-DOR',es:'Tatuador',esP:'ta-tua-DOR',em:'🎨',sim:true,tip:'Comme Tony au Blackthorn Tattoo à Campos !'},{fr:'Je travaille comme…',ca:'Treballo com a…',caP:'tre-BAL-lo kom a',es:'Trabajo como…',esP:'tra-BA-ho KO-mo',em:'💼',sim:true,tip:'Structure clé pour parler de son travail.'},{fr:'Qu\'est-ce que vous faites dans la vie ?',ca:'A què es dedica?',caP:'a ke es de-DI-ka',es:'¿A qué se dedica?',esP:'a ke se de-DI-ka',em:'❓',sim:true,tip:'Formule polie pour demander la profession.'},{fr:'Je suis à mon compte',ca:'Sóc autònom/autònoma',caP:'SOK au-TO-nom',es:'Soy autónomo/autónoma',esP:'soi au-TO-no-mo',em:'🚀',sim:true,tip:'Le statut autónomo est très courant chez les expatriés français à Majorque.'}],
+   phrases:[{fr:'Je travaille comme photographe indépendant à Majorque.',ca:'Treballo com a fotògraf/a autònom/a a Mallorca.',es:'Trabajo como fotógrafo/a autónomo/a en Mallorca.',note:'Structure typique pour se présenter professionnellement.'},{fr:'Je me suis installé(e) ici il y a un an.',ca:'Em vaig instal·lar aquí fa un any.',es:'Me instalé aquí hace un año.',note:'\'Fa un any / hace un año\' = il y a un an. Structure passé identique !'}],
+   quiz:[{q:'Que signifie \'Metge\' ?',em:'👨‍⚕️',opts:["M\u00e9decin", "H\u00f4telier", "Enseignant", "Cuisinier"],ans:0},{q:'Comment dit-on \'Enseignant\' en catalan ?',em:'👩‍🏫',opts:["Hoteler", "Metge", "Cuiner", "Professor"],ans:3},{q:'\'Hotelero\' en espagnol veut dire ?',em:'🏨',opts:["M\u00e9decin", "Enseignant", "H\u00f4telier", "Cuisinier"],ans:2},{q:'Complète : \'Je travaille comme photographe indépendant à Majorque.\'',em:'💬',opts:["Treballo com a fot\u00f2graf/a aut\u00f2nom/a a Mallorca.", "Metge", "Professor", "Hoteler"],ans:0}]},
+  {id:'a1_emotions',title:'Les émotions',icon:'😊',level:'A1',free:false,age:'all',desc:'Exprimer ce qu\'on ressent',
+   words:[{fr:'Content(e)',ca:'Content/Contenta',caP:'kon-TEN',es:'Contento/Contenta',esP:'kon-TEN-to',em:'😊',sim:true,tip:'Quasi identique dans toutes les langues romanes !'},{fr:'Triste',ca:'Trist/Trista',caP:'trist',es:'Triste',esP:'TRIS-te',em:'😢',sim:true,tip:'Identique en catalan et espagnol.'},{fr:'Fatigué(e)',ca:'Cansat/Cansada',caP:'kan-SAT',es:'Cansado/Cansada',esP:'kan-SA-do',em:'😴',sim:true,tip:'\'Cansat/Cansado\' — très proches.'},{fr:'Heureux/Heureuse',ca:'Feliç',caP:'fe-LIS',es:'Feliz',esP:'fe-LIS',em:'😄',sim:true,tip:'\'Feliç/Feliz\' — presque identiques ! Du latin \'felix\'.'},{fr:'En colère',ca:'Enfadat/Enfadada',caP:'en-fa-DAT',es:'Enfadado/Enfadada',esP:'en-fa-DA-do',em:'😠',sim:true,tip:'Quasi identique dans les deux langues.'},{fr:'J\'ai peur',ca:'Tinc por',caP:'tink por',es:'Tengo miedo',esP:'TEN-go MIE-do',em:'😨',sim:false,tip:'\'Por\' catalan = peur. \'Miedo\' espagnol du latin \'metus\'. Deux mots différents.'},{fr:'Je suis bien',ca:'Estic bé',caP:'es-TIK be',es:'Estoy bien',esP:'es-TOI bien',em:'🙂',sim:true,tip:'\'Estic/Estoy\' = je suis (état). Réponse au \'Com estàs?\'.'},{fr:'Super !',ca:'Molt bé!',caP:'molt be',es:'¡Muy bien!',esP:'mui bien',em:'🤩',sim:true,tip:'\'Molt/Muy\' = très. \'Molt bé\' s\'entend partout à Majorque.'},{fr:'Quelle chance !',ca:'Quina sort!',caP:'KI-na sort',es:'¡Qué suerte!',esP:'ke SWER-te',em:'🍀',sim:true,tip:'\'Sort/Suerte\' = chance. Même racine latine.'},{fr:'J\'adore Majorque !',ca:'M\'encanta Mallorca!',caP:'men-KAN-ta',es:'¡Me encanta Mallorca!',esP:'me en-KAN-ta',em:'❤️',sim:true,tip:'\'M\'encanta / Me encanta\' = j\'adore (ça m\'enchante). Identique !'}],
+   phrases:[{fr:'Je suis fatigué(e) mais très content(e) d\'être ici.',ca:'Estic cansat/cansada però molt content/contenta d\'estar aquí.',es:'Estoy cansado/cansada pero muy contento/contenta de estar aquí.',note:'Combiner deux états avec \'però/pero\' = mais.'},{fr:'Comment tu te sens aujourd\'hui ?',ca:'Com et trobes avui?',es:'¿Cómo te encuentras hoy?',note:'\'Com et trobes\' = comment tu te trouves. Expression naturelle en catalan.'}],
+   quiz:[{q:'Que signifie \'Content/Contenta\' ?',em:'😊',opts:["Fatigu\u00e9(e)", "Heureux/Heureuse", "Content(e)", "Triste"],ans:2},{q:'Comment dit-on \'Triste\' en catalan ?',em:'😢',opts:["Feli\u00e7", "Content/Contenta", "Trist/Trista", "Cansat/Cansada"],ans:2},{q:'\'Cansado/Cansada\' en espagnol veut dire ?',em:'😴',opts:["Triste", "Fatigu\u00e9(e)", "Content(e)", "Heureux/Heureuse"],ans:1},{q:'Complète : \'Je suis fatigué(e) mais très content(e) d\'être ici.\'',em:'💬',opts:["Content/Contenta", "Cansat/Cansada", "Trist/Trista", "Estic cansat/cansada per\u00f2 molt content/contenta d'estar aqu\u00ed."],ans:3}]},
+  {id:'a1_nourriture2',title:'Au restaurant',icon:'🥘',level:'A1',free:false,age:'all',desc:'Commander, payer, plats typiques',
+   words:[{fr:'Je voudrais…',ca:'Voldria…',caP:'bol-DRIA',es:'Quisiera…',esP:'ki-SIERA',em:'🍽️',sim:true,tip:'Formes de politesse. \'Voldria/Quisiera\' = je voudrais (conditionnel).'},{fr:'L\'addition s\'il vous plaît',ca:'El compte, si us plau',caP:'el KOM-te',es:'La cuenta, por favor',esP:'la KWEN-ta',em:'🧾',sim:true,tip:'\'Compte/Cuenta\' — proches ! Dire ça à la fin du repas.'},{fr:'C\'est délicieux',ca:'Està deliciós',caP:'es-TA de-li-SIOS',es:'Está delicioso',esP:'es-TA de-li-SIO-so',em:'😋',sim:true,tip:'Quasi identique dans les deux langues. Fait toujours plaisir au cuisinier.'},{fr:'Je suis végétarien(ne)',ca:'Sóc vegetarià/vegetariana',caP:'SOK be-je-ta-RIA',es:'Soy vegetariano/vegetariana',esP:'soi be-he-ta-RIA-no',em:'🥗',sim:true,tip:'Utile au restaurant. Les menus majorquins sont très centrés viande/poisson.'},{fr:'Avez-vous une table pour deux ?',ca:'Té una taula per a dos?',caP:'te U-na TAU-la per a dos',es:'¿Tiene una mesa para dos?',esP:'TIEN-e U-na ME-sa pa-ra dos',em:'🪑',sim:true,tip:'\'Taula/Mesa\' = table. \'Dos\' = deux dans les deux langues.'},{fr:'Qu\'est-ce que vous recommandez ?',ca:'Què ens recomana?',caP:'ke ens re-ko-MA-na',es:'¿Qué nos recomienda?',esP:'ke nos re-ko-MIEN-da',em:'👨‍🍳',sim:true,tip:'Le patron vous conseillera souvent le plat du jour — \'plat del dia\'.'},{fr:'Sans gluten',ca:'Sense gluten',caP:'SEN-se GLUT-en',es:'Sin gluten',esP:'sin GLUT-en',em:'🌾',sim:true,tip:'\'Sense/Sin\' = sans. Très compris dans les restos de Majorque.'},{fr:'La sobrassada',ca:'La sobrassada',caP:'so-bra-SA-da',es:'La sobrasada',esP:'so-bra-SA-da',em:'🌭',sim:true,tip:'LA charcuterie emblématique de Majorque. À goûter absolument.'},{fr:'Bon appétit !',ca:'Bon profit!',caP:'bon pro-FIT',es:'¡Buen provecho!',esP:'bwen pro-BE-cho',em:'🍴',sim:true,tip:'\'Bon profit\' est l\'équivalent catalan. Toujours apprécié des locaux.'},{fr:'C\'était excellent, merci',ca:'Ha estat excel·lent, gràcies',caP:'a es-TAT ex-se-LENT',es:'Ha estado excelente, gracias',esP:'a es-TA-do ex-se-LEN-te',em:'👏',sim:true,tip:'Passé composé : \'ha estat / ha estado\' = c\'était (ça a été).'}],
+   phrases:[{fr:'Une table pour quatre personnes, s\'il vous plaît.',ca:'Una taula per a quatre persones, si us plau.',es:'Una mesa para cuatro personas, por favor.',note:'\'Quatre/Cuatro\' = quatre. \'Persones/Personas\' = personnes.'},{fr:'Je voudrais le menu du jour et un verre d\'eau.',ca:'Voldria el menú del dia i un got d\'aigua.',es:'Quisiera el menú del día y un vaso de agua.',note:'\'Got/Vaso\' = verre. \'Menú del dia\' est universel à Majorque.'},{fr:'Est-ce que c\'est fait maison ?',ca:'Està fet a casa?',es:'¿Está hecho en casa?',note:'\'Fet a casa / Hecho en casa\' = fait maison. Qualité majorquine.'}],
+   quiz:[{q:'Que signifie \'Voldria…\' ?',em:'🍽️',opts:["C'est d\u00e9licieux", "L'addition s'il vous pla\u00eet", "Je voudrais\u2026", "Je suis v\u00e9g\u00e9tarien(ne)"],ans:2},{q:'Comment dit-on \'L\'addition s\'il vous plaît\' en catalan ?',em:'🧾',opts:["Est\u00e0 delici\u00f3s", "Voldria\u2026", "El compte, si us plau", "S\u00f3c vegetari\u00e0/vegetariana"],ans:2},{q:'\'Está delicioso\' en espagnol veut dire ?',em:'😋',opts:["Je voudrais\u2026", "L'addition s'il vous pla\u00eet", "C'est d\u00e9licieux", "Je suis v\u00e9g\u00e9tarien(ne)"],ans:2},{q:'Complète : \'Une table pour quatre personnes, s\'il vous plaît.\'',em:'💬',opts:["Voldria\u2026", "Est\u00e0 delici\u00f3s", "El compte, si us plau", "Una taula per a quatre persones, si us plau."],ans:3}]},
+  {id:'a1_chiffres2',title:'L\'heure & les dates',icon:'🕐',level:'A1',free:false,age:'all',desc:'Dire l\'heure, les jours, les mois',
+   words:[{fr:'Quelle heure est-il ?',ca:'Quina hora és?',caP:'KI-na O-ra es',es:'¿Qué hora es?',esP:'ke O-ra es',em:'🕐',sim:true,tip:'\'Quina/Qué\' = quelle. \'Hora\' identique dans les deux langues.'},{fr:'Il est deux heures',ca:'Són les dues',caP:'son les DU-es',es:'Son las dos',esP:'son las dos',em:'🕑',sim:true,tip:'\'Són/Son\' = sont. Les heures au pluriel en catalan.'},{fr:'Il est midi',ca:'És migdia',caP:'es mig-DIA',es:'Es mediodía',esP:'es me-dio-DIA',em:'☀️',sim:true,tip:'\'Migdia/Mediodía\' = milieu du jour. Même logique de construction.'},{fr:'Lundi',ca:'Dilluns',caP:'di-LYUNS',es:'Lunes',esP:'LU-nes',em:'📅',sim:false,tip:'\'Dilluns\' du latin \'dies Lunae\'. \'Lunes\' aussi ! Mais formes très différentes.'},{fr:'Mardi',ca:'Dimarts',caP:'di-MARS',es:'Martes',esP:'MAR-tes',em:'📅',sim:true,tip:'\'Dimarts/Martes\' — proches ! Jour de Mars.'},{fr:'Mercredi',ca:'Dimecres',caP:'di-ME-kres',es:'Miércoles',esP:'MIER-ko-les',em:'📅',sim:true,tip:'\'Dimecres/Miércoles\' — même origine Mercure.'},{fr:'Aujourd\'hui',ca:'Avui',caP:'a-BUI',es:'Hoy',esP:'oi',em:'📆',sim:false,tip:'\'Avui\' unique au catalan. \'Hoy\' du latin \'hodie\'.'},{fr:'Demain',ca:'Demà',caP:'de-MA',es:'Mañana',esP:'ma-NYA-na',em:'🌅',sim:false,tip:'\'Demà\' proche du français \'demain\'. \'Mañana\' aussi = matin.'},{fr:'Hier',ca:'Ahir',caP:'a-IR',es:'Ayer',esP:'a-YER',em:'⏮️',sim:true,tip:'\'Ahir/Ayer\' — proches. Du latin \'ad heri\'.'},{fr:'Cette semaine',ca:'Aquesta setmana',caP:'a-KES-ta set-MA-na',es:'Esta semana',esP:'ES-ta se-MA-na',em:'🗓️',sim:true,tip:'\'Setmana/Semana\' = semaine. Proches ! Du latin \'septimana\'.'}],
+   phrases:[{fr:'On se retrouve demain à 10 heures du matin.',ca:'Ens trobem demà a les 10 del matí.',es:'Nos vemos mañana a las 10 de la mañana.',note:'\'Ens trobem / Nos vemos\' = on se voit. Structure naturelle pour fixer un rendez-vous.'},{fr:'Le marché a lieu tous les mercredis.',ca:'El mercat és cada dimecres.',es:'El mercado es cada miércoles.',note:'\'Cada\' = chaque dans les deux langues. Le marché de Campos est le mercredi.'}],
+   quiz:[{q:'Que signifie \'Quina hora és?\' ?',em:'🕐',opts:["Lundi", "Quelle heure est-il ?", "Il est deux heures", "Il est midi"],ans:1},{q:'Comment dit-on \'Il est deux heures\' en catalan ?',em:'🕑',opts:["Quina hora \u00e9s?", "Dilluns", "\u00c9s migdia", "S\u00f3n les dues"],ans:3},{q:'\'Es mediodía\' en espagnol veut dire ?',em:'☀️',opts:["Il est deux heures", "Il est midi", "Quelle heure est-il ?", "Lundi"],ans:1},{q:'Complète : \'On se retrouve demain à 10 heures du matin.\'',em:'💬',opts:["Quina hora \u00e9s?", "\u00c9s migdia", "S\u00f3n les dues", "Ens trobem dem\u00e0 a les 10 del mat\u00ed."],ans:3}]},
+  {id:'a2_sante',title:'La santé',icon:'🏥',level:'A2',free:false,age:'all',desc:'Médecin, pharmacie, urgences',
+   words:[{fr:'J\'ai de la fièvre',ca:'Tinc febre',caP:'tink FE-bre',es:'Tengo fiebre',esP:'TEN-go FIEBRE',em:'🤒',sim:true,tip:'\'Febre/Fiebre\' du latin \'febris\'. En Espagne le médecin de famille = médico de cabecera.'},{fr:'J\'ai mal à l\'estomac',ca:'Em fa mal l\'estómac',caP:'em fa mal',es:'Me duele el estómago',esP:'me DWEL-e',em:'🤢',sim:true,tip:'Phrase essentielle à la pharmacie.'},{fr:'Ordonnance',ca:'Recepta',caP:'re-SEP-ta',es:'Receta',esP:'re-SE-ta',em:'📋',sim:true,tip:'\'Recepta/Receta\' — quasi identiques. La carte SIP = carte santé des Baléares.'},{fr:'Pharmacie',ca:'Farmàcia',caP:'far-MA-sia',es:'Farmacia',esP:'far-MA-sia',em:'💊',sim:true,tip:'Identique. Croix verte = pharmacie. Ouvertes par roulement.'},{fr:'Urgences',ca:'Urgències',caP:'ur-JEN-sies',es:'Urgencias',esP:'ur-HEN-sias',em:'🚑',sim:true,tip:'Quasi identique ! Hôpital Son Espases pour les urgences à Palma.'},{fr:'Allergie',ca:'Al·lèrgia',caP:'a-LER-jia',es:'Alergia',esP:'a-LER-hia',em:'🤧',sim:true,tip:'Presque identique. Important à mentionner.'},{fr:'Je suis enceinte',ca:'Estic embarassada',caP:'es-TIK em-ba-ra-SA-da',es:'Estoy embarazada',esP:'es-TOI em-ba-ra-SA-da',em:'🤰',sim:true,tip:'ATTENTION : \'embarassada/embarazada\' ne signifie PAS embarrassée mais enceinte ! Faux-ami.'},{fr:'Carte de santé',ca:'Targeta SIP',caP:'tar-JE-ta sip',es:'Tarjeta SIP',esP:'tar-HE-ta sip',em:'💳',sim:true,tip:'La SIP est gratuite pour les résidents des Baléares inscrits à la SS.'},{fr:'J\'ai besoin d\'aide',ca:'Necessito ajuda',caP:'ne-se-SI-to a-JU-da',es:'Necesito ayuda',esP:'ne-se-SI-to a-JU-da',em:'🆘',sim:true,tip:'\'Necessito/Necesito\' — quasi identiques. Phrase de secours absolue.'},{fr:'Appelez le 112',ca:'Truqueu al 112',caP:'tru-KEU al',es:'Llamen al 112',esP:'LYA-men al',em:'📞',sim:false,tip:'Le 112 fonctionne dans toute l\'UE. Opérateurs bilingues catalan/espagnol.'}],
+   phrases:[{fr:'J\'ai mal à la gorge et de la fièvre depuis deux jours.',ca:'Em fa mal la gola i tinc febre des de fa dos dies.',es:'Me duele la garganta y tengo fiebre desde hace dos días.',note:'\'Gola/Garganta\' = gorge. \'Des de fa dos dies / desde hace dos días\' = depuis deux jours.'},{fr:'Je suis allergique à la pénicilline.',ca:'Sóc al·lèrgic/al·lèrgica a la penicil·lina.',es:'Soy alérgico/alérgica a la penicilina.',note:'Phrase essentielle à toujours avoir en tête avant une consultation.'}],
+   quiz:[{q:'Que signifie \'Tinc febre\' ?',em:'🤒',opts:["J'ai mal \u00e0 l'estomac", "Pharmacie", "Ordonnance", "J'ai de la fi\u00e8vre"],ans:3},{q:'Comment dit-on \'J\'ai mal à l\'estomac\' en catalan ?',em:'🤢',opts:["Tinc febre", "Farm\u00e0cia", "Recepta", "Em fa mal l'est\u00f3mac"],ans:3},{q:'\'Receta\' en espagnol veut dire ?',em:'📋',opts:["Pharmacie", "J'ai de la fi\u00e8vre", "Ordonnance", "J'ai mal \u00e0 l'estomac"],ans:2},{q:'Complète : \'J\'ai mal à la gorge et de la fièvre depuis deux jours.\'',em:'💬',opts:["Em fa mal l'est\u00f3mac", "Recepta", "Tinc febre", "Em fa mal la gola i tinc febre des de fa dos dies."],ans:3}]},
+  {id:'a2_admin',title:'La vie admin',icon:'📋',level:'A2',free:false,age:'adult',desc:'NIE, empadronamiento, banque',
+   words:[{fr:'Numéro d\'identification étranger',ca:'NIE — Número d\'Identificació d\'Estranger',caP:'NIE',es:'NIE — Número de Identificación de Extranjero',esP:'NIE',em:'🪪',sim:true,tip:'Obligatoire pour tout résident étranger. S\'obtient à la Police Nationale de Palma.'},{fr:'Inscription à la mairie',ca:'Empadronament',caP:'em-pa-dro-na-MEN',es:'Empadronamiento',esP:'em-pa-dro-na-MIEN-to',em:'📝',sim:true,tip:'Obligatoire. Donne accès aux services publics locaux.'},{fr:'Mairie',ca:'Ajuntament',caP:'a-jun-ta-MEN',es:'Ayuntamiento',esP:'a-jun-ta-MIEN-to',em:'🏛️',sim:true,tip:'À Campos, l\'ajuntament est en plein centre. On peut s\'adresser en catalan.'},{fr:'Impôts',ca:'Impostos',caP:'im-POS-tos',es:'Impuestos',esP:'im-PWES-tos',em:'📊',sim:true,tip:'\'Impostos/Impuestos\' — proches. Hacienda = fisc espagnol. IRPF = impôt sur le revenu.'},{fr:'Facture',ca:'Factura',caP:'fak-TU-ra',es:'Factura',esP:'fak-TU-ra',em:'🧾',sim:true,tip:'Identique ! Les autónomos émettent des facturas avec IVA (TVA).'},{fr:'Contrat de travail',ca:'Contracte de treball',caP:'kon-TRAK-te de tre-BAL',es:'Contrato de trabajo',esP:'kon-TRA-to de tra-BA-ho',em:'📄',sim:true,tip:'\'Treball/Trabajo\' = travail. Proches ! Du latin \'tripalium\'.'},{fr:'Je voudrais ouvrir un compte',ca:'Voldria obrir un compte',caP:'bol-DRIA o-BRIR',es:'Quisiera abrir una cuenta',esP:'ki-SIERA a-BRIR',em:'💼',sim:true,tip:'Amener NIE + passeport + justificatif de domicile.'},{fr:'Assurance maladie',ca:'Seguretat Social',caP:'se-gu-re-TAT so-SIAL',es:'Seguridad Social',esP:'se-gu-ri-DAD so-SIAL',em:'🛡️',sim:true,tip:'La SS espagnole. Les autónomos cotisent ~300€/mois (tarifa plana 80€ la 1ère année).'},{fr:'Gestionnaire',ca:'Gestor',caP:'jes-TOR',es:'Gestor',esP:'jes-TOR',em:'🧑‍💼',sim:true,tip:'Identique ! Le gestor est un comptable-conseil indispensable pour les autónomos.'},{fr:'Certificat de résidence',ca:'Certificat de residència',caP:'ser-ti-fi-KAT',es:'Certificado de residencia',esP:'ser-ti-fi-KA-do',em:'📜',sim:true,tip:'S\'obtient à la police nationale ou en ligne sur sede.policia.gob.es'}],
+   phrases:[{fr:'Je dois m\'inscrire à la mairie pour obtenir mon empadronamiento.',ca:'He d\'empadronar-me a l\'ajuntament.',es:'Tengo que empadronarme en el ayuntamiento.',note:'\'He de / Tengo que\' = je dois. Construction de l\'obligation.'},{fr:'Où dois-je aller pour obtenir mon NIE ?',ca:'On he d\'anar per obtenir el NIE?',es:'¿Dónde tengo que ir para obtener el NIE?',note:'\'On / Dónde\' = où. \'He d\'anar / Tengo que ir\' = je dois aller.'}],
+   quiz:[{q:'Que signifie \'NIE — Número d\'Identificació d\'Estranger\' ?',em:'🪪',opts:["Imp\u00f4ts", "Num\u00e9ro d'identification \u00e9tranger", "Mairie", "Inscription \u00e0 la mairie"],ans:1},{q:'Comment dit-on \'Inscription à la mairie\' en catalan ?',em:'📝',opts:["Impostos", "Empadronament", "Ajuntament", "NIE \u2014 N\u00famero d'Identificaci\u00f3 d'Estranger"],ans:1},{q:'\'Ayuntamiento\' en espagnol veut dire ?',em:'🏛️',opts:["Inscription \u00e0 la mairie", "Imp\u00f4ts", "Mairie", "Num\u00e9ro d'identification \u00e9tranger"],ans:2},{q:'Complète : \'Je dois m\'inscrire à la mairie pour obtenir mon empadronamie...\'',em:'💬',opts:["Ajuntament", "Empadronament", "He d'empadronar-me a l'ajuntament.", "NIE \u2014 N\u00famero d'Identificaci\u00f3 d'Estranger"],ans:2}]},
+  {id:'a2_nature',title:'La météo & la nature',icon:'🌤️',level:'A2',free:false,age:'all',desc:'Soleil, mer, montagne, saisons',
+   words:[{fr:'Il fait beau',ca:'Fa bon temps',caP:'fa bon TENS',es:'Hace buen tiempo',esP:'A-se bwen TIEM-po',em:'☀️',sim:true,tip:'Majorque = 300 jours de soleil par an.'},{fr:'Il pleut',ca:'Plou',caP:'plou',es:'Llueve',esP:'LWUE-be',em:'🌧️',sim:false,tip:'Automne = saison des pluies, parfois torrentielles (gota fría).'},{fr:'Tramontane',ca:'Tramuntana',caP:'tra-mun-TA-na',es:'Tramontana',esP:'tra-mon-TA-na',em:'🌬️',sim:true,tip:'Le vent du nord de Majorque. Donne son nom à la chaîne UNESCO. Peut dépasser 100 km/h.'},{fr:'Mer',ca:'Mar',caP:'mar',es:'Mar',esP:'mar',em:'🌊',sim:true,tip:'Identique ! 555 km de côtes à Majorque.'},{fr:'Montagne',ca:'Muntanya',caP:'mun-TAN-ya',es:'Montaña',esP:'mon-TAN-ya',em:'⛰️',sim:true,tip:'Serra de Tramuntana = Patrimoine UNESCO. Puig Major = 1445m, sommet de Majorque.'},{fr:'Plage',ca:'Platja',caP:'PLAT-ja',es:'Playa',esP:'PLA-ya',em:'🏖️',sim:true,tip:'Plus de 200 plages à Majorque. Cala Pi, près de Campos, est magnifique.'},{fr:'Amandier',ca:'Ametller',caP:'a-met-LYER',es:'Almendro',esP:'al-MEN-dro',em:'🌸',sim:true,tip:'Les amandiers fleurissent en janvier à Majorque — spectacle unique au monde.'},{fr:'Coucher de soleil',ca:'Posta de sol',caP:'POS-ta de sol',es:'Puesta de sol',esP:'PWES-ta de sol',em:'🌅',sim:true,tip:'Cap de Formentor = meilleur coucher de soleil de Majorque.'},{fr:'Il fait chaud',ca:'Fa calor',caP:'fa ka-LOR',es:'Hace calor',esP:'A-se ka-LOR',em:'🥵',sim:true,tip:'Été à Majorque = 35°C régulièrement. La sieste n\'est pas un luxe.'},{fr:'Quelle belle journée !',ca:'Quin dia tan bonic!',caP:'kin DIA tan bo-NIK',es:'¡Qué día tan bonito!',esP:'ke DIA tan bo-NI-to',em:'😍',sim:true,tip:'\'Bonic/Bonito\' = beau. Exclamation naturelle pour parler du temps.'}],
+   phrases:[{fr:'Aujourd\'hui il fait très beau, on va à la plage ?',ca:'Avui fa molt bon temps, anem a la platja?',es:'Hoy hace muy buen tiempo, ¿vamos a la playa?',note:'\'Anem / Vamos\' = allons. Construction pour proposer une activité.'},{fr:'La tramontane souffle fort cette semaine.',ca:'La Tramuntana bufa molt fort aquesta setmana.',es:'La Tramontana sopla muy fuerte esta semana.',note:'\'Bufa/Sopla\' = souffle. \'Fort/Fuerte\' = fort.'}],
+   quiz:[{q:'Que signifie \'Fa bon temps\' ?',em:'☀️',opts:["Il fait beau", "Tramontane", "Il pleut", "Mer"],ans:0},{q:'Comment dit-on \'Il pleut\' en catalan ?',em:'🌧️',opts:["Fa bon temps", "Tramuntana", "Mar", "Plou"],ans:3},{q:'\'Tramontana\' en espagnol veut dire ?',em:'🌬️',opts:["Tramontane", "Il pleut", "Il fait beau", "Mer"],ans:0},{q:'Complète : \'Aujourd\'hui il fait très beau, on va à la plage ?\'',em:'💬',opts:["Avui fa molt bon temps, anem a la platja?", "Tramuntana", "Fa bon temps", "Plou"],ans:0}]},
+  {id:'a2_mallorqui',title:'Le mallorquí',icon:'🏴',level:'A2',free:false,age:'all',desc:'Le dialecte authentique des Baléares',
+   words:[{fr:'Article \'le\' en mallorquí',ca:'Es (au lieu de El)',caP:'es',es:'—',esP:'—',em:'📖',sim:false,tip:'En mallorquí, l\'article masculin est \'es\' au lieu de \'el\'. Ex: \'Es sol\' = le soleil.'},{fr:'Article \'la\' en mallorquí',ca:'Sa (au lieu de La)',caP:'sa',es:'—',esP:'—',em:'📖',sim:false,tip:'\'Sa\' = la. Ex: \'Sa mar\' = la mer. \'Sa casa\' = la maison. Très typique des Baléares.'},{fr:'Le soleil',ca:'Es sol (mallorquí) / El sol (standard)',caP:'es sol',es:'El sol',esP:'el sol',em:'☀️',sim:true,tip:'\'Es sol\' s\'entend encore chez les anciens de Campos et Santanyí.'},{fr:'La mer',ca:'Sa mar (mallorquí) / La mar (standard)',caP:'sa mar',es:'La mar / El mar',esP:'la mar',em:'🌊',sim:true,tip:'\'Sa mar\' est la forme traditionnelle majorquine. Les pêcheurs l\'utilisent encore.'},{fr:'Ça va bien',ca:'Ja va bé',caP:'ja ba be',es:'Ya va bien',esP:'ya ba bien',em:'👌',sim:true,tip:'Expression très utilisée à Majorque. \'Ja va bé\' = c\'est bon, ça marche.'},{fr:'Petit à petit',ca:'A poc a poc',caP:'a pok a pok',es:'Poco a poco',esP:'PO-ko a PO-ko',em:'🐢',sim:true,tip:'\'A poc a poc\' est LA phrase de Majorque. Les Mallorquins sont réputés pour leur rythme tranquille.'},{fr:'À tout à l\'heure',ca:'Fins ara',caP:'fins A-ra',es:'Hasta ahora',esP:'AS-ta a-O-ra',em:'👋',sim:true,tip:'\'Fins ara\' = jusqu\'à maintenant / tout à l\'heure. Très courant dans les villages.'},{fr:'C\'est magnifique !',ca:'Quina meravella!',caP:'KI-na me-ra-VEL-la',es:'¡Qué maravilla!',esP:'ke ma-ra-BI-ya',em:'😍',sim:true,tip:'\'Meravella\' = merveille. Sonne très naturelle en découvrant l\'île.'},{fr:'Le village',ca:'Es poble',caP:'es PO-ble',es:'El pueblo',esP:'el PWEB-lo',em:'🏘️',sim:true,tip:'\'Es poble\' avec l\'article mallorquí. Campos, Felanitx, Santanyí gardent ce dialecte.'},{fr:'Tu comprends le mallorquí ?',ca:'Entens es mallorquí?',caP:'en-TENS es ma-lyor-KI',es:'—',esP:'—',em:'🤔',sim:false,tip:'Question qui fait toujours sourire les locaux. Répondre \'Una mica!\' = Un peu !'}],
+   phrases:[{fr:'Je comprends un peu le mallorquí mais c\'est difficile.',ca:'Entenc una mica es mallorquí però és difícil.',es:'—',note:'\'Difícil\' = difficile dans les deux langues. Les locaux apprécient énormément l\'effort.'},{fr:'À Campos on parle beaucoup mallorquí.',ca:'A Campos es parla molt es mallorquí.',es:'En Campos se habla mucho el mallorquín.',note:'\'Es parla / Se habla\' = on parle (voix passive). Construction naturelle.'}],
+   quiz:[{q:'Que signifie \'Es (au lieu de El)\' ?',em:'📖',opts:["Le soleil", "Article 'la' en mallorqu\u00ed", "Article 'le' en mallorqu\u00ed", "La mer"],ans:2},{q:'Comment dit-on \'Article \'la\' en mallorquí\' en catalan ?',em:'📖',opts:["Sa (au lieu de La)", "Sa mar (mallorqu\u00ed) / La mar (standard)", "Es (au lieu de El)", "Es sol (mallorqu\u00ed) / El sol (standard)"],ans:0},{q:'\'El sol\' en espagnol veut dire ?',em:'☀️',opts:["Le soleil", "Article 'le' en mallorqu\u00ed", "Article 'la' en mallorqu\u00ed", "La mer"],ans:0},{q:'Complète : \'Je comprends un peu le mallorquí mais c\'est difficile.\'',em:'💬',opts:["Es sol (mallorqu\u00ed) / El sol (standard)", "Es (au lieu de El)", "Sa (au lieu de La)", "Entenc una mica es mallorqu\u00ed per\u00f2 \u00e9s dif\u00edcil."],ans:3}]},
+  {id:'b1_raconter',title:'Raconter & narrer',icon:'📖',level:'B1',free:false,age:'all',desc:'Passé, souvenirs, récits de vie',
+   words:[{fr:'Quand j\'étais petit(e)',ca:'Quan era petit/petita',caP:'kwan E-ra pe-TIT',es:'Cuando era pequeño/pequeña',esP:'KWAN-do E-ra pe-KEN-yo',em:'👶',sim:true,tip:'Imparfait catalan = era/era. Identique à l\'espagnol pour \'ser\' !'},{fr:'J\'ai décidé de m\'installer',ca:'Vaig decidir instal·lar-me',caP:'batj de-si-DIR',es:'Decidí instalarme',esP:'de-si-DI ins-ta-LAR-me',em:'🏡',sim:true,tip:'Passé composé catalan avec \'vaig\' (je suis allé). Structure unique.'},{fr:'Au début c\'était difficile',ca:'Al principi era difícil',caP:'al prin-SI-pi',es:'Al principio era difícil',esP:'al prin-SI-pio',em:'💪',sim:true,tip:'\'Principi/Principio\' — presque identiques. \'Difícil\' identique !'},{fr:'Maintenant je me sens chez moi',ca:'Ara em sento com a casa',caP:'A-ra em SEN-to',es:'Ahora me siento como en casa',esP:'a-O-ra me SIEN-to',em:'🏠',sim:true,tip:'\'Em sento / Me siento\' = je me sens. \'Com a casa / Como en casa\' = comme chez moi.'},{fr:'Depuis que j\'habite ici',ca:'Des que visc aquí',caP:'des ke bisk a-KI',es:'Desde que vivo aquí',esP:'DES-de ke BI-bo',em:'📅',sim:true,tip:'\'Des que / Desde que\' = depuis que. Mêmes structures temporelles.'},{fr:'J\'ai appris beaucoup de choses',ca:'He après moltes coses',caP:'e a-PRES MOL-tes',es:'He aprendido muchas cosas',esP:'e a-pren-DI-do',em:'🎓',sim:true,tip:'Passé composé : \'he après / he aprendido\'. Le catalan dit \'après\' comme le français !'},{fr:'La première fois que je suis venu(e)',ca:'La primera vegada que vaig venir',caP:'la pri-ME-ra be-GA-da',es:'La primera vez que vine',esP:'la pri-ME-ra bes',em:'✈️',sim:true,tip:'\'Vegada/Vez\' = fois. \'Vaig venir / vine\' = je suis venu.'},{fr:'J\'avais l\'habitude de',ca:'Tenia el costum de',caP:'te-NIA el kos-TUM',es:'Tenía la costumbre de',esP:'te-NIA la kos-TUM-bre',em:'🔄',sim:true,tip:'\'Tenia/Tenía\' = j\'avais. Imparfait identique ! \'Costum/Costumbre\' = habitude.'},{fr:'Ça m\'a beaucoup changé',ca:'M\'ha canviat molt',caP:'ma kan-BIAT molt',es:'Me ha cambiado mucho',esP:'me a kam-BIA-do',em:'🌱',sim:true,tip:'\'Canviat/Cambiado\' = changé. Passé composé naturel.'},{fr:'Je ne regrette rien',ca:'No me\'n penedeixo de res',caP:'no men pe-ne-DEI-cho',es:'No me arrepiento de nada',esP:'no me a-re-PIEN-to',em:'🎯',sim:false,tip:'Deux constructions différentes mais même sens. Expression forte pour parler de sa vie.'}],
+   phrases:[{fr:'Quand je suis arrivé(e) à Majorque, je ne parlais pas du tout catalan.',ca:'Quan vaig arribar a Mallorca, no parlava gens de català.',es:'Cuando llegué a Mallorca, no hablaba nada de catalán.',note:'\'Vaig arribar / Llegué\' = je suis arrivé (passé). \'No parlava gens / no hablaba nada\' = ne parlais pas du tout.'},{fr:'Maintenant, un an après, je commence à me débrouiller.',ca:'Ara, un any després, començo a espavilar-me.',es:'Ahora, un año después, empiezo a desenvolverme.',note:'\'Espavilar-se\' = se débrouiller (expression colorée majorquine). \'Començo / Empiezo\' = je commence.'}],
+   quiz:[{q:'Que signifie \'Quan era petit/petita\' ?',em:'👶',opts:["Maintenant je me sens chez moi", "Quand j'\u00e9tais petit(e)", "Au d\u00e9but c'\u00e9tait difficile", "J'ai d\u00e9cid\u00e9 de m'installer"],ans:1},{q:'Comment dit-on \'J\'ai décidé de m\'installer\' en catalan ?',em:'🏡',opts:["Al principi era dif\u00edcil", "Vaig decidir instal\u00b7lar-me", "Quan era petit/petita", "Ara em sento com a casa"],ans:1},{q:'\'Al principio era difícil\' en espagnol veut dire ?',em:'💪',opts:["J'ai d\u00e9cid\u00e9 de m'installer", "Maintenant je me sens chez moi", "Au d\u00e9but c'\u00e9tait difficile", "Quand j'\u00e9tais petit(e)"],ans:2},{q:'Complète : \'Quand je suis arrivé(e) à Majorque, je ne parlais pas du tou...\'',em:'💬',opts:["Quan era petit/petita", "Vaig decidir instal\u00b7lar-me", "Quan vaig arribar a Mallorca, no parlava gens de catal\u00e0.", "Al principi era dif\u00edcil"],ans:2}]},
+  {id:'b1_exprimer',title:'Exprimer son opinion',icon:'💬',level:'B1',free:false,age:'all',desc:'Donner son avis, débattre, nuancer',
+   words:[{fr:'Je pense que…',ca:'Crec que…',caP:'krek ke',es:'Creo que…',esP:'KRE-o ke',em:'💭',sim:true,tip:'\'Crec/Creo\' = je crois/pense. Du latin \'credere\'. Très utilisé.'},{fr:'À mon avis',ca:'Al meu parer',caP:'al meu pa-RE',es:'En mi opinión',esP:'en mi o-pi-NION',em:'🗣️',sim:false,tip:'\'Al meu parer\' = à mon avis (littéralement \'selon ma façon de voir\').'},{fr:'Je ne suis pas d\'accord',ca:'No hi estic d\'acord',caP:'no i es-TIK da-KORD',es:'No estoy de acuerdo',esP:'no es-TOI de a-KWER-do',em:'❌',sim:true,tip:'\'D\'acord/De acuerdo\' = d\'accord. \'Hi/—\' = y (particule catalan). \'Molt d\'acord !\' = tout à fait d\'accord.'},{fr:'C\'est vrai mais…',ca:'És veritat però…',caP:'es be-ri-TAT pe-RO',es:'Es verdad pero…',esP:'es ber-DAD PE-ro',em:'🤔',sim:true,tip:'\'Veritat/Verdad\' = vérité. \'Però/Pero\' = mais. Structure de nuance.'},{fr:'D\'un côté… de l\'autre…',ca:'D\'una banda… de l\'altra…',caP:'DU-na BAN-da',es:'Por un lado… por otro…',esP:'por un LA-do',em:'⚖️',sim:false,tip:'Structure pour présenter deux aspects. \'Banda\' = côté en catalan.'},{fr:'En résumé',ca:'En resum',caP:'en re-SUM',es:'En resumen',esP:'en re-SU-men',em:'📋',sim:true,tip:'\'Resum/Resumen\' — quasi identiques. Pour conclure un argument.'},{fr:'Cela dépend de…',ca:'Depèn de…',caP:'de-PEN de',es:'Depende de…',esP:'de-PEN-de de',em:'🔀',sim:true,tip:'Quasi identique ! \'Depèn/Depende\' = ça dépend.'},{fr:'Il faut reconnaître que',ca:'Cal reconèixer que',caP:'kal re-ko-NEI-cher',es:'Hay que reconocer que',esP:'ai ke re-ko-no-SER',em:'✅',sim:false,tip:'\'Cal/Hay que\' = il faut. Structures d\'obligation impersonnelle.'},{fr:'Je trouve que',ca:'Trobo que',caP:'TRO-bo ke',es:'Encuentro que',esP:'en-KWEN-tro ke',em:'🔍',sim:false,tip:'\'Trobo\' = je trouve (catalan). \'Encuentro\' = je trouve/rencontre (espagnol). Faux-ami !'},{fr:'Absolument !',ca:'Absolutament!',caP:'ab-so-lu-ta-MEN',es:'¡Absolutamente!',esP:'ab-so-lu-ta-MEN-te',em:'💯',sim:true,tip:'Quasi identique dans les deux langues. Expression d\'accord total.'}],
+   phrases:[{fr:'Je pense que vivre à Majorque est une chance extraordinaire.',ca:'Crec que viure a Mallorca és una sort extraordinària.',es:'Creo que vivir en Mallorca es una suerte extraordinaria.',note:'\'Viure / Vivir\' = vivre (infinitif). \'Sort extraordinària\' = chance extraordinaire.'},{fr:'D\'un côté c\'est cher, mais de l\'autre la qualité de vie est incomparable.',ca:'D\'una banda és car, però de l\'altra la qualitat de vida és incomparable.',es:'Por un lado es caro, pero por otro la calidad de vida es incomparable.',note:'Structure de nuance parfaite pour parler de l\'expatriation.'}],
+   quiz:[{q:'Que signifie \'Crec que…\' ?',em:'💭',opts:["C'est vrai mais\u2026", "\u00c0 mon avis", "Je pense que\u2026", "Je ne suis pas d'accord"],ans:2},{q:'Comment dit-on \'À mon avis\' en catalan ?',em:'🗣️',opts:["Crec que\u2026", "No hi estic d'acord", "\u00c9s veritat per\u00f2\u2026", "Al meu parer"],ans:3},{q:'\'No estoy de acuerdo\' en espagnol veut dire ?',em:'❌',opts:["Je pense que\u2026", "\u00c0 mon avis", "Je ne suis pas d'accord", "C'est vrai mais\u2026"],ans:2},{q:'Complète : \'Je pense que vivre à Majorque est une chance extraordinaire.\'',em:'💬',opts:["Crec que viure a Mallorca \u00e9s una sort extraordin\u00e0ria.", "No hi estic d'acord", "Al meu parer", "Crec que\u2026"],ans:0}]},
+  {id:'b1_pro',title:'La vie professionnelle',icon:'💼',level:'B1',free:false,age:'adult',desc:'Réunions, clients, négociations',
+   words:[{fr:'Réunion',ca:'Reunió',caP:'re-u-NIO',es:'Reunión',esP:'re-u-NION',em:'🤝',sim:true,tip:'Quasi identique. \'Tenim reunió\' = nous avons une réunion.'},{fr:'Client',ca:'Client',caP:'kli-EN',es:'Cliente',esP:'kli-EN-te',em:'👤',sim:true,tip:'Identique en catalan et français. L\'espagnol ajoute -e.'},{fr:'Devis',ca:'Pressupost',caP:'pre-su-POST',es:'Presupuesto',esP:'pre-su-PWES-to',em:'📊',sim:true,tip:'\'Pressupost/Presupuesto\' = devis/budget. Même racine.'},{fr:'Facture',ca:'Factura',caP:'fak-TU-ra',es:'Factura',esP:'fak-TU-ra',em:'🧾',sim:true,tip:'Identique dans les deux langues.'},{fr:'Délai',ca:'Termini',caP:'ter-MI-ni',es:'Plazo',esP:'PLA-so',em:'⏰',sim:false,tip:'\'Termini\' proche du français \'terme\'. \'Plazo\' du latin \'placitum\'.'},{fr:'Livraison',ca:'Lliurament',caP:'lyu-ra-MEN',es:'Entrega',esP:'en-TRE-ga',em:'📦',sim:false,tip:'\'Lliurament\' de \'lliurar\' = libérer/livrer. \'Entrega\' = remise.'},{fr:'Contrat',ca:'Contracte',caP:'kon-TRAK-te',es:'Contrato',esP:'kon-TRA-to',em:'📄',sim:true,tip:'\'Contracte/Contrato\' — quasi identiques.'},{fr:'Nous pouvons nous retrouver',ca:'Ens podem trobar',caP:'ens PO-dem tro-BAR',es:'Podemos quedar',esP:'po-DE-mos ke-DAR',em:'📅',sim:false,tip:'\'Trobar/Quedar\' = se retrouver. \'Quedar\' plus courant pour fixer un rendez-vous en espagnol.'},{fr:'Je vous envoie le devis demain',ca:'Li envio el pressupost demà',caP:'li en-BI-o',es:'Le envío el presupuesto mañana',esP:'le en-BI-o',em:'📧',sim:true,tip:'\'Li envio / Le envío\' = je vous envoie. Forme de politesse professionnelle.'},{fr:'Merci pour votre confiance',ca:'Gràcies per la seva confiança',caP:'GRA-sies per la SE-ba',es:'Gracias por su confianza',esP:'GRA-sias por su kon-FIAN-sa',em:'🙏',sim:true,tip:'\'Seva/Su\' = votre (vouvoiement). \'Confiança/Confianza\' = confiance.'}],
+   phrases:[{fr:'Je vous envoie le devis par email d\'ici demain soir.',ca:'Li envio el pressupost per correu electrònic d\'aquí demà al vespre.',es:'Le envío el presupuesto por correo electrónico para mañana por la noche.',note:'\'Correu electrònic / Correo electrónico\' = email. \'Al vespre / Por la noche\' = le soir.'},{fr:'Serait-il possible de se retrouver la semaine prochaine ?',ca:'Seria possible trobar-nos la setmana que ve?',es:'¿Sería posible quedar la semana que viene?',note:'\'La setmana que ve / La semana que viene\' = la semaine prochaine. Même construction !'}],
+   quiz:[{q:'Que signifie \'Reunió\' ?',em:'🤝',opts:["Client", "R\u00e9union", "Facture", "Devis"],ans:1},{q:'Comment dit-on \'Client\' en catalan ?',em:'👤',opts:["Client", "Reuni\u00f3", "Pressupost", "Factura"],ans:0},{q:'\'Presupuesto\' en espagnol veut dire ?',em:'📊',opts:["R\u00e9union", "Devis", "Facture", "Client"],ans:1},{q:'Complète : \'Je vous envoie le devis par email d\'ici demain soir.\'',em:'💬',opts:["Client", "Pressupost", "Li envio el pressupost per correu electr\u00f2nic d'aqu\u00ed dem\u00e0 al vespre.", "Reuni\u00f3"],ans:2}]},
 ];
 
 const COGN_OPTS=[
@@ -769,14 +429,14 @@ const DRAGON_STAGES=[
   {min:600,max:1200,em:"🐉",name:"Dragon"},
   {min:1200,max:99999,em:"🔥🐉",name:"Dragon de feu"}
 ];
-const LEVELS=["Pré-A1","A1","A2"];
+const LEVELS=["Pré-A1","A1","A2","B1"];
 const FB_OK={standard:["✓ Correct !","✓ Parfait !","✓ Excellent !"],tdah:["🔥 BRAVO !!!","🌟 OUI !!!","⚡ SUPER !"],dys:["✓ Bien !","✓ Bravo.","✓ C'est ça !"],hpi:["✓ Exact.","✓ Correct.","✓ Bien vu."],adult:["Très bien.","Parfait.","Bonne réponse."]};
 const FB_KO={standard:["Pas tout à fait — c'était :","La bonne réponse :"],tdah:["Pas grave ! C'était :","Presque :"],dys:["La bonne réponse : ","C'était : "],hpi:["Inexact. La réponse : ","Non. C'était : "],adult:["La réponse juste : ","Presque — c'était : "]};
 const RES_TIT={standard:{3:"Parfait !",2:"Très bien !",1:"Continue !"},tdah:{3:"INCROYABLE !!!",2:"SUPER !!!",1:"Bien joué !"},dys:{3:"Bravo !",2:"Bien joué !",1:"Tu y arrives !"},hpi:{3:"Excellent.",2:"Très bien.",1:"Continue."},adult:{3:"Très bien.",2:"Bien.",1:"Bonne progression."}};
 
 // ═══════ STATE ═══════
 let profiles=[],selId=null;
-let curMod=null,lStep=0,lMode="learn",lWords=[],lQuiz=[],qIdx=0,lOK=0,lTotal=0,tdahCnt=0;
+let curMod=null,curPhrases=[],lStep=0,lMode="learn",lWords=[],lQuiz=[],qIdx=0,lOK=0,lTotal=0,tdahCnt=0;
 let curLevel="Pré-A1";
 let selAva=AVATARS[0],selAge="9-12",selCogn="standard",selLang="duo";
 
@@ -901,7 +561,7 @@ function startModule(modId){
   const mod=MODULES.find(m=>m.id===modId);if(!mod)return;
   const p=prof();if(!p)return;
   curMod=modId;
-  lWords=p.cogn==="tdah"?mod.words.slice(0,5):mod.words;
+  lWords=p.cogn==="tdah"?mod.words.slice(0,5):mod.words;curPhrases=mod.phrases||[];
   lQuiz=mod.quiz;lStep=0;lMode="learn";lOK=0;lTotal=lQuiz.length;qIdx=0;tdahCnt=0;
   show("sLesson");renderLesson();
 }
@@ -946,6 +606,7 @@ function renderWord(w){
       <div class="word-pron">[${w.caP}]</div>
       ${esEl}${simB}${listenBtns}${tipEl}
     </div>
+    ${lStep===lWords.length-1&&curPhrases.length>0?`<div style="margin:12px 0;background:rgba(45,212,160,.07);border:1px solid rgba(45,212,160,.2);border-radius:12px;padding:14px;"><div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#2DD4A0;margin-bottom:8px;">💬 PHRASE DU MODULE</div><div style="font-size:12px;color:var(--muted);margin-bottom:5px;">🇫🇷 ${curPhrases[0].fr}</div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">🏴 ${curPhrases[0].ca}</div>${isDuo&&curPhrases[0].es!=="—"?`<div style="font-size:12px;color:#5BA3F5;margin-bottom:4px;">🇪🇸 ${curPhrases[0].es}</div>`:""} ${curPhrases[0].note?`<div style="font-size:10px;color:var(--muted);margin-top:5px;font-style:italic;">📌 ${curPhrases[0].note}</div>`:""}</div>`:""}
     <button class="btn-prim" id="btnNW">${isTdah?"⚡ Suivant !":"Suivant →"}</button>`;
   
   document.getElementById("bLC").addEventListener("click",()=>spk(w.ca,null));
