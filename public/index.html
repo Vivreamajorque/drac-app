@@ -967,9 +967,19 @@ async function doAuth(email, prenom) {
 function afterAuth() {
   const auth = getAuthState()
   if (!auth) { show('sAuth'); return }
-  // Si profils existants → famille, sinon créer profil
-  if (profiles.length > 0) goHome()
-  else { initCreate(); show('sCreate') }
+  // Essayer de charger depuis le cloud d'abord
+  syncLoad().then(loaded => {
+    if (loaded) {
+      showToast('☁️ Profils restaurés !')
+      goHome()
+    } else if (profiles.length > 0) {
+      // Profils locaux disponibles → syncer vers cloud
+      syncSave()
+      goHome()
+    } else {
+      initCreate(); show('sCreate')
+    }
+  })
 }
 
 function logout() {
@@ -1017,7 +1027,51 @@ let selAva = AVATARS[0], selAge = "9-12", selCogn = "standard", selLang = "duo";
 // ═══════════════════════════════════════════════════════════════
 // STORAGE
 // ═══════════════════════════════════════════════════════════════
-function save() { localStorage.setItem("drac4_p", JSON.stringify(profiles)); }
+
+// ═══════════════════════════════════════════════════════════════
+// SYNC CLOUD — sauvegarde/restauration des profils par email
+// ═══════════════════════════════════════════════════════════════
+const SYNC_API = 'https://vivre-a-majorque.vercel.app/api/drac-sync'
+
+async function syncSave() {
+  const email = localStorage.getItem(EMAIL_KEY)
+  const token = localStorage.getItem(AUTH_KEY)
+  if (!email || !token || !profiles.length) return
+  try {
+    await fetch(SYNC_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'save', email, token, profiles })
+    })
+  } catch(e) { /* silencieux si offline */ }
+}
+
+async function syncLoad() {
+  const email = localStorage.getItem(EMAIL_KEY)
+  const token = localStorage.getItem(AUTH_KEY)
+  if (!email || !token) return false
+  try {
+    const r = await fetch(SYNC_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'load', email, token })
+    })
+    const d = await r.json()
+    if (d.success && d.profiles && d.profiles.length) {
+      profiles = d.profiles
+      save() // mettre à jour le localStorage aussi
+      return true
+    }
+  } catch(e) { /* silencieux si offline */ }
+  return false
+}
+
+function save() {
+  localStorage.setItem("drac4_p", JSON.stringify(profiles));
+  // Sync cloud en arrière-plan (debounce 2s)
+  clearTimeout(window._syncTimer);
+  window._syncTimer = setTimeout(() => syncSave(), 2000);
+}
 function load() {
   try { const d = localStorage.getItem("drac4_p"); if (d) profiles = JSON.parse(d); }
   catch(e) { profiles = []; }
