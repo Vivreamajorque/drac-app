@@ -385,7 +385,10 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
   <div class="level-tabs" id="levelTabs"></div>
   <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px">Modules</div>
   <div class="mod-list" id="modList"></div>
-  <button class="btn-sec" id="btnSwitch" style="margin-bottom:16px">Changer de profil</button>
+  <div style="display:flex;gap:8px;margin-bottom:16px">
+  <button class="btn-sec" id="btnSwitch" style="flex:1">Changer de profil</button>
+  <button class="btn-sec" id="btnEditProf" style="flex:1">✏️ Modifier</button>
+</div>
 </div>
 
 <!-- ═══ SESSION ═══ -->
@@ -1618,6 +1621,27 @@ function finishSession() {
 // ═══════════════════════════════════════════════════════════════
 // CRÉER PROFIL
 // ═══════════════════════════════════════════════════════════════
+function editProfile(profId) {
+  const p = profiles.find(x => x.id === profId);
+  if (!p) return;
+  // Pré-remplir avec les valeurs existantes
+  selAva  = p.avatar  || AVATARS[0];
+  selAge  = p.age     || "9-12";
+  selCogn = p.cogn    || "standard";
+  selLang = p.lang    || "duo";
+  initCreate();
+  // Remettre le prénom
+  document.getElementById("inpName").value = p.name || "";
+  // Changer le titre
+  document.querySelector("#sCreate .page-title").textContent = "Modifier le profil";
+  document.querySelector("#sCreate .page-sub").textContent   = p.name;
+  // Changer le bouton pour "Enregistrer"
+  const btn = document.getElementById("btnCreate");
+  btn.textContent = "Enregistrer ✓";
+  btn.dataset.editId = profId;
+  show("sCreate");
+}
+
 function initCreate() {
   selAva = AVATARS[0]; selAge = "9-12"; selCogn = "standard"; selLang = "duo";
   document.getElementById("inpName").value = "";
@@ -1662,13 +1686,34 @@ function initCreate() {
 function createProfile() {
   const name = document.getElementById("inpName").value.trim();
   if (!name) { showModal("⚠️","Prénom manquant","Saisis un prénom."); return; }
-  if (profiles.length >= 4) { showModal("👥","4 profils max","Supprime un profil existant."); return; }
-  const p = {
-    id: "p_" + Date.now(), name, avatar: selAva, age: selAge,
-    cogn: selCogn, lang: selLang,
-    xp: 0, done: [], fsrs: {}, streak: 0, lastDate: null
-  };
-  profiles.push(p); selId = p.id; save();
+  const btn = document.getElementById("btnCreate");
+  const editId = btn.dataset.editId;
+
+  if (editId) {
+    // MODE MODIFICATION — on garde XP, fsrs, done, streak
+    const idx = profiles.findIndex(x => x.id === editId);
+    if (idx >= 0) {
+      profiles[idx] = {
+        ...profiles[idx],
+        name, avatar: selAva, age: selAge, cogn: selCogn, lang: selLang
+      };
+      selId = editId;
+      delete btn.dataset.editId;
+    }
+  } else {
+    // MODE CRÉATION
+    if (profiles.length >= 4) { showModal("👥","4 profils max","Supprime un profil existant."); return; }
+    const p = {
+      id: "p_" + Date.now(), name, avatar: selAva, age: selAge,
+      cogn: selCogn, lang: selLang,
+      xp: 0, done: [], fsrs: {}, streak: 0, lastDate: null
+    };
+    profiles.push(p); selId = p.id;
+  }
+
+  save();
+  showToast("✅ Profil mis à jour !");
+  const p = prof();
   applyMode(p); renderMap(); show("sMap");
 }
 
@@ -1760,6 +1805,10 @@ document.getElementById("btnResAgain").addEventListener("click", () => {
 });
 document.getElementById("btnReview").addEventListener("click", startReviewSession);
 document.getElementById("btnSwitch").addEventListener("click", goHome);
+document.getElementById("btnEditProf").addEventListener("click", () => {
+  if (selId) editProfile(selId);
+  else showModal("⚠️","Aucun profil","Sélectionne un profil d'abord.");
+});
 // Bouton logout (long press sur btnSwitch non implémenté pour l'instant)
 
 // ═══════════════════════════════════════════════════════════════
