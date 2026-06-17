@@ -294,6 +294,57 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
   </div>
 </div>
 
+
+<!-- ═══ AUTH ═══ -->
+<div class="screen" id="sAuth">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;">
+    <span style="font-size:64px;margin-bottom:14px">🐉</span>
+    <h1 style="font-family:'Caveat',cursive;font-size:40px;color:var(--acc);margin-bottom:6px">Drac</h1>
+    <p style="font-size:14px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:28px;max-width:300px">
+      Entre ton email pour accéder.<br>C'est tout.
+    </p>
+
+    <!-- Explication des 3 cas -->
+    <div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center">
+        <span style="font-size:22px">🏝️</span>
+        <div>
+          <div style="font-size:13px;font-weight:800;margin-bottom:2px">Tu es sur Vivre à Majorque ?</div>
+          <div style="font-size:11px;color:var(--muted)">Ton compte est reconnu automatiquement</div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center">
+        <span style="font-size:22px">✨</span>
+        <div>
+          <div style="font-size:13px;font-weight:800;margin-bottom:2px">Nouveau sur Drac ?</div>
+          <div style="font-size:11px;color:var(--muted)">Ton email t'inscrit en bêta gratuite</div>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center">
+        <span style="font-size:22px">🔒</span>
+        <div>
+          <div style="font-size:13px;font-weight:800;margin-bottom:2px">Pas de mot de passe</div>
+          <div style="font-size:11px;color:var(--muted)">L'email suffit · Accès immédiat</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire -->
+    <div style="width:100%;max-width:380px">
+      <input id="authPrenom" class="name-inp" placeholder="Ton prénom" maxlength="30" autocomplete="given-name"
+             style="margin-bottom:10px">
+      <input id="authEmail" class="name-inp" placeholder="Ton adresse email" type="email" autocomplete="email"
+             style="margin-bottom:14px">
+      <div id="authError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
+      <button class="btn-prim" id="btnAuthGo" style="font-size:16px">Accéder à Drac 🐉</button>
+      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">
+        En continuant tu acceptes de recevoir les mises à jour Drac par email.<br>
+        <span style="color:var(--green)">Bêta 100% gratuite.</span> Aucune carte bancaire.
+      </p>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ FAMILLE ═══ -->
 <div class="screen" id="sHome">
   <div class="fam-hd">
@@ -847,6 +898,140 @@ const SESSION = {
     return 4;                          // Facile (< 4s)
   }
 };
+
+
+
+// ═══════════════════════════════════════════════════════════════
+// AUTHENTIFICATION PARTAGÉE VAM ↔ DRAC
+// ═══════════════════════════════════════════════════════════════
+
+const AUTH_KEY   = 'drac_token'
+const EMAIL_KEY  = 'drac_email'
+const PRENOM_KEY = 'drac_prenom'
+const ROLE_KEY   = 'drac_role'
+const VAM_API    = 'https://vivre-a-majorque.vercel.app/api/drac-auth'
+
+function parseToken(token) {
+  try {
+    const [encoded] = token.split('.')
+    const payload = JSON.parse(atob(encoded.replace(/-/g,'+').replace(/_/g,'/')))
+    if (payload.exp && Date.now() > payload.exp) return null
+    return payload
+  } catch { return null }
+}
+
+function getAuthState() {
+  const token  = localStorage.getItem(AUTH_KEY)
+  const email  = localStorage.getItem(EMAIL_KEY)
+  const prenom = localStorage.getItem(PRENOM_KEY)
+  const role   = localStorage.getItem(ROLE_KEY)
+  if (!token || !email) return null
+  const payload = parseToken(token)
+  if (!payload) {
+    // Token expiré — nettoyer
+    localStorage.removeItem(AUTH_KEY)
+    localStorage.removeItem(EMAIL_KEY)
+    localStorage.removeItem(PRENOM_KEY)
+    localStorage.removeItem(ROLE_KEY)
+    return null
+  }
+  return { token, email, prenom, role: role || payload.role }
+}
+
+// Vérifier aussi le token VAM existant (si déjà connecté sur VAM)
+function checkVAMToken() {
+  const vamToken = localStorage.getItem('vmaq_premium_token')
+  const vamEmail = localStorage.getItem('vmaq_premium_email')
+  if (!vamToken || !vamEmail) return null
+  const payload = parseToken(vamToken)
+  if (!payload) return null
+  return { email: vamEmail, role: payload.role || 'freemium', source: 'vam' }
+}
+
+async function doAuth(email, prenom) {
+  const btn = document.getElementById('btnAuthGo')
+  const errEl = document.getElementById('authError')
+  btn.disabled = true
+  btn.textContent = '⏳ Connexion...'
+  errEl.style.display = 'none'
+
+  try {
+    const res = await fetch(VAM_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.trim().toLowerCase(), prenom: prenom.trim() }),
+    })
+    const data = await res.json()
+
+    if (!data.success || !data.token) {
+      throw new Error(data.error || 'Connexion impossible')
+    }
+
+    // Sauvegarder
+    localStorage.setItem(AUTH_KEY,   data.token)
+    localStorage.setItem(EMAIL_KEY,  email.trim().toLowerCase())
+    localStorage.setItem(PRENOM_KEY, prenom.trim() || email.split('@')[0])
+    localStorage.setItem(ROLE_KEY,   data.role)
+
+    // Message selon le cas
+    const msgs = {
+      vam_premium:  '✅ Compte VAM Premium reconnu !',
+      vam_freemium: '✅ Compte Vivre à Majorque reconnu !',
+      drac_beta:    '✅ Bienvenue en bêta Drac !',
+      admin:        '✅ Accès admin',
+    }
+    showToast(msgs[data.source] || '✅ Connecté !')
+
+    // Aller à l'accueil
+    afterAuth()
+
+  } catch (err) {
+    errEl.textContent = err.message || 'Connexion impossible. Réessaie.'
+    errEl.style.display = 'block'
+    btn.disabled = false
+    btn.textContent = 'Accéder à Drac 🐉'
+  }
+}
+
+function afterAuth() {
+  const auth = getAuthState()
+  if (!auth) { show('sAuth'); return }
+  // Si profils existants → famille, sinon créer profil
+  if (profiles.length > 0) goHome()
+  else { initCreate(); show('sCreate') }
+}
+
+function logout() {
+  localStorage.removeItem(AUTH_KEY)
+  localStorage.removeItem(EMAIL_KEY)
+  localStorage.removeItem(PRENOM_KEY)
+  localStorage.removeItem(ROLE_KEY)
+  show('sAuth')
+}
+
+// Init auth
+function initAuth() {
+  // 1. Déjà connecté sur Drac ?
+  const dracAuth = getAuthState()
+  if (dracAuth) { afterAuth(); return }
+
+  // 2. Déjà connecté sur VAM ? Auto-login silencieux
+  const vamAuth = checkVAMToken()
+  if (vamAuth) {
+    // Créer un token Drac depuis le token VAM (sans appel API)
+    localStorage.setItem(EMAIL_KEY,  vamAuth.email)
+    localStorage.setItem(ROLE_KEY,   vamAuth.role)
+    localStorage.setItem(PRENOM_KEY, vamAuth.email.split('@')[0])
+    // On utilise le token VAM directement comme token Drac temporaire
+    localStorage.setItem(AUTH_KEY, localStorage.getItem('vmaq_premium_token'))
+    showToast('✅ Connecté avec ton compte VAM !')
+    afterAuth()
+    return
+  }
+
+  // 3. Rien → écran auth
+  show('sAuth')
+}
 
 
 // ═══════════════════════════════════════════════════════════════
@@ -1542,8 +1727,20 @@ function confetti(n) {
 // ═══════════════════════════════════════════════════════════════
 // EVENT LISTENERS
 // ═══════════════════════════════════════════════════════════════
+// Auth
+document.getElementById("btnAuthGo").addEventListener("click", () => {
+  const prenom = document.getElementById("authPrenom").value.trim()
+  const email  = document.getElementById("authEmail").value.trim()
+  if (!prenom) { document.getElementById("authError").textContent = "Entre ton prénom."; document.getElementById("authError").style.display = "block"; return }
+  if (!email || !email.includes("@")) { document.getElementById("authError").textContent = "Email invalide."; document.getElementById("authError").style.display = "block"; return }
+  doAuth(email, prenom)
+})
+document.getElementById("authEmail").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("btnAuthGo").click()
+})
+
 document.getElementById("btnStart").addEventListener("click", () => {
-  if (!profiles.length) { initCreate(); show("sCreate"); } else goHome();
+  show("sAuth");  // Toujours passer par l'auth
 });
 document.getElementById("btnPlay").addEventListener("click", () => {
   if (selId) { const p = profiles.find(x => x.id === selId); if (p) { applyMode(p); renderMap(); show("sMap"); } }
@@ -1563,13 +1760,13 @@ document.getElementById("btnResAgain").addEventListener("click", () => {
 });
 document.getElementById("btnReview").addEventListener("click", startReviewSession);
 document.getElementById("btnSwitch").addEventListener("click", goHome);
+// Bouton logout (long press sur btnSwitch non implémenté pour l'instant)
 
 // ═══════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════
 load();
-if (!profiles.length) show("sOnboard");
-else { selId = profiles[0].id; goHome(); }
+initAuth();  // Vérifier auth avant tout
 initCreate();
 
 window.addEventListener("load", () => {
