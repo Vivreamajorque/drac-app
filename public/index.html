@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- PWA -->
+  <meta name="theme-color" content="#0D1117">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-inset">
+  <meta name="apple-mobile-web-app-title" content="Drac">
+  <meta name="application-name" content="Drac">
+  <meta name="description" content="Apprends le catalan et l'espagnol depuis le français. Modes TDAH, Dys, HPI. Pour toute la famille à Majorque.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('SW registered'))
+          .catch(e => console.log('SW error', e))
+      })
+    }
+  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Drac — Catalan & Espagnol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET & ROOT ═══ */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root {
+  --bg:#0D1117; --surf:#161B24; --card:#1E2635; --border:#2A3347;
+  --acc:#7C5CBF; --acc2:#E86D4A; --green:#2DD4A0; --yel:#FFD84D;
+  --red:#FF6B6B; --blue:#5BA3F5; --text:#EEF0F6; --muted:#7A8299;
+  --r:16px; --rs:10px;
+  /* TDAH overrides */
+  --tdah-acc:#FF6B35; --tdah-bg:#0F0A00;
+  /* Dys overrides */
+  --dys-size:18px; --dys-spacing:0.08em; --dys-line:1.9;
+  /* HPI overrides */
+  --hpi-acc:#5BA3F5;
+  /* Bienveillant overrides */
+  --bien-acc:#2DD4A0;
+}
+
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* ═══ MODE DYS — police accessible ═══ */
+body.mode-dys {
+  font-family: 'Arial', sans-serif;
+  font-size: var(--dys-size);
+  letter-spacing: var(--dys-spacing);
+  line-height: var(--dys-line);
+}
+body.mode-dys .word-ca { font-family:'Arial',sans-serif; letter-spacing:0.12em; }
+body.mode-dys .word-pron { font-size:16px; }
+body.mode-dys .quiz-choice { font-size:17px; padding:18px 12px; }
+body.mode-dys .tip-box { font-size:15px; line-height:2; }
+
+/* ═══ MODE TDAH ═══ */
+body.mode-tdah { background: #0F0A00; }
+body.mode-tdah .word-card { border-color: var(--tdah-acc); }
+body.mode-tdah .btn-primary { background: linear-gradient(135deg,#FF6B35,#E84393); }
+body.mode-tdah .xp-bar-fill { background: linear-gradient(90deg,#FF6B35,#FFD84D); }
+body.mode-tdah .dragon-zone { background: linear-gradient(135deg,rgba(255,107,53,.15),rgba(255,216,77,.1)); }
+
+/* ═══ MODE ADULTE / HPI / BIENVEILLANT ═══ */
+body.mode-adult, body.mode-hpi, body.mode-bien {
+  font-family: 'Inter', sans-serif;
+  --card:#1A1F2A; --surf:#13181F;
+}
+body.mode-adult .word-ca, body.mode-hpi .word-ca, body.mode-bien .word-ca {
+  font-family: 'Inter', sans-serif; font-size:30px; letter-spacing:0;
+}
+body.mode-adult .dragon-zone { background: rgba(255,255,255,.03); }
+body.mode-hpi .btn-primary { background:linear-gradient(135deg,var(--hpi-acc),#3A7BD5); }
+body.mode-bien .btn-primary { background:linear-gradient(135deg,var(--bien-acc),#1A8A6F); }
+
+/* ═══ SCREENS ═══ */
+.screen{display:none;min-height:100vh;padding:18px;max-width:480px;margin:0 auto;flex-direction:column;}
+.screen.on{display:flex;}
+
+/* ═══ ONBOARDING ═══ */
+.ob-hero{text-align:center;padding:36px 0 24px;}
+.ob-dragon{font-size:88px;display:block;animation:breathe 3s ease-in-out infinite;}
+.ob-title{font-family:'Caveat',cursive;font-size:44px;color:var(--acc);font-weight:700;margin-bottom:8px;}
+.ob-sub{color:var(--muted);font-size:16px;line-height:1.65;margin-bottom:28px;}
+.feat-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.feat-item{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.feat-ico{font-size:22px;flex-shrink:0;}
+.feat-txt strong{display:block;font-weight:800;font-size:14px;margin-bottom:2px;}
+.feat-txt span{font-size:12px;color:var(--muted);}
+
+/* ═══ ÉCRAN FAMILLE ═══ */
+.home-header{text-align:center;padding:20px 0 16px;}
+.home-logo{font-family:'Caveat',cursive;font-size:36px;color:var(--acc);font-weight:700;}
+.home-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+.who-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;}
+.profiles-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.prof-card{background:var(--card);border:2px solid transparent;border-radius:var(--r);padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.prof-card:hover{border-color:rgba(124,92,191,.4);}
+.prof-card.sel{border-color:var(--acc);background:rgba(124,92,191,.14);}
+.prof-ava{font-size:40px;margin-bottom:8px;display:block;}
+.prof-name{font-weight:800;font-size:15px;margin-bottom:4px;}
+.prof-xp{font-size:11px;color:var(--muted);}
+.prof-xpbar{background:rgba(255,255,255,.08);border-radius:20px;height:4px;margin-top:6px;overflow:hidden;}
+.prof-xpfill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .4s;}
+.cogn-tag{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;}
+.tag-tdah{background:rgba(255,107,53,.2);color:#FF6B35;}
+.tag-dys{background:rgba(91,163,245,.2);color:#5BA3F5;}
+.tag-hpi{background:rgba(91,163,245,.18);color:#9BC4FF;}
+.tag-bien{background:rgba(45,212,160,.18);color:#2DD4A0;}
+.tag-standard{background:rgba(124,92,191,.2);color:#C4A9FF;}
+.prof-add{background:rgba(255,255,255,.04);border:2px dashed var(--border);border-radius:var(--r);padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s;color:var(--muted);font-size:24px;}
+.prof-add:hover{border-color:var(--acc);color:var(--acc);}
+.btn-play{background:linear-gradient(135deg,var(--acc),#5A3E9E);color:#fff;border:none;border-radius:30px;padding:17px 32px;font-size:17px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;margin-bottom:12px;}
+.btn-play:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,191,.35);}
+.btn-play:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.home-manage{text-align:center;font-size:13px;color:var(--muted);cursor:pointer;padding:8px;}
+.home-manage:hover{color:var(--text);}
+
+/* ═══ CRÉATION PROFIL ═══ */
+.page-hd{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+.page-title{font-size:20px;font-weight:900;}
+.page-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+.btn-back{background:var(--card);border:1px solid var(--border);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--text);transition:background .2s;flex-shrink:0;}
+.btn-back:hover{background:var(--border);}
+.create-sec{margin-bottom:22px;}
+.create-lbl{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:10px;}
+.ava-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.ava-opt{width:46px;height:46px;border-radius:12px;background:var(--card);border:2px solid transparent;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.ava-opt.sel{border-color:var(--acc);background:rgba(124,92,191,.2);}
+.name-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:var(--rs);padding:13px 16px;font-size:16px;font-family:'Nunito',sans-serif;outline:none;transition:border-color .2s;}
+.name-inp:focus{border-color:var(--acc);}
+.age-row{display:flex;gap:8px;flex-wrap:wrap;}
+.age-btn{background:var(--card);border:2px solid transparent;border-radius:var(--rs);padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);font-family:'Nunito',sans-serif;transition:all .2s;}
+.age-btn.sel{border-color:var(--acc);background:rgba(124,92,191,.18);color:var(--acc);}
+.cogn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cogn-btn{background:var(--card);border:2px solid transparent;border-radius:var(--r);padding:14px 12px;cursor:pointer;color:var(--text);font-family:'Nunito',sans-serif;text-align:left;transition:all .2s;}
+.cogn-btn:hover{border-color:rgba(124,92,191,.4);}
+.cogn-btn.sel{border-color:var(--acc);background:rgba(124,92,191,.14);}
+.cogn-ico{font-size:26px;display:block;margin-bottom:6px;}
+.cogn-name{font-weight:800;font-size:14px;margin-bottom:3px;}
+.cogn-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+.lang-row{display:flex;gap:8px;}
+.lang-btn{flex:1;background:var(--card);border:2px solid transparent;border-radius:var(--rs);padding:12px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);font-family:'Nunito',sans-serif;text-align:center;transition:all .2s;}
+.lang-btn.sel{border-color:var(--acc);background:rgba(124,92,191,.18);color:var(--acc);}
+.btn-create{background:linear-gradient(135deg,var(--acc),#5A3E9E);color:#fff;border:none;border-radius:30px;padding:16px 32px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;margin-top:8px;transition:all .2s;}
+.btn-create:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,191,.35);}
+
+/* ═══ APP HEADER ═══ */
+.app-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 0 18px;}
+.app-logo{font-family:'Caveat',cursive;font-size:26px;color:var(--acc);font-weight:700;}
+.xp-chip{background:var(--card);border:1px solid var(--border);padding:6px 13px;border-radius:20px;font-size:13px;font-weight:700;color:var(--yel);}
+
+/* ═══ DRAGON ZONE ═══ */
+.dragon-zone{background:linear-gradient(135deg,rgba(124,92,191,.14),rgba(232,109,74,.08));border:1px solid var(--border);border-radius:var(--r);padding:22px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden;}
+.dragon-zone::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(124,92,191,.18),transparent 70%);}
+.dr-emoji{font-size:68px;display:block;margin-bottom:6px;animation:breathe 3s ease-in-out infinite;}
+.dr-name{font-family:'Caveat',cursive;font-size:20px;color:var(--acc);margin-bottom:2px;}
+.dr-level{font-size:12px;color:var(--muted);margin-bottom:12px;}
+.xpbar{background:rgba(255,255,255,.08);border-radius:20px;height:9px;overflow:hidden;}
+.xpfill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .6s ease;}
+.xp-lbl{font-size:11px;color:var(--muted);margin-top:5px;}
+
+/* ═══ STATS ROW ═══ */
+.stats-row{display:flex;gap:10px;margin-bottom:18px;}
+.stat-c{flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;}
+.stat-v{font-size:24px;font-weight:900;}
+.stat-l{font-size:11px;color:var(--muted);margin-top:2px;}
+.stat-c.fire .stat-v{color:var(--acc2);}
+.stat-c.star .stat-v{color:var(--yel);}
+.stat-c.done .stat-v{color:var(--green);}
+
+/* ═══ MINI BRIEFING MODE ═══ */
+.mode-info-bar{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
+.mode-info-bar .mode-pill{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;}
+
+/* ═══ MODULES ═══ */
+.sec-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;}
+.mod-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.mod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:15px 16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px;}
+.mod-card:hover{border-color:var(--acc);transform:translateX(4px);}
+.mod-card.locked{opacity:.4;cursor:not-allowed;filter:grayscale(.5);}
+.mod-card.locked:hover{transform:none;border-color:var(--border);}
+.mod-card.done{border-color:var(--green);}
+.mod-ico{font-size:30px;flex-shrink:0;}
+.mod-info{flex:1;}
+.mod-title{font-weight:800;font-size:15px;}
+.mod-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.mod-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block;margin-top:4px;}
+.badge-free{background:rgba(45,212,160,.15);color:var(--green);}
+.badge-prem{background:rgba(124,92,191,.2);color:#C4A9FF;}
+.mod-stars{font-size:14px;flex-shrink:0;}
+
+/* ═══ LEÇON ═══ */
+.lesson-hd{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.l-prog{flex:1;}
+.l-bar{background:var(--card);border-radius:20px;height:8px;overflow:hidden;}
+.l-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--acc),var(--green));transition:width .4s ease;}
+.l-lbl{font-size:11px;color:var(--muted);margin-top:4px;text-align:right;}
+
+/* CARTE MOT — mode enfant */
+.word-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:26px 22px;text-align:center;margin-bottom:18px;}
+.word-em{font-size:56px;display:block;margin-bottom:10px;}
+.word-fr{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:6px;}
+.word-ca{font-size:34px;font-weight:900;font-family:'Caveat',cursive;letter-spacing:.5px;margin-bottom:4px;}
+.word-pron{font-size:13px;color:var(--acc);margin-bottom:10px;}
+.word-es-row{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.04);border-radius:8px;padding:7px 12px;margin-bottom:10px;}
+.es-flag{font-size:15px;}
+.word-es{font-size:15px;font-weight:700;color:var(--blue);}
+.word-es-pron{font-size:11px;color:var(--muted);}
+.sim-badge{font-size:11px;padding:3px 10px;border-radius:6px;font-weight:700;display:inline-block;margin-bottom:12px;}
+.sim{background:rgba(45,212,160,.14);color:var(--green);}
+.diff{background:rgba(255,107,107,.13);color:var(--red);}
+.btn-listen{background:rgba(124,92,191,.18);border:1px solid rgba(124,92,191,.35);color:var(--acc);border-radius:24px;padding:7px 18px;cursor:pointer;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;transition:all .2s;margin-bottom:10px;}
+.btn-listen:hover{background:rgba(124,92,191,.32);}
+.tip-box{background:rgba(91,163,245,.07);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 13px;font-size:12px;color:var(--muted);text-align:left;line-height:1.55;}
+
+/* CARTE MOT — mode adulte (sobre) */
+body.mode-adult .word-card, body.mode-hpi .word-card, body.mode-bien .word-card {
+  background: var(--surf); border-color: rgba(255,255,255,.08);
+}
+body.mode-adult .word-em, body.mode-hpi .word-em { font-size:36px; }
+body.mode-adult .word-ca, body.mode-hpi .word-ca, body.mode-bien .word-ca {
+  font-family:'Inter',sans-serif; font-size:28px; font-weight:700;
+}
+body.mode-bien .word-em { font-size:44px; }
+.context-note{background:rgba(45,212,160,.06);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:10px 13px;font-size:12px;color:var(--muted);text-align:left;line-height:1.55;margin-top:8px;}
+
+/* TDAH : micro-récompense inline */
+.tdah-boost{font-size:22px;font-weight:900;color:var(--tdah-acc);text-align:center;margin-bottom:8px;animation:popIn .3s ease;}
+@keyframes popIn{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+
+/* ═══ QUIZ ═══ */
+.quiz-q{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:26px 22px;text-align:center;margin-bottom:14px;}
+.quiz-em{font-size:48px;display:block;margin-bottom:10px;}
+.quiz-prompt{font-size:13px;color:var(--muted);margin-bottom:5px;}
+.quiz-word{font-size:20px;font-weight:900;}
+body.mode-adult .quiz-word, body.mode-hpi .quiz-word, body.mode-bien .quiz-word{font-family:'Inter',sans-serif;}
+.quiz-choices{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px;}
+.choice{background:var(--card);border:2px solid var(--border);border-radius:var(--rs);padding:13px 10px;text-align:center;cursor:pointer;transition:all .2s;font-weight:700;font-size:14px;color:var(--text);}
+.choice:hover{border-color:var(--acc);background:rgba(124,92,191,.1);}
+.choice.correct{border-color:var(--green);background:rgba(45,212,160,.13);color:var(--green);}
+.choice.wrong{border-color:var(--red);background:rgba(255,107,107,.1);color:var(--red);}
+.choice.reveal{border-color:var(--green);background:rgba(45,212,160,.06);}
+.fb-bar{border-radius:var(--rs);padding:13px 16px;font-weight:700;font-size:14px;text-align:center;display:none;margin-bottom:14px;}
+.fb-bar.ok{background:rgba(45,212,160,.16);color:var(--green);border:1px solid rgba(45,212,160,.28);}
+.fb-bar.ko{background:rgba(255,107,107,.13);color:var(--red);border:1px solid rgba(255,107,107,.22);}
+/* mode bienveillant : pas de mot "erreur" */
+body.mode-bien .fb-bar.ko::before{content:'Presque ! '}
+
+/* ═══ BOUTONS ═══ */
+.btn-prim{background:linear-gradient(135deg,var(--acc),#5A3E9E);color:#fff;border:none;border-radius:28px;padding:15px 30px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;}
+.btn-prim:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,191,.32);}
+.btn-sec{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:28px;padding:13px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;}
+.btn-sec:hover{border-color:var(--acc);}
+
+/* ═══ RÉSULTAT ═══ */
+.res-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.res-big{font-size:76px;margin-bottom:8px;}
+.res-title{font-size:26px;font-weight:900;margin-bottom:6px;}
+.res-sub{color:var(--muted);font-size:14px;margin-bottom:22px;}
+.res-xp{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:16px;font-size:22px;font-weight:900;color:var(--yel);width:100%;text-align:center;}
+.res-xp span{font-size:12px;color:var(--muted);font-weight:400;display:block;margin-top:3px;}
+.stars-row{font-size:30px;letter-spacing:4px;margin-bottom:6px;}
+
+/* ═══ MODAL ═══ */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.show{display:flex;}
+.modal-box{background:var(--surf);border:1px solid var(--border);border-radius:var(--r);padding:26px;max-width:340px;width:100%;text-align:center;}
+.modal-em{font-size:48px;margin-bottom:10px;}
+.modal-title{font-size:20px;font-weight:900;margin-bottom:8px;}
+.modal-body{color:var(--muted);font-size:14px;margin-bottom:18px;line-height:1.55;}
+
+/* ═══ TOAST TDAH ═══ */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--tdah-acc);color:#fff;padding:10px 22px;border-radius:24px;font-size:14px;font-weight:800;z-index:999;transition:all .3s;opacity:0;pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ═══ CONFETTI ═══ */
+#cf{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;}
+.cf{position:absolute;top:-20px;border-radius:3px;animation:fall var(--d,1.4s) var(--dl,0s) ease-in forwards;}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:360px){.quiz-choices{grid-template-columns:1fr;}.cogn-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="cf"></div>
+
+<!-- MODAL GÉNÉRIQUE -->
+<div class="modal-ov" id="modalOv">
+  <div class="modal-box">
+    <div class="modal-em" id="mEm">🔒</div>
+    <div class="modal-title" id="mTitle">Titre</div>
+    <div class="modal-body" id="mBody">Corps</div>
+    <button class="btn-prim" id="mBtn">OK</button>
+  </div>
+</div>
+
+<!-- TOAST (mode TDAH) -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════
+     SCREEN 1 : ONBOARDING
+══════════════════════════════════ -->
+<div class="screen on" id="sOnboard">
+  <div class="ob-hero">
+    <span class="ob-dragon">🐉</span>
+    <div class="ob-title">Drac</div>
+    <div class="ob-sub">Apprends le catalan et l'espagnol<br>depuis le français — pour toute la famille.</div>
+  </div>
+  <div class="feat-list">
+    <div class="feat-item">
+      <div class="feat-ico">🇫🇷→🏴</div>
+      <div class="feat-txt">
+        <strong>Intercompréhension</strong>
+        <span>Français · Catalan · Espagnol côte à côte</span>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico">🧠</div>
+      <div class="feat-txt">
+        <strong>Adapté à chaque profil</strong>
+        <span>Standard · TDAH · Dys · HPI · Adulte bienveillant</span>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico">👨‍👩‍👧</div>
+      <div class="feat-txt">
+        <strong>Mode famille</strong>
+        <span>Jusqu'à 4 profils sur un seul appareil</span>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico">🐉</div>
+      <div class="feat-txt">
+        <strong>Dragon qui grandit</strong>
+        <span>XP · Niveaux · Étoiles · Streak quotidien</span>
+      </div>
+    </div>
+  </div>
+  <button class="btn-prim" id="btnStart">C'est parti ! 🐉</button>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 2 : FAMILLE (sélection profil)
+══════════════════════════════════ -->
+<div class="screen" id="sHome">
+  <div class="home-header">
+    <div class="home-logo">🐉 Drac</div>
+    <div class="home-sub">Catalan & Espagnol · Mode famille</div>
+  </div>
+  <div class="who-label">Qui joue aujourd'hui ?</div>
+  <div class="profiles-grid" id="profilesGrid"></div>
+  <button class="btn-play" id="btnPlay" disabled>▶ Jouer !</button>
+  <div class="home-manage" id="btnAddProfile">+ Ajouter un profil</div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 3 : MAP (modules)
+══════════════════════════════════ -->
+<div class="screen" id="sMap">
+  <div class="app-hd">
+    <div class="app-logo" id="mapLogo">🐉 Drac</div>
+    <div class="xp-chip" id="xpChip">⚡ 0 XP</div>
+  </div>
+  <div class="dragon-zone">
+    <span class="dr-emoji" id="drEm">🥚</span>
+    <div class="dr-name" id="drName">Dragon</div>
+    <div class="dr-level" id="drLevel">Niveau 1 · Œuf</div>
+    <div class="xpbar"><div class="xpfill" id="xpFill" style="width:0%"></div></div>
+    <div class="xp-lbl" id="xpLbl">0 / 100 XP</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-c fire"><div class="stat-v" id="sStreak">0</div><div class="stat-l">🔥 Jours</div></div>
+    <div class="stat-c star"><div class="stat-v" id="sStars">0</div><div class="stat-l">⭐ Étoiles</div></div>
+    <div class="stat-c done"><div class="stat-v" id="sDone">0</div><div class="stat-l">✅ Leçons</div></div>
+  </div>
+  <div class="mode-info-bar" id="modeBar"></div>
+  <div class="sec-title">Ton parcours</div>
+  <div class="mod-list" id="modList"></div>
+  <button class="btn-sec" id="btnSwitchProfile" style="margin-bottom:16px;">Changer de profil</button>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 4 : LEÇON
+══════════════════════════════════ -->
+<div class="screen" id="sLesson">
+  <div class="lesson-hd">
+    <button class="btn-back" id="btnBackLesson">←</button>
+    <div class="l-prog">
+      <div class="l-bar"><div class="l-fill" id="lFill" style="width:0%"></div></div>
+      <div class="l-lbl" id="lLbl">0/0</div>
+    </div>
+  </div>
+  <div id="lessonContent"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 5 : RÉSULTAT
+══════════════════════════════════ -->
+<div class="screen" id="sResult">
+  <div class="res-center">
+    <div class="res-big" id="rEm">🎉</div>
+    <div class="res-title" id="rTitle">Bravo !</div>
+    <div class="res-sub" id="rSub">Tu as terminé la leçon</div>
+    <div class="res-xp" id="rXP">+20 XP <span>gagné cette leçon</span></div>
+    <div class="stars-row" id="rStars">⭐⭐⭐</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:20px;">
+    <button class="btn-prim" id="btnResNext">Leçon suivante →</button>
+    <button class="btn-sec" id="btnResHome">Retour au parcours</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN 6 : CRÉER PROFIL
+══════════════════════════════════ -->
+<div class="screen" id="sCreate">
+  <div class="page-hd">
+    <button class="btn-back" id="btnBackCreate">←</button>
+    <div><div class="page-title">Nouveau profil</div><div class="page-sub">Qui va apprendre ?</div></div>
+  </div>
+  <div class="create-sec">
+    <div class="create-lbl">Avatar</div>
+    <div class="ava-grid" id="avaGrid"></div>
+  </div>
+  <div class="create-sec">
+    <div class="create-lbl">Prénom</div>
+    <input class="name-inp" id="inpName" placeholder="Ex: Lenny, Marc, Sophie…" maxlength="18" autocomplete="off">
+  </div>
+  <div class="create-sec">
+    <div class="create-lbl">Tranche d'âge</div>
+    <div class="age-row" id="ageRow"></div>
+  </div>
+  <div class="create-sec">
+    <div class="create-lbl">Mode d'apprentissage</div>
+    <div class="cogn-grid" id="cognGrid"></div>
+  </div>
+  <div class="create-sec">
+    <div class="create-lbl">Langue cible</div>
+    <div class="lang-row" id="langRow"></div>
+  </div>
+  <button class="btn-create" id="btnCreate">Créer le profil 🐉</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA — MODULES & MOTS
+// ═══════════════════════════════════════════════════
+
+const MODULES = [
+  {
+    id:"m1", title:"Bonjour Majorque", icon:"👋", free:true,
+    desc:"Salutations de base",
+    words:[
+      {fr:"Bonjour",         ca:"Bon dia",     caP:"bon DI-a",       es:"Buenos días",   esP:"BUEN-os DI-as",    em:"☀️", sim:true,  tip:"'Bon dia' le matin. Après 12h : 'Bona tarda'. La nuit : 'Bona nit'."},
+      {fr:"Bonsoir",         ca:"Bona tarda",  caP:"BO-na TAR-da",   es:"Buenas tardes", esP:"BUEN-as TAR-des",  em:"🌆", sim:true,  tip:"En catalan 'tarda' couvre l'après-midi ET le soir. Pratique !"},
+      {fr:"Bonne nuit",      ca:"Bona nit",    caP:"BO-na nit",      es:"Buenas noches", esP:"BUEN-as NO-ches",  em:"🌙", sim:true,  tip:"'Nit' (nuit en catalan) ressemble au mot espagnol 'noche'."},
+      {fr:"Merci",           ca:"Gràcies",     caP:"GRA-si-es",      es:"Gracias",       esP:"GRA-si-as",        em:"🙏", sim:true,  tip:"Très proches ! Le 'c' catalan se prononce 's' devant i ou e."},
+      {fr:"S'il vous plaît", ca:"Si us plau",  caP:"si us PLAU",     es:"Por favor",     esP:"por fa-VOR",       em:"🤲", sim:false, tip:"'Si us plau' est unique au catalan. L'espagnol 'por favor' ressemble plus au français 'par faveur'."},
+      {fr:"Au revoir",       ca:"Adéu",        caP:"a-DEU",          es:"Adiós",         esP:"a-DIOS",           em:"👋", sim:true,  tip:"Même racine latine 'ad deum' (à Dieu). Les deux langues ont gardé cette étymologie !"},
+      {fr:"Oui",             ca:"Sí",          caP:"si",             es:"Sí",            esP:"si",               em:"✅", sim:true,  tip:"Identique dans les deux langues ! L'accent distingue 'si' (si) de 'sí' (oui)."},
+      {fr:"Non",             ca:"No",          caP:"no",             es:"No",            esP:"no",               em:"❌", sim:true,  tip:"Universel dans toutes les langues romanes. Facile à retenir !"},
+      {fr:"Comment vas-tu ?",ca:"Com estàs?",  caP:"kom es-TAS",     es:"¿Cómo estás?",  esP:"KO-mo es-TAS",     em:"😊", sim:true,  tip:"'Estàs' / 'estás' — même verbe 'estar' (être/aller). Quasi identique !"},
+      {fr:"Je m'appelle…",   ca:"Em dic…",     caP:"em dik",         es:"Me llamo…",     esP:"me LYA-mo",        em:"🙋", sim:false, tip:"'Em dic' (catalan) = 'je me dis'. 'Me llamo' (espagnol) = 'je m'appelle'. Deux façons d'exprimer la même idée."}
+    ],
+    quiz:[
+      {q:"Comment dit-on 'Merci' en catalan ?", em:"🙏", opts:["Adéu","Bon dia","Gràcies","Sí"], ans:2},
+      {q:"Quel mot catalan signifie 'Bonjour' ?", em:"☀️", opts:["Bona nit","Adéu","Bon dia","No"], ans:2},
+      {q:"'Adiós' en espagnol c'est…", em:"👋", opts:["Merci","Oui","Bonjour","Au revoir"], ans:3},
+      {q:"Comment dit-on 'S'il vous plaît' en catalan ?", em:"🤲", opts:["Si us plau","Gràcies","Com estàs","Bona tarda"], ans:0}
+    ]
+  },
+  {
+    id:"m2", title:"La famille", icon:"👨‍👩‍👧", free:true,
+    desc:"Père, mère, enfants, grands-parents",
+    words:[
+      {fr:"Père",      ca:"Pare",    caP:"PA-re",    es:"Padre",   esP:"PA-dre",     em:"👨",  sim:true,  tip:"Même racine latine 'pater'. À Majorque on entend souvent 'mon pare' dans la rue."},
+      {fr:"Mère",      ca:"Mare",    caP:"MA-re",    es:"Madre",   esP:"MA-dre",     em:"👩",  sim:true,  tip:"'Mare' en catalan, 'madre' en espagnol. Viennent du latin 'mater'. Le catalan est plus court !"},
+      {fr:"Fils",      ca:"Fill",    caP:"fi-LY",    es:"Hijo",    esP:"I-ho",       em:"👦",  sim:false, tip:"'Fill' vient du latin 'filius'. L'espagnol 'hijo' a évolué différemment. Le ll catalan = son mouillé."},
+      {fr:"Fille",     ca:"Filla",   caP:"fi-LYA",   es:"Hija",    esP:"I-ha",       em:"👧",  sim:false, tip:"'Filla' = féminin de 'fill'. En catalan, la terminaison -a marque le féminin comme en espagnol."},
+      {fr:"Frère",     ca:"Germà",   caP:"jer-MA",   es:"Hermano", esP:"er-MA-no",   em:"🤝",  sim:true,  tip:"'Germà' et 'hermano' viennent du latin 'germanus'. Même racine, formes proches !"},
+      {fr:"Sœur",      ca:"Germana", caP:"jer-MA-na",es:"Hermana", esP:"er-MA-na",   em:"👭",  sim:true,  tip:"Très proche de l'espagnol ! Juste une lettre de différence entre 'germana' et 'hermana'."},
+      {fr:"Grand-père",ca:"Avi",     caP:"A-vi",     es:"Abuelo",  esP:"a-BUEL-o",   em:"👴",  sim:false, tip:"'Avi' est court et affectueux en catalan. 'Abuelo' vient du latin 'avuculus' (petit oncle)."},
+      {fr:"Grand-mère",ca:"Àvia",    caP:"A-vi-a",   es:"Abuela",  esP:"a-BUEL-a",   em:"👵",  sim:false, tip:"L'accent grave sur le 'à' de 'àvia' indique qu'on prononce le a ouvert. Très entendu à Majorque !"},
+      {fr:"Bébé",      ca:"Bebè",    caP:"be-BE",    es:"Bebé",    esP:"be-BE",       em:"👶",  sim:true,  tip:"Presque identique dans les deux langues ! Mot d'origine onomatopéique universelle."},
+      {fr:"Famille",   ca:"Família", caP:"fa-MI-lia", es:"Familia", esP:"fa-MI-lia",  em:"👨‍👩‍👧", sim:true, tip:"Identique en catalan et espagnol ! Et très proche du français. Vient du latin 'familia'."}
+    ],
+    quiz:[
+      {q:"Comment dit-on 'Mère' en catalan ?", em:"👩", opts:["Pare","Fill","Mare","Àvia"], ans:2},
+      {q:"'Hermano' en espagnol signifie ?", em:"🤝", opts:["Père","Sœur","Frère","Fils"], ans:2},
+      {q:"Quel mot catalan signifie 'Grand-mère' ?", em:"👵", opts:["Germana","Avi","Àvia","Filla"], ans:2},
+      {q:"'Filla' en catalan c'est ?", em:"👧", opts:["Fils","Mère","Frère","Fille"], ans:3}
+    ]
+  },
+  {
+    id:"m3", title:"Les couleurs", icon:"🎨", free:false,
+    desc:"Rouge, bleu, vert, jaune…",
+    words:[
+      {fr:"Rouge",   ca:"Vermell",  caP:"ver-MELL",  es:"Rojo",     esP:"RO-ho",      em:"🔴", sim:false, tip:"'Vermell' vient du latin 'vermiculus'. Très différent de l'espagnol 'rojo'. Mot unique au catalan !"},
+      {fr:"Bleu",    ca:"Blau",     caP:"blau",       es:"Azul",     esP:"a-ZUL",      em:"🔵", sim:false, tip:"'Blau' vient du germanique. 'Azul' vient de l'arabe 'lazaward' (lapis-lazuli) ! Origines très différentes."},
+      {fr:"Vert",    ca:"Verd",     caP:"bert",        es:"Verde",    esP:"BER-de",     em:"🟢", sim:true,  tip:"Très proches ! 'Verd' (catalan) et 'verde' (espagnol). Le d final est muet en catalan."},
+      {fr:"Jaune",   ca:"Groc",     caP:"grok",        es:"Amarillo", esP:"a-ma-RI-yo", em:"🟡", sim:false, tip:"'Groc' est unique au catalan. 'Amarillo' vient du latin 'amarellus'. Deux formes très différentes !"},
+      {fr:"Noir",    ca:"Negre",    caP:"NE-gre",      es:"Negro",    esP:"NE-gro",     em:"⚫", sim:true,  tip:"Viennent du latin 'niger'. Très proches — juste la terminaison change. Facile !"},
+      {fr:"Blanc",   ca:"Blanc",    caP:"blan",         es:"Blanco",   esP:"BLAN-ko",    em:"⚪", sim:true,  tip:"Identique en catalan et français ! L'espagnol ajoute juste -co final."},
+      {fr:"Orange",  ca:"Taronja",  caP:"ta-RON-ja",   es:"Naranja",  esP:"na-RAN-ha",  em:"🟠", sim:true,  tip:"Même racine arabe 'naranj'. 'Taronja' a donné le mot français 'orange' via l'occitan !"},
+      {fr:"Violet",  ca:"Morat",    caP:"mo-RAT",       es:"Morado",   esP:"mo-RA-do",   em:"🟣", sim:true,  tip:"'Morat/morado' viennent du latin 'moratus' (couleur de mûre). 'Mûre' en catalan = 'mora'."}
+    ],
+    quiz:[
+      {q:"Comment dit-on 'Vert' en espagnol ?", em:"🟢", opts:["Rojo","Azul","Verde","Groc"], ans:2},
+      {q:"Quelle couleur catalan signifie 'Rouge' ?", em:"🔴", opts:["Morat","Blau","Vermell","Verd"], ans:2},
+      {q:"'Azul' en espagnol c'est ?", em:"🔵", opts:["Vert","Orange","Jaune","Bleu"], ans:3},
+      {q:"Comment dit-on 'Blanc' en catalan ?", em:"⚪", opts:["Groc","Taronja","Blanc","Negre"], ans:2}
+    ]
+  },
+  {
+    id:"m4", title:"Les chiffres", icon:"🔢", free:false,
+    desc:"De 1 à 10 en catalan et espagnol",
+    words:[
+      {fr:"Un",     ca:"Un",     caP:"un",      es:"Uno",    esP:"U-no",   em:"1️⃣", sim:true,  tip:"Identique en catalan et français ! L'espagnol ajoute -o. 'Una' au féminin dans les deux langues."},
+      {fr:"Deux",   ca:"Dos",    caP:"dos",      es:"Dos",    esP:"dos",    em:"2️⃣", sim:true,  tip:"Identique en catalan et espagnol ! À Majorque les enfants l'apprennent très vite."},
+      {fr:"Trois",  ca:"Tres",   caP:"tres",     es:"Tres",   esP:"tres",   em:"3️⃣", sim:true,  tip:"Identique dans les deux langues et proche du français 'trois'. Facile !"},
+      {fr:"Quatre", ca:"Quatre", caP:"KWA-tre",  es:"Cuatro", esP:"KWA-tro",em:"4️⃣", sim:true,  tip:"Identique en catalan et français ! Le catalan a conservé la forme latine 'quattuor'."},
+      {fr:"Cinq",   ca:"Cinc",   caP:"sink",     es:"Cinco",  esP:"SINK-o", em:"5️⃣", sim:true,  tip:"'Cinc' et 'cinco' — presque identiques ! Le c final catalan se prononce k."},
+      {fr:"Six",    ca:"Sis",    caP:"sis",      es:"Seis",   esP:"seis",   em:"6️⃣", sim:true,  tip:"'Sis' (catalan) vs 'seis' (espagnol). Le groupe -ei- se prononce comme 'eï' en espagnol."},
+      {fr:"Sept",   ca:"Set",    caP:"set",      es:"Siete",  esP:"si-ETE", em:"7️⃣", sim:false, tip:"'Set' est ultra-court en catalan ! 'Siete' en espagnol est plus long. Même racine latine 'septem'."},
+      {fr:"Huit",   ca:"Vuit",   caP:"buit",     es:"Ocho",   esP:"O-cho",  em:"8️⃣", sim:false, tip:"'Vuit' est unique au catalan — le v se prononce b ! 'Ocho' suit une évolution propre à l'espagnol."},
+      {fr:"Neuf",   ca:"Nou",    caP:"nou",      es:"Nueve",  esP:"NWEV-e", em:"9️⃣", sim:false, tip:"'Nou' ressemble au français 'nouveau'. Attention : 'nou' veut dire NEUF en catalan, pas nouveau !"},
+      {fr:"Dix",    ca:"Deu",    caP:"DEU",      es:"Diez",   esP:"dies",   em:"🔟", sim:false, tip:"'Deu' ressemble au français 'deux' mais signifie DIX ! C'est le piège classique pour les Français."}
+    ],
+    quiz:[
+      {q:"Comment dit-on '3' en catalan ?", em:"3️⃣", opts:["Dos","Quatre","Tres","Sis"], ans:2},
+      {q:"'Vuit' représente quel chiffre ?", em:"8️⃣", opts:["6","8","7","9"], ans:1},
+      {q:"'Diez' en espagnol c'est ?", em:"🔟", opts:["7","9","8","10"], ans:3},
+      {q:"Comment dit-on '5' en espagnol ?", em:"5️⃣", opts:["Cinc","Cuatro","Cinco","Seis"], ans:2}
+    ]
+  },
+  {
+    id:"m5", title:"La nourriture", icon:"🍽️", free:false,
+    desc:"Pain, eau, fruits, restaurant",
+    words:[
+      {fr:"Pain",    ca:"Pa",        caP:"pa",         es:"Pan",      esP:"pan",        em:"🍞", sim:true,  tip:"'Pa' en catalan — ultra-court ! Base du plat typique majorquin : 'pa amb tomàquet' (pain à la tomate)."},
+      {fr:"Eau",     ca:"Aigua",     caP:"AIG-ua",     es:"Agua",     esP:"A-gua",      em:"💧", sim:true,  tip:"'Aigua' garde le -i- du latin 'aqua'. À Majorque, l'eau du robinet s'appelle 'aigua de l'aixeta'."},
+      {fr:"Vin",     ca:"Vi",        caP:"vi",         es:"Vino",     esP:"VI-no",      em:"🍷", sim:true,  tip:"'Vi' en catalan, ultra-court ! Mêmes racines du latin 'vinum'. Le Mallorca DO est réputé."},
+      {fr:"Poisson", ca:"Peix",      caP:"pech",       es:"Pescado",  esP:"pes-KA-do",  em:"🐟", sim:false, tip:"'Peix' du latin 'piscis'. 'Pescado' du verbe 'pescar' (pêcher). La Méditerranée inspire les deux !"},
+      {fr:"Poulet",  ca:"Pollastre", caP:"po-LLAS-tre",es:"Pollo",    esP:"PO-yo",      em:"🍗", sim:true,  tip:"'Pollastre' ressemble plus au français 'poulet' que 'pollo' ! Même racine latine 'pullus'."},
+      {fr:"Fromage", ca:"Formatge",  caP:"for-MAT-je", es:"Queso",    esP:"KE-so",      em:"🧀", sim:false, tip:"'Formatge' ressemble au français 'fromage' ! L'espagnol 'queso' vient du latin 'caseus'."},
+      {fr:"Pomme",   ca:"Poma",      caP:"PO-ma",      es:"Manzana",  esP:"man-ZA-na",  em:"🍎", sim:false, tip:"'Poma' du latin 'poma'. 'Manzana' vient d'un autre terme latin. Deux mots très différents !"},
+      {fr:"Café",    ca:"Cafè",      caP:"ca-FE",      es:"Café",     esP:"ca-FE",      em:"☕", sim:true,  tip:"Identique en catalan, espagnol et français ! L'accent grave catalan indique e ouvert."}
+    ],
+    quiz:[
+      {q:"Comment dit-on 'Pain' en catalan ?", em:"🍞", opts:["Vi","Pa","Peix","Cafè"], ans:1},
+      {q:"'Agua' en espagnol c'est ?", em:"💧", opts:["Vin","Café","Eau","Fromage"], ans:2},
+      {q:"Quel mot catalan signifie 'Fromage' ?", em:"🧀", opts:["Poma","Peix","Formatge","Pollastre"], ans:2},
+      {q:"'Pollo' en espagnol = ?", em:"🍗", opts:["Pain","Poisson","Café","Poulet"], ans:3}
+    ]
+  },
+  {
+    id:"m6", title:"À l'école", icon:"🏫", free:false,
+    desc:"Pour Lenny et tous les enfants à Majorque",
+    words:[
+      {fr:"École",        ca:"Escola",    caP:"es-KO-la",    es:"Escuela",  esP:"es-KWE-la",  em:"🏫", sim:true,  tip:"Même racine grecque 'skholè'. À Majorque, l'instruction publique est en catalan dès la maternelle."},
+      {fr:"Professeur",   ca:"Mestre",    caP:"MES-tre",     es:"Maestro",  esP:"ma-ES-tro",  em:"👩‍🏫",sim:true,  tip:"'Mestre/Maestro' du latin 'magister'. Le titre espagnol 'maestro' est entré dans de nombreuses langues."},
+      {fr:"Livre",        ca:"Llibre",    caP:"LY-bre",      es:"Libro",    esP:"LI-bro",     em:"📚", sim:true,  tip:"Très proches ! Le catalan double le L au début. 'Ll' se prononce comme un Y mouillé sonore."},
+      {fr:"Crayon",       ca:"Llapis",    caP:"LYA-pis",     es:"Lápiz",    esP:"LA-pis",     em:"✏️", sim:true,  tip:"'Llapis' et 'lápiz' ont la même racine. Le 'll' catalan donne un son différent du 'l' simple."},
+      {fr:"Cahier",       ca:"Quadern",   caP:"qua-DERN",    es:"Cuaderno", esP:"cua-DER-no", em:"📓", sim:true,  tip:"Identiques à une lettre près ! Du latin 'quaternus' (4 feuilles). C'est fascinant comme étymologie."},
+      {fr:"Ami",          ca:"Amic",      caP:"a-MIC",       es:"Amigo",    esP:"a-MI-go",    em:"🤝", sim:true,  tip:"'Amic' et 'amigo' du latin 'amicus'. Le c final catalan se prononce k. Simple !"},
+      {fr:"Récréation",   ca:"Pati",      caP:"PA-ti",       es:"Patio",    esP:"PA-tio",     em:"🛝", sim:true,  tip:"À Majorque le 'pati' est le terme courant. Les enfants savent tous ce mot dès la première semaine !"},
+      {fr:"Devoirs",      ca:"Deures",    caP:"DEU-res",     es:"Deberes",  esP:"de-BE-res",  em:"📝", sim:true,  tip:"Du latin 'debere' (devoir). Lenny connaît bien les 'deures' à Campos — un mot qu'on apprend vite !"}
+    ],
+    quiz:[
+      {q:"Comment dit-on 'Livre' en catalan ?", em:"📚", opts:["Quadern","Llapis","Escola","Llibre"], ans:3},
+      {q:"'Amigo' en espagnol = ?", em:"🤝", opts:["Frère","Professeur","Ami","Élève"], ans:2},
+      {q:"Quel mot catalan signifie 'Devoirs' ?", em:"📝", opts:["Pati","Mestre","Amic","Deures"], ans:3},
+      {q:"'Cuaderno' en espagnol c'est ?", em:"📓", opts:["Livre","Crayon","Cahier","École"], ans:2}
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════
+// CONFIG PROFILS COGNITIFS
+// ═══════════════════════════════════════════════════
+
+const COGN_OPTS = [
+  {v:"standard", ico:"🐉", name:"Standard",    desc:"Parcours normal, toutes les activités",          tag:"standard"},
+  {v:"tdah",     ico:"🌀", name:"TDAH",         desc:"Sessions courtes, récompenses fréquentes",       tag:"tdah"},
+  {v:"dys",      ico:"📖", name:"Dys",          desc:"Police adaptée, priorité à l'oral",             tag:"dys"},
+  {v:"hpi",      ico:"🚀", name:"HPI / Avancé", desc:"Moins de répétition, contexte approfondi",      tag:"hpi"},
+  {v:"adult",    ico:"😊", name:"Adulte serein",desc:"Pas de pression, explications détaillées",      tag:"bien"}
+];
+
+const AGE_OPTS  = [{v:"6-8",l:"6–8 ans"},{v:"9-12",l:"9–12 ans"},{v:"ado",l:"Ado"},{v:"adulte",l:"Adulte"}];
+const LANG_OPTS = [{v:"ca",l:"🏴 Catalan seul"},{v:"duo",l:"🏴🇪🇸 Catalan + Espagnol"}];
+const AVATARS   = ["🐉","🦋","🦊","🐬","🐼","🌺","⚡","🌙","🎸","🦁","🐸","🌈","🏄","🌵","🎯","🐧"];
+
+const DRAGON_STAGES = [
+  {min:0,   max:100,  em:"🥚",    name:"Œuf"},
+  {min:100, max:300,  em:"🐣",    name:"Éclosion"},
+  {min:300, max:600,  em:"🐲",    name:"Bébé dragon"},
+  {min:600, max:1000, em:"🐉",    name:"Dragon"},
+  {min:1000,max:99999,em:"🔥🐉",  name:"Dragon de feu"}
+];
+
+// Textes de feedback adaptés par mode
+const FB_OK = {
+  standard:["✓ Correct ! Bien joué !","✓ Parfait !","✓ Excellent !"],
+  tdah:["🔥 BRAVO !!! TROP FORT !","🌟 OUI OUI OUI !!!","⚡ SUPER HÉROS !"],
+  dys:["✓ Bien ! Continue.","✓ C'est ça ! Bravo.","✓ Tu as réussi !"],
+  hpi:["✓ Exact. Intéressant, non ?","✓ Correct — tu as remarqué la racine ?","✓ Bien vu."],
+  adult:["Très bien.","Parfait.","Bonne réponse."]
+};
+const FB_KO = {
+  standard:["La bonne réponse était :","Pas tout à fait — c'était :","Presque ! La réponse :"],
+  tdah:["Pas grave ! C'était :","Presque ! Retiens bien :","On réessaie ! C'était :"],
+  dys:["C'était : ","La bonne réponse : ","Retiens : "],
+  hpi:["Inexact. La réponse correcte : ","Non. C'était : ","La bonne réponse était : "],
+  adult:["La réponse juste était : ","Presque — c'était : ","La bonne réponse : "]
+};
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+
+let profiles = [], selectedId = null;
+let curModId  = null, lessonStep = 0, lessonMode = "learn";
+let lessonWords = [], lessonQuiz = [], quizIdx = 0;
+let lessonOK = 0, lessonTotal = 0;
+let tdahBoostCount = 0;
+
+// ═══════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════
+
+function save(){ localStorage.setItem("drac2_profiles", JSON.stringify(profiles)); }
+function load(){
+  try{ const d=localStorage.getItem("drac2_profiles"); if(d) profiles=JSON.parse(d); }
+  catch(e){ profiles=[]; }
+}
+
+function prof(){ return profiles.find(p=>p.id===selectedId)||profiles[0]||null; }
+
+// ═══════════════════════════════════════════════════
+// APPLY COGN MODE TO BODY
+// ═══════════════════════════════════════════════════
+
+function applyMode(p){
+  document.body.className = "";
+  if(!p) return;
+  const m = p.cogn;
+  if(m==="tdah")  document.body.classList.add("mode-tdah");
+  if(m==="dys")   document.body.classList.add("mode-dys");
+  if(m==="hpi")   document.body.classList.add("mode-hpi");
+  if(m==="adult") document.body.classList.add("mode-adult","mode-bien");
+}
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));
+  document.getElementById(id).classList.add("on");
+  window.scrollTo(0,0);
+}
+
+function goHome(){ renderFamilyScreen(); show("sHome"); }
+function goMap(){
+  const p=prof();
+  if(!p) return;
+  applyMode(p);
+  renderMap();
+  show("sMap");
+}
+function goCreate(){ initCreateForm(); show("sCreate"); }
+
+// ═══════════════════════════════════════════════════
+// ÉCRAN FAMILLE
+// ═══════════════════════════════════════════════════
+
+function renderFamilyScreen(){
+  const grid=document.getElementById("profilesGrid");
+  grid.innerHTML="";
+  profiles.forEach(p=>{
+    const stage=getDragonStage(p.xp||0);
+    const nextS=DRAGON_STAGES[DRAGON_STAGES.indexOf(stage)+1];
+    const pct=nextS?Math.round((p.xp-stage.min)/(nextS.min-stage.min)*100):100;
+    const tagClass="tag-"+(p.cogn==="adult"?"bien":p.cogn);
+    const card=document.createElement("div");
+    card.className="prof-card"+(selectedId===p.id?" sel":"");
+    card.innerHTML=`
+      <span class="cogn-tag ${tagClass}">${p.cogn==="standard"?"STD":p.cogn==="adult"?"😊":p.cogn.toUpperCase()}</span>
+      <span class="prof-ava">${p.avatar}</span>
+      <div class="prof-name">${p.name}</div>
+      <div class="prof-xp">${stage.em} ${stage.name} · ${p.xp||0} XP</div>
+      <div class="prof-xpbar"><div class="prof-xpfill" style="width:${pct}%"></div></div>
+    `;
+    card.addEventListener("click",()=>{
+      selectedId=p.id;
+      document.querySelectorAll(".prof-card").forEach(c=>c.classList.remove("sel"));
+      card.classList.add("sel");
+      document.getElementById("btnPlay").disabled=false;
+    });
+    grid.appendChild(card);
+  });
+  // Bouton ajouter (max 4 profils)
+  if(profiles.length<4){
+    const add=document.createElement("div");
+    add.className="prof-add";
+    add.innerHTML="＋<br><span style='font-size:12px;color:var(--muted)'>Ajouter</span>";
+    add.addEventListener("click",goCreate);
+    grid.appendChild(add);
+  }
+  document.getElementById("btnPlay").disabled=!selectedId;
+}
+
+// ═══════════════════════════════════════════════════
+// MAP DES MODULES
+// ═══════════════════════════════════════════════════
+
+function getDragonStage(xp){
+  return DRAGON_STAGES.find(s=>xp>=s.min&&xp<s.max)||DRAGON_STAGES[DRAGON_STAGES.length-1];
+}
+
+function totalStars(){
+  const p=prof(); if(!p) return 0;
+  return Object.values(p.stars||{}).reduce((a,b)=>a+b,0);
+}
+
+function renderMap(){
+  const p=prof(); if(!p) return;
+
+  document.getElementById("xpChip").textContent="⚡ "+(p.xp||0)+" XP";
+
+  const stage=getDragonStage(p.xp||0);
+  const nextS=DRAGON_STAGES[DRAGON_STAGES.indexOf(stage)+1];
+  const pct=nextS?Math.round(((p.xp||0)-stage.min)/(nextS.min-stage.min)*100):100;
+  document.getElementById("drEm").textContent=stage.em;
+  document.getElementById("drName").textContent="Dragon de "+p.name;
+  document.getElementById("drLevel").textContent="Niveau "+(DRAGON_STAGES.indexOf(stage)+1)+" · "+stage.name;
+  document.getElementById("xpFill").style.width=pct+"%";
+  document.getElementById("xpLbl").textContent=(p.xp||0)+" / "+(nextS?nextS.min:"MAX")+" XP";
+
+  document.getElementById("sStreak").textContent=p.streak||0;
+  document.getElementById("sStars").textContent=totalStars();
+  document.getElementById("sDone").textContent=(p.done||[]).length;
+
+  // Bandeau mode cognitif
+  const modeBar=document.getElementById("modeBar");
+  const modeLabels={standard:"🐉 Mode Standard",tdah:"🌀 Mode TDAH — sessions courtes + boosts",dys:"📖 Mode Dys — police adaptée + oral",hpi:"🚀 Mode HPI — contexte approfondi",adult:"😊 Mode Adulte serein — pas de pression"};
+  const modeColors={standard:"rgba(124,92,191,.2)",tdah:"rgba(255,107,53,.2)",dys:"rgba(91,163,245,.2)",hpi:"rgba(91,163,245,.18)",adult:"rgba(45,212,160,.18)"};
+  modeBar.innerHTML=`<span>${modeLabels[p.cogn]||"🐉 Mode Standard"}</span>`;
+  modeBar.style.background=modeColors[p.cogn]||"rgba(255,255,255,.04)";
+
+  // Modules
+  const list=document.getElementById("modList");
+  list.innerHTML="";
+  MODULES.forEach((mod,idx)=>{
+    const unlocked=idx===0||(p.done||[]).includes(MODULES[idx-1].id);
+    const done=(p.done||[]).includes(mod.id);
+    const stars=(p.stars||{})[mod.id]||0;
+    const card=document.createElement("div");
+    card.className="mod-card"+(unlocked?"":"locked")+(done?" done":"");
+    card.innerHTML=`
+      <div class="mod-ico">${mod.icon}</div>
+      <div class="mod-info">
+        <div class="mod-title">${mod.title}</div>
+        <div class="mod-sub">${mod.desc}</div>
+        <span class="mod-badge ${mod.free?"badge-free":"badge-prem"}">${mod.free?"✓ Gratuit":"⭐ Premium"}</span>
+      </div>
+      <div class="mod-stars">${stars>0?"⭐".repeat(stars):(unlocked?"→":"🔒")}</div>
+    `;
+    if(unlocked){
+      card.addEventListener("click",()=>startModule(mod.id));
+    } else {
+      card.addEventListener("click",()=>showModal("🔒","Module verrouillé","Termine le module précédent pour débloquer celui-ci !"));
+    }
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// LEÇON
+// ═══════════════════════════════════════════════════
+
+function startModule(modId){
+  const mod=MODULES.find(m=>m.id===modId); if(!mod) return;
+  const p=prof(); if(!p) return;
+
+  // Mode TDAH : on ne prend que 5 mots par session au lieu de 10
+  curModId=modId;
+  lessonWords=p.cogn==="tdah"?mod.words.slice(0,5):mod.words;
+  lessonQuiz=mod.quiz;
+  lessonStep=0; lessonMode="learn"; lessonOK=0;
+  lessonTotal=lessonQuiz.length; quizIdx=0; tdahBoostCount=0;
+  show("sLesson");
+  renderLessonStep();
+}
+
+function updateProgress(){
+  const total=lessonWords.length+lessonQuiz.length;
+  const cur=lessonMode==="learn"?lessonStep:(lessonWords.length+quizIdx);
+  const pct=Math.round(cur/total*100);
+  document.getElementById("lFill").style.width=pct+"%";
+  document.getElementById("lLbl").textContent=cur+"/"+total;
+}
+
+function renderLessonStep(){
+  updateProgress();
+  if(lessonMode==="learn"){
+    if(lessonStep<lessonWords.length) renderWordCard(lessonWords[lessonStep]);
+    else{ lessonMode="quiz"; quizIdx=0; renderLessonStep(); }
+  } else {
+    if(quizIdx<lessonQuiz.length) renderQuiz(lessonQuiz[quizIdx]);
+    else finishLesson();
+  }
+}
+
+function renderWordCard(word){
+  const p=prof();
+  const isDuo=p&&p.lang==="duo";
+  const isAdult=p&&(p.cogn==="adult"||p.cogn==="hpi");
+  const isTdah=p&&p.cogn==="tdah";
+  const isDys=p&&p.cogn==="dys";
+
+  const simBadge=word.sim
+    ?`<span class="sim-badge sim">✓ Proche du français</span>`
+    :`<span class="sim-badge diff">⚠ Mot différent</span>`;
+
+  // Tip contextualisé pour adulte / HPI
+  const tipHtml=word.tip
+    ?`<div class="${isAdult?"context-note":"tip-box"}">
+        ${isAdult?"📌":"💡"} ${word.tip}
+       </div>`
+    :"";
+
+  // Bouton écoute — deux boutons séparés en mode adulte+duo
+  const listenHtml=(isAdult&&isDuo)
+    ?`<div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px;">
+        <button class="btn-listen" id="btnListenCA">🔊 Catalan</button>
+        <button class="btn-listen" id="btnListenES">🔊 Espagnol</button>
+      </div>`
+    :`<button class="btn-listen" id="btnListenCA" style="margin-bottom:10px;">🔊 Écouter</button>`;
+
+  // Mode TDAH : émoji géant + mot gros
+  const emojiSize=isTdah?"font-size:74px":"";
+
+  document.getElementById("lessonContent").innerHTML=`
+    <div class="word-card">
+      <span class="word-em" style="${emojiSize}">${word.em}</span>
+      <div class="word-fr">🇫🇷 En français : <strong>${word.fr}</strong></div>
+      <div class="word-ca">${word.ca}</div>
+      <div class="word-pron">[${word.caP}]</div>
+      ${isDuo?`<div class="word-es-row">
+        <span class="es-flag">🇪🇸</span>
+        <span class="word-es">${word.es}</span>
+        <span class="word-es-pron">[${word.esP}]</span>
+      </div>`:""}
+      ${simBadge}
+      ${listenHtml}
+      ${tipHtml}
+    </div>
+    ${isTdah&&tdahBoostCount>0?`<div class="tdah-boost">🔥 ${tdahBoostCount} mots appris !</div>`:""}
+    <button class="btn-prim" id="btnNextWord">${isTdah?"⚡ Suivant !":"Suivant →"}</button>
+  `;
+
+  document.getElementById("btnListenCA").addEventListener("click",()=>spk(word.ca,null));
+  if(isDuo&&isAdult&&document.getElementById("btnListenES")){
+    document.getElementById("btnListenES").addEventListener("click",()=>spk(null,word.es));
+  } else if(!isAdult){
+    document.getElementById("btnListenCA").addEventListener("click",()=>spk(word.ca,isDuo?word.es:null));
+  }
+  document.getElementById("btnNextWord").addEventListener("click",()=>{
+    tdahBoostCount++;
+    // TDAH : mini toast tous les 2 mots
+    if(p&&p.cogn==="tdah"&&tdahBoostCount%2===0) showToast("🌟 Tu assures ! "+tdahBoostCount+" mots !");
+    lessonStep++;
+    renderLessonStep();
+  });
+}
+
+function renderQuiz(q){
+  const p=prof();
+  const isBien=p&&p.cogn==="adult";
+  const isTdah=p&&p.cogn==="tdah";
+
+  document.getElementById("lessonContent").innerHTML=`
+    <div class="quiz-q">
+      <span class="quiz-em">${q.em}</span>
+      <div class="quiz-prompt">Question ${quizIdx+1}/${lessonQuiz.length}</div>
+      <div class="quiz-word">${q.q}</div>
+    </div>
+    <div class="quiz-choices" id="choices">
+      ${q.opts.map((o,i)=>`<button class="choice" data-i="${i}">${o}</button>`).join("")}
+    </div>
+    <div class="fb-bar" id="fbBar"></div>
+    ${isBien?`<div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px;">Pas de pression — chaque erreur aide à mémoriser.</div>`:""}
+    <button class="btn-prim" id="btnNextQuiz" style="display:none">${isTdah?"⚡ Continuer !":"Continuer →"}</button>
+  `;
+
+  document.querySelectorAll(".choice").forEach(btn=>{
+    btn.addEventListener("click",function(){
+      answerQuiz(parseInt(this.dataset.i),q.ans,q.opts);
+    });
+  });
+}
+
+function answerQuiz(chosen,correct,opts){
+  const p=prof();
+  const cogn=p?p.cogn:"standard";
+
+  document.querySelectorAll(".choice").forEach(b=>{
+    b.style.pointerEvents="none";
+    const i=parseInt(b.dataset.i);
+    if(i===correct) b.classList.add("reveal");
+    if(i===chosen&&chosen!==correct) b.classList.add("wrong");
+    if(i===chosen&&chosen===correct) b.classList.add("correct");
+  });
+
+  const fb=document.getElementById("fbBar");
+  fb.style.display="block";
+  const okMsgs=FB_OK[cogn]||FB_OK.standard;
+  const koMsgs=FB_KO[cogn]||FB_KO.standard;
+
+  if(chosen===correct){
+    lessonOK++;
+    fb.className="fb-bar ok";
+    fb.textContent=okMsgs[Math.floor(Math.random()*okMsgs.length)];
+    // TDAH : confettis sur chaque bonne réponse
+    if(cogn==="tdah") confetti(30);
+    else confetti(16);
+  } else {
+    fb.className="fb-bar ko";
+    const msg=koMsgs[Math.floor(Math.random()*koMsgs.length)];
+    fb.textContent=(cogn==="adult"?"Presque — ":"")+msg+" "+opts[correct];
+  }
+
+  document.getElementById("btnNextQuiz").style.display="block";
+  document.getElementById("btnNextQuiz").addEventListener("click",()=>{
+    quizIdx++;
+    renderLessonStep();
+  });
+}
+
+function finishLesson(){
+  const p=prof(); if(!p) return;
+  const stars=lessonOK>=lessonTotal?3:(lessonOK>=Math.ceil(lessonTotal*.6)?2:1);
+  const xpGained=10+(stars*10)+(stars===3?5:0);
+
+  p.xp=(p.xp||0)+xpGained;
+  if(!p.done) p.done=[];
+  if(!p.done.includes(curModId)) p.done.push(curModId);
+  if(!p.stars) p.stars={};
+  p.stars[curModId]=Math.max(p.stars[curModId]||0,stars);
+  checkStreak(p);
+  save();
+
+  // Textes adaptés selon mode
+  const cogn=p.cogn||"standard";
+  const titles={standard:{3:"Parfait !",2:"Très bien !",1:"Continue !"},tdah:{3:"INCROYABLE !!!",2:"SUPER !!!",1:"C'est bien !"},dys:{3:"Bravo !",2:"Bien joué !",1:"Tu y arrives !"},hpi:{3:"Excellent.",2:"Très bien.",1:"Continue."},adult:{3:"Très bien.",2:"Bien.",1:"Bonne progression."}};
+  const t=titles[cogn]||titles.standard;
+
+  document.getElementById("rEm").textContent=stars===3?"🏆":stars===2?"🎉":"👍";
+  document.getElementById("rTitle").textContent=t[stars];
+  document.getElementById("rSub").textContent=`${lessonOK}/${lessonTotal} bonnes réponses`;
+  document.getElementById("rXP").innerHTML=`+${xpGained} XP <span>gagné cette leçon</span>`;
+  document.getElementById("rStars").textContent="⭐".repeat(stars)+"☆".repeat(3-stars);
+
+  if(stars===3) confetti(60);
+  show("sResult");
+
+  const modIdx=MODULES.findIndex(m=>m.id===curModId);
+  const nextMod=MODULES[modIdx+1];
+  const btnNext=document.getElementById("btnResNext");
+  btnNext.replaceWith(btnNext.cloneNode(true));
+  const newBtn=document.getElementById("btnResNext");
+  if(nextMod){
+    newBtn.textContent="Module suivant →";
+    newBtn.addEventListener("click",()=>startModule(nextMod.id));
+  } else {
+    newBtn.textContent="Retour au parcours";
+    newBtn.addEventListener("click",goMap);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// CRÉATION PROFIL
+// ═══════════════════════════════════════════════════
+
+let selAva=AVATARS[0], selAge="9-12", selCogn="standard", selLang="duo";
+
+function initCreateForm(){
+  selAva=AVATARS[0]; selAge="9-12"; selCogn="standard"; selLang="duo";
+  document.getElementById("inpName").value="";
+
+  // Avatars
+  const ag=document.getElementById("avaGrid"); ag.innerHTML="";
+  AVATARS.forEach(av=>{
+    const btn=document.createElement("div");
+    btn.className="ava-opt"+(av===selAva?" sel":"");
+    btn.textContent=av;
+    btn.addEventListener("click",()=>{
+      selAva=av;
+      document.querySelectorAll(".ava-opt").forEach(b=>b.classList.remove("sel"));
+      btn.classList.add("sel");
+    });
+    ag.appendChild(btn);
+  });
+
+  // Âge
+  const ageR=document.getElementById("ageRow"); ageR.innerHTML="";
+  AGE_OPTS.forEach(o=>{
+    const btn=document.createElement("button");
+    btn.className="age-btn"+(o.v===selAge?" sel":"");
+    btn.textContent=o.l;
+    btn.addEventListener("click",()=>{
+      selAge=o.v;
+      document.querySelectorAll(".age-btn").forEach(b=>b.classList.remove("sel"));
+      btn.classList.add("sel");
+    });
+    ageR.appendChild(btn);
+  });
+
+  // Cognitif
+  const cg=document.getElementById("cognGrid"); cg.innerHTML="";
+  COGN_OPTS.forEach(o=>{
+    const btn=document.createElement("button");
+    btn.className="cogn-btn"+(o.v===selCogn?" sel":"");
+    btn.innerHTML=`<span class="cogn-ico">${o.ico}</span><div class="cogn-name">${o.name}</div><div class="cogn-desc">${o.desc}</div>`;
+    btn.addEventListener("click",()=>{
+      selCogn=o.v;
+      document.querySelectorAll(".cogn-btn").forEach(b=>b.classList.remove("sel"));
+      btn.classList.add("sel");
+    });
+    cg.appendChild(btn);
+  });
+
+  // Langue
+  const lr=document.getElementById("langRow"); lr.innerHTML="";
+  LANG_OPTS.forEach(o=>{
+    const btn=document.createElement("button");
+    btn.className="lang-btn"+(o.v===selLang?" sel":"");
+    btn.textContent=o.l;
+    btn.addEventListener("click",()=>{
+      selLang=o.v;
+      document.querySelectorAll(".lang-btn").forEach(b=>b.classList.remove("sel"));
+      btn.classList.add("sel");
+    });
+    lr.appendChild(btn);
+  });
+}
+
+function createProfile(){
+  const name=document.getElementById("inpName").value.trim();
+  if(!name){ showModal("⚠️","Prénom manquant","Saisis un prénom pour créer le profil."); return; }
+  if(profiles.length>=4){ showModal("👥","4 profils max","Supprime un profil existant pour en créer un nouveau."); return; }
+  const p={
+    id:"p_"+Date.now(), name, avatar:selAva, age:selAge,
+    cogn:selCogn, lang:selLang,
+    xp:0, done:[], stars:{}, streak:0, lastDate:null
+  };
+  profiles.push(p);
+  selectedId=p.id;
+  save();
+  applyMode(p);
+  goMap();
+}
+
+// ═══════════════════════════════════════════════════
+// STREAK
+// ═══════════════════════════════════════════════════
+
+function checkStreak(p){
+  const today=new Date().toDateString();
+  if(p.lastDate===today) return;
+  const yest=new Date(Date.now()-86400000).toDateString();
+  p.streak=(p.lastDate===yest)?(p.streak||0)+1:1;
+  p.lastDate=today;
+}
+
+// ═══════════════════════════════════════════════════
+// UTILITAIRES
+// ═══════════════════════════════════════════════════
+
+function showModal(em,title,body){
+  document.getElementById("mEm").textContent=em;
+  document.getElementById("mTitle").textContent=title;
+  document.getElementById("mBody").textContent=body;
+  document.getElementById("modalOv").classList.add("show");
+}
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+function spk(ca,es){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  if(ca){ const u=new SpeechSynthesisUtterance(ca); u.lang="ca-ES"; u.rate=0.82; window.speechSynthesis.speak(u); }
+  if(es){
+    const p2=new SpeechSynthesisUtterance(" "); p2.lang="ca-ES"; p2.rate=0.1; window.speechSynthesis.speak(p2);
+    const u2=new SpeechSynthesisUtterance(es); u2.lang="es-ES"; u2.rate=0.85; window.speechSynthesis.speak(u2);
+  }
+}
+
+const CF_COLORS=["#A78BFA","#00E5B4","#FFD60A","#FB7185","#38BDF8","#FF6B35","#FD79A8","#00CEC9"];
+function confetti(n){
+  n=n||16; const w=document.getElementById("cf");
+  for(let i=0;i<n;i++){
+    const p=document.createElement("div"); p.className="cf";
+    p.style.cssText=`left:${Math.random()*100}vw;background:${CF_COLORS[Math.floor(Math.random()*CF_COLORS.length)]};width:${Math.random()*8+5}px;height:${Math.random()*11+7}px;--d:${(Math.random()*1.2+1).toFixed(1)}s;--dl:${(Math.random()*.3).toFixed(2)}s`;
+    w.appendChild(p); p.addEventListener("animationend",function(){this.remove();});
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// INIT EVENT LISTENERS
+// ═══════════════════════════════════════════════════
+
+document.getElementById("btnStart").addEventListener("click",()=>{
+  if(profiles.length===0){ initCreateForm(); show("sCreate"); }
+  else{ goHome(); }
+});
+document.getElementById("btnPlay").addEventListener("click",()=>{
+  if(selectedId){ const p=profiles.find(x=>x.id===selectedId); if(p){ applyMode(p); renderMap(); show("sMap"); } }
+});
+document.getElementById("btnAddProfile").addEventListener("click",goCreate);
+document.getElementById("btnBackLesson").addEventListener("click",()=>{ applyMode(prof()); renderMap(); show("sMap"); });
+document.getElementById("btnBackCreate").addEventListener("click",()=>{ if(profiles.length>0) goHome(); else show("sOnboard"); });
+document.getElementById("btnCreate").addEventListener("click",createProfile);
+document.getElementById("mBtn").addEventListener("click",()=>document.getElementById("modalOv").classList.remove("show"));
+document.getElementById("btnResHome").addEventListener("click",()=>{ applyMode(prof()); renderMap(); show("sMap"); });
+document.getElementById("btnSwitchProfile").addEventListener("click",goHome);
+
+// ═══════════════════════════════════════════════════
+// DÉMARRAGE
+// ═══════════════════════════════════════════════════
+
+load();
+
+if(profiles.length===0){
+  show("sOnboard");
+} else {
+  selectedId=profiles[0].id;
+  goHome();
+}
+
+</script>
+</body>
+</html>
