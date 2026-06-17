@@ -32,9 +32,9 @@
   <ellipse cx="96" cy="90" rx="70" ry="65" fill="url(#glow)"/>
 
   <!-- Queue -->
-  <path d="M 58 148 Q 50 165 68 168 Q 85 170 88 158 Q 90 148 78 145" 
+  <path d="M 58 148 Q 50 165 68 168 Q 85 170 88 158 Q 90 148 78 145"
         fill="none" stroke="#6A3FA8" stroke-width="10" stroke-linecap="round"/>
-  
+
   <!-- Corps -->
   <path d="M 58 148 L 56 110 Q 54 70 72 50 Q 92 28 118 38 Q 148 50 150 85 Q 152 118 138 138 Q 122 158 98 160 L 78 158"
         fill="none" stroke="url(#bodyGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
@@ -67,17 +67,18 @@
   <ellipse cx="118" cy="32" rx="1.5" ry="2" fill="#0A0514"/>
   <circle cx="119" cy="31" r="0.8" fill="white"/>
   <ellipse cx="127" cy="38" rx="2" ry="1.5" fill="#3D2875" opacity="0.7"/>
+
+  <!-- Corne -->
   <path d="M 112 24 Q 106 14 102 8" stroke="#C4A9FF" stroke-width="3" stroke-linecap="round" fill="none"/>
   <path d="M 102 8 Q 100 5 104 7" fill="#C4A9FF"/>
   <path d="M 120 22 Q 116 14 114 10" stroke="#9B6FE0" stroke-width="2" stroke-linecap="round" fill="none"/>
 
   <!-- Flammes -->
-  <path d="M 128 42 Q 148 38 158 30 Q 162 26 156 28 Q 148 32 144 36 Q 152 28 158 18 Q 160 14 154 18 Q 146 26 140 34 Q 146 22 148 12 Q 148 8 144 14 Q 138 24 132 38" 
+  <path d="M 128 42 Q 148 38 158 30 Q 162 26 156 28 Q 148 32 144 36 Q 152 28 158 18 Q 160 14 154 18 Q 146 26 140 34 Q 146 22 148 12 Q 148 8 144 14 Q 138 24 132 38"
         fill="url(#fireGrad)" opacity="0.9" filter="url(#glow-filter)"/>
 
   <!-- Griffes queue -->
   <path d="M 65 165 Q 60 172 55 168" stroke="#8B5FD0" stroke-width="2.5" stroke-linecap="round" fill="none"/>
   <path d="M 70 168 Q 67 176 62 172" stroke="#8B5FD0" stroke-width="2.5" stroke-linecap="round" fill="none"/>
   <path d="M 76 168 Q 75 176 70 174" stroke="#8B5FD0" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-
 </svg>
