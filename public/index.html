@@ -301,46 +301,46 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
     <span style="font-size:64px;margin-bottom:14px">🐉</span>
     <h1 style="font-family:'Caveat',cursive;font-size:40px;color:var(--acc);margin-bottom:6px">Drac</h1>
     <p style="font-size:14px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:28px;max-width:300px">
-      Entre ton email pour accéder.<br>C'est tout.
+      Apprends le catalan et l'espagnol depuis le français.<br>
+      <span style="color:var(--green)">Bêta 100% gratuite.</span>
     </p>
 
-    <!-- Explication des 3 cas -->
-    <div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center">
-        <span style="font-size:22px">🏝️</span>
-        <div>
-          <div style="font-size:13px;font-weight:800;margin-bottom:2px">Tu es sur Vivre à Majorque ?</div>
-          <div style="font-size:11px;color:var(--muted)">Ton compte est reconnu automatiquement</div>
+    <!-- Étape 1 : email -->
+    <div id="authStep1" style="width:100%;max-width:360px">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;gap:10px;align-items:center">
+          <span style="font-size:18px">🔗</span>
+          <span style="font-size:12px;color:var(--muted)">Tu recevras un <strong style="color:var(--fg)">lien magique</strong> par email — clique dessus, t'es connecté(e)</span>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;gap:10px;align-items:center">
+          <span style="font-size:18px">🔒</span>
+          <span style="font-size:12px;color:var(--muted)">Pas de mot de passe · Ta progression est <strong style="color:var(--fg)">sauvegardée</strong> partout</span>
         </div>
       </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center">
-        <span style="font-size:22px">✨</span>
-        <div>
-          <div style="font-size:13px;font-weight:800;margin-bottom:2px">Nouveau sur Drac ?</div>
-          <div style="font-size:11px;color:var(--muted)">Ton email t'inscrit en bêta gratuite</div>
-        </div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:center">
-        <span style="font-size:22px">🔒</span>
-        <div>
-          <div style="font-size:13px;font-weight:800;margin-bottom:2px">Pas de mot de passe</div>
-          <div style="font-size:11px;color:var(--muted)">L'email suffit · Accès immédiat</div>
-        </div>
-      </div>
+      <input id="authEmail" class="name-inp" placeholder="Ton adresse email" type="email" autocomplete="email"
+             style="margin-bottom:12px;font-size:16px">
+      <div id="authError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
+      <button class="btn-prim" id="btnAuthGo" style="font-size:16px">Envoyer mon lien magique 🔗</button>
+      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">
+        En continuant tu acceptes de recevoir des emails de Drac.
+      </p>
     </div>
 
-    <!-- Formulaire -->
-    <div style="width:100%;max-width:380px">
-      <input id="authPrenom" class="name-inp" placeholder="Ton prénom" maxlength="30" autocomplete="given-name"
-             style="margin-bottom:10px">
-      <input id="authEmail" class="name-inp" placeholder="Ton adresse email" type="email" autocomplete="email"
-             style="margin-bottom:14px">
-      <div id="authError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
-      <button class="btn-prim" id="btnAuthGo" style="font-size:16px">Accéder à Drac 🐉</button>
-      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">
-        En continuant tu acceptes de recevoir les mises à jour Drac par email.<br>
-        <span style="color:var(--green)">Bêta 100% gratuite.</span> Aucune carte bancaire.
+    <!-- Étape 2 : email envoyé -->
+    <div id="authStep2" style="display:none;width:100%;max-width:360px;text-align:center">
+      <div style="font-size:56px;margin-bottom:16px">📬</div>
+      <h2 style="color:var(--fg);margin:0 0 10px;font-size:20px">Vérifie tes emails !</h2>
+      <p style="color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:24px">
+        On a envoyé un lien à<br>
+        <strong id="authEmailDisplay" style="color:var(--acc)"></strong><br>
+        <span style="font-size:12px">Valable 15 minutes · Vérifie aussi tes spams</span>
       </p>
+      <button class="btn-sec" id="btnAuthRetry" style="font-size:13px;margin-bottom:8px">
+        Renvoyer le lien
+      </button>
+      <button class="btn-sec" id="btnAuthChangeEmail" style="font-size:13px">
+        Changer d'email
+      </button>
     </div>
   </div>
 </div>
@@ -992,6 +992,8 @@ function logout() {
 
 // Init auth
 function initAuth() {
+  // 0. Magic link dans l'URL ?
+  if (checkMagicLinkInURL()) return
   // 1. Déjà connecté sur Drac ?
   const dracAuth = getAuthState()
   if (dracAuth) { afterAuth(); return }
@@ -1014,6 +1016,90 @@ function initAuth() {
   show('sAuth')
 }
 
+
+
+// ═══════════════════════════════════════════════════════════════
+// MAGIC LINK AUTH
+// ═══════════════════════════════════════════════════════════════
+const MAGIC_API = 'https://vivre-a-majorque.vercel.app/api/drac-magic'
+
+async function sendMagicLink(email) {
+  const btn = document.getElementById('btnAuthGo')
+  const errEl = document.getElementById('authError')
+  btn.disabled = true
+  btn.textContent = '⏳ Envoi en cours...'
+  errEl.style.display = 'none'
+
+  try {
+    const r = await fetch(MAGIC_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'send', email: email.trim().toLowerCase() })
+    })
+    const d = await r.json()
+    if (!d.success) throw new Error(d.error || 'Erreur envoi')
+
+    // Afficher étape 2
+    document.getElementById('authStep1').style.display = 'none'
+    document.getElementById('authStep2').style.display = 'block'
+    document.getElementById('authEmailDisplay').textContent = email.trim().toLowerCase()
+
+  } catch(e) {
+    errEl.textContent = e.message || 'Erreur. Réessaie.'
+    errEl.style.display = 'block'
+    btn.disabled = false
+    btn.textContent = 'Envoyer mon lien magique 🔗'
+  }
+}
+
+async function verifyMagicToken(token) {
+  try {
+    const r = await fetch(MAGIC_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'verify', token })
+    })
+    const d = await r.json()
+    if (!d.success) throw new Error(d.error || 'Lien invalide')
+
+    // Sauvegarder la session
+    localStorage.setItem(AUTH_KEY,   d.token)
+    localStorage.setItem(EMAIL_KEY,  d.email)
+    localStorage.setItem(PRENOM_KEY, d.email.split('@')[0])
+    localStorage.setItem(ROLE_KEY,   d.role)
+
+    showToast(d.message || '✅ Connecté !')
+    afterAuth()
+  } catch(e) {
+    // Afficher l'erreur sur l'écran auth
+    show('sAuth')
+    const errEl = document.getElementById('authError')
+    errEl.textContent = e.message
+    errEl.style.display = 'block'
+  }
+}
+
+// Vérifier si un magic token est dans l'URL au chargement
+function checkMagicLinkInURL() {
+  const params = new URLSearchParams(window.location.search)
+  const magic = params.get('magic')
+  if (magic) {
+    // Nettoyer l'URL
+    window.history.replaceState({}, '', window.location.pathname)
+    // Afficher un écran de chargement
+    show('sAuth')
+    document.getElementById('authStep1').style.display = 'none'
+    document.getElementById('authStep2').style.display = 'none'
+    // Vérifier le token
+    const loadingEl = document.createElement('div')
+    loadingEl.style.cssText = 'text-align:center;padding:40px;color:var(--muted)'
+    loadingEl.innerHTML = '<div style="font-size:40px;margin-bottom:12px">🔗</div><p>Connexion en cours...</p>'
+    document.querySelector('#sAuth > div').appendChild(loadingEl)
+    verifyMagicToken(magic)
+    return true
+  }
+  return false
+}
 
 // ═══════════════════════════════════════════════════════════════
 // STATE
@@ -1803,16 +1889,32 @@ function confetti(n) {
 // ═══════════════════════════════════════════════════════════════
 // EVENT LISTENERS
 // ═══════════════════════════════════════════════════════════════
-// Auth
+// Auth Magic Link
 document.getElementById("btnAuthGo").addEventListener("click", () => {
-  const prenom = document.getElementById("authPrenom").value.trim()
-  const email  = document.getElementById("authEmail").value.trim()
-  if (!prenom) { document.getElementById("authError").textContent = "Entre ton prénom."; document.getElementById("authError").style.display = "block"; return }
-  if (!email || !email.includes("@")) { document.getElementById("authError").textContent = "Email invalide."; document.getElementById("authError").style.display = "block"; return }
-  doAuth(email, prenom)
+  const email = document.getElementById("authEmail").value.trim()
+  if (!email || !email.includes("@")) {
+    const e = document.getElementById("authError")
+    e.textContent = "Email invalide — vérifie le format."
+    e.style.display = "block"
+    return
+  }
+  sendMagicLink(email)
 })
 document.getElementById("authEmail").addEventListener("keydown", e => {
   if (e.key === "Enter") document.getElementById("btnAuthGo").click()
+})
+document.getElementById("btnAuthRetry").addEventListener("click", () => {
+  const email = document.getElementById("authEmailDisplay").textContent
+  if (email) sendMagicLink(email)
+})
+document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
+  document.getElementById("authStep1").style.display = "block"
+  document.getElementById("authStep2").style.display = "none"
+  const btn = document.getElementById("btnAuthGo")
+  btn.disabled = false
+  btn.textContent = "Envoyer mon lien magique 🔗"
+  document.getElementById("authEmail").value = ""
+  document.getElementById("authEmail").focus()
 })
 
 document.getElementById("btnStart").addEventListener("click", () => {
