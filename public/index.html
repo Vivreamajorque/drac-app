@@ -400,6 +400,7 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
       <div class="l-lbl" id="lLbl">0/0</div>
     </div>
   </div>
+  <div id="sessModName" style="text-align:center;font-size:11px;color:var(--muted);padding:4px 16px 0;letter-spacing:.5px;text-transform:uppercase;font-weight:700"></div>
   <div id="sessContent"></div>
 </div>
 
@@ -413,7 +414,8 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
     <div class="next-review" id="nextReview"></div>
   </div>
   <div style="display:flex;flex-direction:column;gap:9px;padding-bottom:20px;">
-    <button class="btn-prim" id="btnResAgain">Nouvelle session →</button>
+    <button class="btn-prim" id="btnResNext" style="display:none">Module suivant →</button>
+    <button class="btn-prim" id="btnResAgain">Réviser ce module 🔁</button>
     <button class="btn-sec" id="btnResHome">Retour au parcours</button>
   </div>
 </div>
@@ -1359,6 +1361,9 @@ function startModule(modId) {
 
   // Construire la session FSRS
   curMod = MODULES.find(m => m.id === modId);
+  // Afficher le nom du module dans le header
+  const modNameEl = document.getElementById("sessModName");
+  if (modNameEl && curMod) modNameEl.textContent = curMod.icon + " " + curMod.title;
   curSession = SESSION.buildSession(modWords, p.fsrs, p, p.cogn);
 
   // Si pas de mots à voir, prendre les N premiers comme nouveaux
@@ -1651,6 +1656,21 @@ function applyRating(rating, correct) {
   if (correct) {
     sessCorrect++;
     p.xp = (p.xp || 0) + (rating >= 3 ? 2 : 1);
+    // Flash vert rapide sur la carte
+    const sc = document.getElementById("sessContent");
+    if (sc && rating >= 3) {
+      sc.style.transition = "box-shadow .15s";
+      sc.style.boxShadow = "0 0 0 2px rgba(45,212,160,.5)";
+      setTimeout(() => { sc.style.boxShadow = ""; }, 300);
+    }
+  } else {
+    // Flash rouge si incorrect
+    const sc = document.getElementById("sessContent");
+    if (sc) {
+      sc.style.transition = "box-shadow .15s";
+      sc.style.boxShadow = "0 0 0 2px rgba(255,107,107,.5)";
+      setTimeout(() => { sc.style.boxShadow = ""; }, 300);
+    }
   }
 
   // Mode TDAH : toast tous les 2 items corrects
@@ -1688,35 +1708,69 @@ function finishSession() {
   const cards = p.fsrs || {};
   const stats = FSRS.getRetentionStats(cards);
 
+  // Mots vus dans cette session
+  const seenWords = curSession.map(item => item.word).filter(Boolean);
+  const seenCount = seenWords.length;
+
   // Titre selon perf
   const titles = {
-    standard: {good:"Excellente session !",ok:"Bonne session !",low:"Continue !"},
-    tdah:     {good:"INCROYABLE !!!",       ok:"SUPER !!!",          low:"Bien joué !"},
-    dys:      {good:"Bravo !",             ok:"Bien joué !",        low:"Tu progresses !"},
-    hpi:      {good:"Excellent.",          ok:"Très bien.",         low:"Continue."},
-    adult:    {good:"Très bien.",          ok:"Bien.",              low:"Bonne progression."}
+    standard: {good:"Module terminé ! 🎉",ok:"Bonne session !",low:"Continue, tu progresses !"},
+    tdah:     {good:"EXCELLENT !!!",       ok:"SUPER !!!",     low:"Bien joué !"},
+    dys:      {good:"Bravo !",            ok:"Bien joué !",   low:"Tu progresses !"},
+    hpi:      {good:"Excellent.",         ok:"Très bien.",    low:"Continue."},
+    adult:    {good:"Très bien.",         ok:"Bien.",         low:"Bonne progression."}
   };
   const t = titles[cogn] || titles.standard;
   const tier = accuracy >= 80 ? "good" : accuracy >= 60 ? "ok" : "low";
 
   document.getElementById("rEm").textContent = accuracy >= 80 ? "🏆" : accuracy >= 60 ? "🎉" : "💪";
   document.getElementById("rTit").textContent = t[tier];
-  document.getElementById("rSub").textContent = `${sessCorrect}/${curSession.length} · ${duration}s`;
 
-  // Stats grid
+  // Sous-titre informatif
+  const modTitle = curMod ? curMod.title : "";
+  document.getElementById("rSub").textContent = modTitle ? `${modTitle} · ${seenCount} mots` : `${seenCount} mots · ${duration}s`;
+
+  // Stats grid — uniquement les stats utiles
   const sg = document.getElementById("resStatsGrid");
-  const nextDue = FSRS.getDue(p.fsrs||{});
-  const tomorrowDue = Object.values(p.fsrs||{})
-    .filter(c => {
-      const d = (c.due - Date.now()) / 86400000;
-      return d >= 0 && d <= 1;
-    }).length;
+  sg.innerHTML = \`
+    <div class="res-stat"><div class="v">${accuracy}%</div><div class="l">Réussite</div></div>
+    <div class="res-stat"><div class="v" style="color:var(--green)">${seenCount}</div><div class="l">Mots vus</div></div>
+    <div class="res-stat"><div class="v" style="color:var(--blue)">${stats.retention || 0}%</div><div class="l">Rétention</div></div>
+    <div class="res-stat"><div class="v" style="color:var(--acc2)">${stats.due || 0}</div><div class="l">À réviser</div></div>\`;
 
-  sg.innerHTML = `
-    <div class="res-stat"><div class="v">${accuracy}%</div><div class="l">Précision</div></div>
-    <div class="res-stat"><div class="v" style="color:var(--blue)">${stats.retention}%</div><div class="l">Rétention globale</div></div>
-    <div class="res-stat"><div class="v" style="color:var(--green)">${stats.mature}</div><div class="l">Mots mémorisés</div></div>
-    <div class="res-stat"><div class="v" style="color:var(--acc2)">${stats.due}</div><div class="l">Révisions dues</div></div>`;
+  // Récap des mots vus
+  const nextReviewEl = document.getElementById("nextReview");
+  if (seenWords.length > 0) {
+    const wordPills = seenWords.slice(0, 8).map(w =>
+      \`<span style="display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;margin:3px">\${w.ca} <span style="color:var(--muted);font-size:10px">\${w.fr}</span></span>\`
+    ).join("");
+    nextReviewEl.innerHTML = \`
+      <div style="margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700">Mots de cette session</div>
+      <div style="line-height:2">\${wordPills}\</div>\`;
+  }
+
+  // Bouton "Module suivant" si disponible
+  const nextModBtn = document.getElementById("btnResNext");
+  if (curMod && nextModBtn) {
+    const curLevel = curMod.level;
+    const p2 = prof();
+    const modsOfLevel = MODULES.filter(m => m.level === curLevel && !m.id.startsWith("GR_"));
+    const curIdx = modsOfLevel.findIndex(m => m.id === curMod.id);
+    const nextMod = modsOfLevel[curIdx + 1];
+    if (nextMod) {
+      nextModBtn.style.display = "block";
+      nextModBtn.textContent = nextMod.icon + " " + nextMod.title + " →";
+      nextModBtn.onclick = () => startModule(nextMod.id);
+    } else {
+      nextModBtn.style.display = "none";
+    }
+  }
+
+  // Texte bouton "réviser ce module"
+  const againBtn = document.getElementById("btnResAgain");
+  if (againBtn && curMod) againBtn.textContent = "🔁 Refaire " + curMod.title;
+
+  // Stats grid — uniquement les stats utiles (déjà défini ci-dessus — doublon supprimé)
 
   // Prochaine révision
   const nr = document.getElementById("nextReview");
