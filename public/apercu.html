@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drac — Aperçu de l'application</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #080C12;
+  --card: #131929;
+  --border: #1E2D45;
+  --acc: #7C5CBF;
+  --acc2: #E86D4A;
+  --green: #2DD4A0;
+  --yel: #FFD84D;
+  --text: #EEF0F6;
+  --muted: #6B7A99;
+}
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 70px 20px 50px;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(124,92,191,0.18) 0%, transparent 70%);
+}
+.hero-dragon { font-size: 72px; display: block; margin-bottom: 16px; }
+.hero-title { font-family: 'Caveat', cursive; font-size: 64px; color: var(--acc); font-weight: 700; line-height: 1; margin-bottom: 12px; }
+.hero-sub { font-size: 20px; color: var(--muted); max-width: 520px; margin: 0 auto 32px; line-height: 1.6; }
+.hero-url {
+  display: inline-block;
+  background: rgba(124,92,191,0.15);
+  border: 1.5px solid rgba(124,92,191,0.4);
+  color: #C4A9FF;
+  padding: 10px 28px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+.hero-url:hover { background: rgba(124,92,191,0.28); }
+
+/* PILLS */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 40px auto 60px;
+  max-width: 700px;
+  padding: 0 20px;
+}
+.pill {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.pill.acc { border-color: rgba(124,92,191,0.5); color: #C4A9FF; background: rgba(124,92,191,0.1); }
+.pill.green { border-color: rgba(45,212,160,0.4); color: var(--green); background: rgba(45,212,160,0.08); }
+.pill.orange { border-color: rgba(232,109,74,0.4); color: #FF9A7A; background: rgba(232,109,74,0.08); }
+
+/* SECTION TITLE */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.sec-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--acc);
+  margin-bottom: 8px;
+}
+.sec-title {
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.sec-sub {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 40px;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* ÉTAPES GRID */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.step-screen {
+  background: #0D1117;
+  padding: 28px 24px;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.step-num {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(124,92,191,0.25);
+  border: 1px solid rgba(124,92,191,0.4);
+  color: #C4A9FF;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.step-info {
+  padding: 20px 20px 22px;
+  border-top: 1px solid var(--border);
+}
+.step-info h3 {
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+.step-info p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* MOCKUP SCREENS */
+
+/* === ONBOARDING === */
+.ob-dragon { font-size: 64px; text-align: center; margin: 20px 0 10px; }
+.ob-title { font-family: 'Caveat', cursive; font-size: 40px; color: var(--acc); text-align: center; font-weight: 700; margin-bottom: 6px; }
+.ob-sub { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 20px; line-height: 1.5; }
+.feat { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+.feat-ico { font-size: 18px; }
+.feat-txt strong { display: block; font-size: 13px; font-weight: 800; }
+.feat-txt span { font-size: 11px; color: var(--muted); }
+.btn-mock { background: linear-gradient(135deg, var(--acc), #5A3E9E); color: #fff; border: none; border-radius: 24px; padding: 12px 0; font-size: 14px; font-weight: 800; width: 100%; margin-top: 12px; font-family: 'Nunito', sans-serif; cursor: default; }
+
+/* === FAMILLE === */
+.fam-header { text-align: center; padding-top: 10px; margin-bottom: 16px; }
+.fam-logo { font-family: 'Caveat', cursive; font-size: 22px; color: var(--acc); }
+.fam-sub { font-size: 11px; color: var(--muted); }
+.who { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 10px; }
+.prof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.prof { background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 12px; padding: 12px 8px; text-align: center; }
+.prof.sel { border-color: var(--acc); background: rgba(124,92,191,0.14); }
+.prof-ava { font-size: 28px; display: block; margin-bottom: 4px; }
+.prof-nm { font-size: 12px; font-weight: 800; }
+.prof-xp { font-size: 10px; color: var(--muted); }
+.tag { font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 5px; margin-bottom: 4px; display: inline-block; }
+.tag-tdah { background: rgba(255,107,53,0.2); color: #FF6B35; }
+.tag-bien { background: rgba(45,212,160,0.18); color: #2DD4A0; }
+.prof-add { background: rgba(255,255,255,0.03); border: 2px dashed rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 8px; text-align: center; color: var(--muted); font-size: 20px; }
+
+/* === CREATION === */
+.cr-title { font-size: 16px; font-weight: 900; margin-bottom: 4px; }
+.cr-sub { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+.cr-lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+.ava-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+.ava { width: 34px; height: 34px; background: rgba(255,255,255,0.06); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 2px solid transparent; }
+.ava.sel { border-color: var(--acc); background: rgba(124,92,191,0.2); }
+.inp-mock { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #4A5568; width: 100%; margin-bottom: 12px; font-family: 'Nunito', sans-serif; }
+.cogn-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
+.cogn-mini { background: rgba(255,255,255,0.04); border: 2px solid transparent; border-radius: 10px; padding: 8px 10px; }
+.cogn-mini.sel { border-color: var(--acc); background: rgba(124,92,191,0.14); }
+.cogn-mini .ico { font-size: 18px; display: block; margin-bottom: 3px; }
+.cogn-mini .nm { font-size: 11px; font-weight: 800; }
+.cogn-mini .ds { font-size: 10px; color: var(--muted); }
+
+/* === MAP === */
+.map-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-top: 8px; }
+.map-logo { font-family: 'Caveat', cursive; font-size: 18px; color: var(--acc); }
+.xp-badge { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: var(--yel); }
+.dragon-z { background: linear-gradient(135deg, rgba(124,92,191,0.12), rgba(232,109,74,0.06)); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 10px; }
+.dr-em { font-size: 40px; }
+.dr-nm { font-family: 'Caveat', cursive; font-size: 16px; color: var(--acc); }
+.dr-lv { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+.xpb { background: rgba(255,255,255,0.08); border-radius: 20px; height: 6px; overflow: hidden; }
+.xpb-f { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--acc), var(--acc2)); }
+.mod-mini { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.mod-mini.done { border-color: rgba(45,212,160,0.3); }
+.mod-mini.locked { opacity: 0.4; }
+.mod-ico { font-size: 22px; }
+.mod-nm { font-size: 12px; font-weight: 800; }
+.mod-ds { font-size: 10px; color: var(--muted); }
+.mbadge { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-top: 2px; display: inline-block; }
+.mfree { background: rgba(45,212,160,0.15); color: var(--green); }
+.mprem { background: rgba(124,92,191,0.2); color: #C4A9FF; }
+.mode-bar { background: rgba(255,107,53,0.12); border-radius: 8px; padding: 7px 10px; font-size: 10px; font-weight: 700; color: #FF9A7A; margin-bottom: 10px; }
+
+/* === LEÇON MOT === */
+.word-card-m { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px 16px; text-align: center; margin-bottom: 14px; }
+.w-em { font-size: 48px; display: block; margin-bottom: 8px; }
+.w-fr { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.w-ca { font-family: 'Caveat', cursive; font-size: 30px; font-weight: 700; margin-bottom: 2px; }
+.w-pron { font-size: 12px; color: var(--acc); margin-bottom: 8px; }
+.w-es { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 6px 10px; display: flex; align-items: center; gap: 6px; justify-content: center; margin-bottom: 8px; }
+.w-es-txt { font-size: 13px; font-weight: 700; color: #5BA3F5; }
+.w-es-pron { font-size: 11px; color: var(--muted); }
+.sim-b { font-size: 10px; padding: 2px 8px; border-radius: 5px; font-weight: 700; display: inline-block; margin-bottom: 8px; }
+.sim-ok { background: rgba(45,212,160,0.13); color: var(--green); }
+.tip-m { background: rgba(91,163,245,0.06); border-left: 2px solid #5BA3F5; border-radius: 0 6px 6px 0; padding: 7px 10px; font-size: 10px; color: var(--muted); text-align: left; line-height: 1.5; margin-bottom: 10px; }
+
+/* === QUIZ === */
+.quiz-q-m { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 12px; }
+.q-em { font-size: 42px; display: block; margin-bottom: 6px; }
+.q-num { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+.q-txt { font-size: 15px; font-weight: 800; }
+.choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px; }
+.choice-m { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 8px; text-align: center; font-size: 13px; font-weight: 700; }
+.choice-m.correct { border-color: var(--green); background: rgba(45,212,160,0.12); color: var(--green); }
+.choice-m.wrong { border-color: #FF6B6B; background: rgba(255,107,107,0.1); color: #FF6B6B; }
+.fb-ok { background: rgba(45,212,160,0.14); border: 1px solid rgba(45,212,160,0.25); border-radius: 8px; padding: 10px; text-align: center; font-size: 12px; font-weight: 700; color: var(--green); margin-bottom: 10px; }
+.tdah-b { font-size: 18px; font-weight: 900; color: #FF6B35; text-align: center; margin-bottom: 8px; }
+
+/* === RÉSULTAT === */
+.res-center { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; }
+.res-big { font-size: 64px; margin-bottom: 8px; }
+.res-title { font-size: 24px; font-weight: 900; margin-bottom: 4px; }
+.res-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.res-xp { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; width: 100%; text-align: center; font-size: 20px; font-weight: 900; color: var(--yel); margin-bottom: 12px; }
+.res-xp span { display: block; font-size: 10px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.stars-m { font-size: 26px; letter-spacing: 4px; margin-bottom: 12px; }
+
+/* PROFILS COGNITIFS */
+.cogn-section { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; }
+.cogn-grid-full { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.cogn-card {
+  border-radius: 14px; padding: 18px 16px;
+  border: 1px solid;
+}
+.cogn-card.standard { background: rgba(124,92,191,0.07); border-color: rgba(124,92,191,0.3); }
+.cogn-card.tdah { background: rgba(255,107,53,0.07); border-color: rgba(255,107,53,0.3); }
+.cogn-card.dys { background: rgba(91,163,245,0.07); border-color: rgba(91,163,245,0.3); }
+.cogn-card.hpi { background: rgba(91,163,245,0.07); border-color: rgba(91,163,245,0.3); }
+.cogn-card.adult { background: rgba(45,212,160,0.07); border-color: rgba(45,212,160,0.3); }
+.cogn-ico { font-size: 28px; margin-bottom: 8px; display: block; }
+.cogn-nm { font-size: 15px; font-weight: 900; margin-bottom: 6px; }
+.cogn-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+.cogn-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.ctag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; }
+.ctag.purple { background: rgba(124,92,191,0.2); color: #C4A9FF; }
+.ctag.orange { background: rgba(255,107,53,0.2); color: #FF9A7A; }
+.ctag.blue { background: rgba(91,163,245,0.2); color: #93C5FD; }
+.ctag.green { background: rgba(45,212,160,0.2); color: var(--green); }
+
+/* MODULES SECTION */
+.modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.module-full { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
+.module-full.done { border-color: rgba(45,212,160,0.3); }
+.module-full.locked { opacity: 0.5; }
+.mf-ico { font-size: 36px; flex-shrink: 0; }
+.mf-info .mf-title { font-size: 16px; font-weight: 900; margin-bottom: 3px; }
+.mf-info .mf-desc { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.mf-words { display: flex; flex-wrap: wrap; gap: 4px; }
+.mf-word { background: rgba(255,255,255,0.06); border-radius: 5px; padding: 2px 7px; font-size: 10px; font-weight: 700; color: var(--muted); }
+
+/* PWA SECTION */
+.pwa-box {
+  background: linear-gradient(135deg, rgba(124,92,191,0.14) 0%, rgba(232,109,74,0.08) 100%);
+  border: 1px solid rgba(124,92,191,0.3);
+  border-radius: 20px; padding: 40px; text-align: center;
+}
+.pwa-title { font-size: 26px; font-weight: 900; margin-bottom: 10px; }
+.pwa-sub { font-size: 15px; color: var(--muted); max-width: 480px; margin: 0 auto 28px; line-height: 1.6; }
+.pwa-steps { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+.pwa-step { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 14px 20px; font-size: 13px; max-width: 180px; text-align: center; }
+.pwa-step .num { font-size: 22px; font-weight: 900; color: var(--acc); margin-bottom: 4px; }
+.pwa-step p { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.pwa-cta {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--acc), #5A3E9E);
+  color: #fff; text-decoration: none;
+  border-radius: 28px; padding: 14px 36px;
+  font-size: 16px; font-weight: 800;
+  box-shadow: 0 8px 24px rgba(124,92,191,0.35);
+}
+
+/* FOOTER */
+footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+footer a { color: #C4A9FF; text-decoration: none; }
+
+/* DIVIDER */
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto 70px; max-width: 800px; }
+
+@media (max-width: 600px) {
+  .hero-title { font-size: 44px; }
+  .steps-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-dragon">🐉</span>
+  <div class="hero-title">Drac</div>
+  <p class="hero-sub">Apprends le catalan et l'espagnol depuis le français.<br>Pour toute la famille, avec un mode pour chaque profil.</p>
+  <a class="hero-url" href="https://drac-app.vercel.app" target="_blank">→ Ouvrir drac-app.vercel.app</a>
+</div>
+
+<div class="pills">
+  <span class="pill acc">🏴 Catalan</span>
+  <span class="pill acc">🇪🇸 Espagnol</span>
+  <span class="pill orange">🇫🇷 Depuis le français</span>
+  <span class="pill green">👨‍👩‍👧 Mode famille</span>
+  <span class="pill">🌀 TDAH</span>
+  <span class="pill">📖 Dys</span>
+  <span class="pill">🚀 HPI</span>
+  <span class="pill">😊 Adulte serein</span>
+  <span class="pill green">📱 Installable sur mobile</span>
+  <span class="pill">✈️ Fonctionne hors ligne</span>
+</div>
+
+<!-- SECTION : ÉTAPES -->
+<div class="section">
+  <div class="sec-label">Parcours utilisateur</div>
+  <div class="sec-title">6 étapes, de l'ouverture au résultat</div>
+  <p class="sec-sub">Chaque écran a été pensé pour être clair, motivant et adapté au profil — enfant TDAH ou adulte serein.</p>
+
+  <div class="steps-grid">
+
+    <!-- ÉTAPE 1 : ONBOARDING -->
+    <div class="step-card">
+      <div class="step-screen">
+        <span class="step-num">Étape 1</span>
+        <div class="ob-dragon">🐉</div>
+        <div class="ob-title">Drac</div>
+        <p class="ob-sub">Apprends le catalan et l'espagnol depuis le français — pour toute la famille.</p>
+        <div class="feat">
+          <span class="feat-ico">🇫🇷→🏴</span>
+          <div class="feat-txt"><strong>Intercompréhension</strong><span>Français · Catalan · Espagnol côte à côte</span></div>
+        </div>
+        <div class="feat">
+          <span class="feat-ico">🧠</span>
+          <div class="feat-txt"><strong>Adapté à chaque profil</strong><span>Standard · TDAH · Dys · HPI · Adulte</span></div>
+        </div>
+        <div class="feat">
+          <span class="feat-ico">👨‍👩‍👧</span>
+          <div class="feat-txt"><strong>Mode famille</strong><span>Jusqu'à 4 profils sur un seul appareil</span></div>
+        </div>
+        <button class="btn-mock" style="margin-top:auto">C'est parti ! 🐉</button>
+      </div>
+      <div class="step-info">
+        <h3>Accueil & présentation</h3>
+        <p>L'écran d'entrée présente les 4 piliers de l'app. Un seul bouton. Pas de compte, pas d'email.</p>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2 : CRÉATION PROFIL -->
+    <div class="step-card">
+      <div class="step-screen">
+        <span class="step-num">Étape 2</span>
+        <div class="cr-title" style="margin-top:10px">Nouveau profil</div>
+        <div class="cr-sub">Qui va apprendre ?</div>
+        <div class="cr-lbl">Avatar</div>
+        <div class="ava-row">
+          <div class="ava">🐉</div><div class="ava sel">🦋</div><div class="ava">🦊</div>
+          <div class="ava">🐬</div><div class="ava">🐼</div><div class="ava">🌺</div>
+          <div class="ava">⚡</div><div class="ava">🌙</div>
+        </div>
+        <div class="cr-lbl">Tranche d'âge</div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+          <span style="background:rgba(255,255,255,0.05);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;">6–8 ans</span>
+          <span style="background:rgba(124,92,191,0.2);border:1.5px solid rgba(124,92,191,0.5);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;color:#C4A9FF;">9–12 ans</span>
+          <span style="background:rgba(255,255,255,0.05);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;">Ado</span>
+          <span style="background:rgba(255,255,255,0.05);border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;">Adulte</span>
+        </div>
+        <div class="cr-lbl">Mode d'apprentissage</div>
+        <div class="cogn-mini-grid">
+          <div class="cogn-mini"><span class="ico">🐉</span><div class="nm">Standard</div><div class="ds">Parcours normal</div></div>
+          <div class="cogn-mini sel"><span class="ico">🌀</span><div class="nm">TDAH</div><div class="ds">Sessions courtes</div></div>
+          <div class="cogn-mini"><span class="ico">📖</span><div class="nm">Dys</div><div class="ds">Police adaptée</div></div>
+          <div class="cogn-mini"><span class="ico">🚀</span><div class="nm">HPI / Avancé</div><div class="ds">Moins de répétition</div></div>
+        </div>
+        <button class="btn-mock">Créer le profil 🐉</button>
+      </div>
+      <div class="step-info">
+        <h3>Création du profil</h3>
+        <p>Avatar, prénom, tranche d'âge et mode cognitif. Le profil est sauvegardé localement, sans compte.</p>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3 : ÉCRAN FAMILLE -->
+    <div class="step-card">
+      <div class="step-screen">
+        <span class="step-num">Étape 3</span>
+        <div class="fam-header">
+          <div class="fam-logo">🐉 Drac</div>
+          <div class="fam-sub">Catalan & Espagnol · Mode famille</div>
+        </div>
+        <div class="who">Qui joue aujourd'hui ?</div>
+        <div class="prof-grid">
+          <div class="prof sel">
+            <span class="tag tag-tdah">TDAH</span>
+            <span class="prof-ava">🦋</span>
+            <div class="prof-nm">Lenny</div>
+            <div class="prof-xp">🥚 Œuf · 0 XP</div>
+          </div>
+          <div class="prof">
+            <span class="tag tag-bien">😊</span>
+            <span class="prof-ava">🌺</span>
+            <div class="prof-nm">Amely</div>
+            <div class="prof-xp">🥚 Œuf · 0 XP</div>
+          </div>
+          <div class="prof-add">＋</div>
+        </div>
+        <button class="btn-mock">▶ Jouer !</button>
+      </div>
+      <div class="step-info">
+        <h3>Sélection du profil</h3>
+        <p>Chaque membre de la famille a sa carte avec son badge cognitif visible. Un clic pour choisir, puis Jouer.</p>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 : MAP MODULES -->
+    <div class="step-card">
+      <div class="step-screen">
+        <span class="step-num">Étape 4</span>
+        <div class="map-hd">
+          <span class="map-logo">🐉 Drac</span>
+          <span class="xp-badge">⚡ 45 XP</span>
+        </div>
+        <div class="dragon-z">
+          <div class="dr-em">🐣</div>
+          <div class="dr-nm">Dragon de Lenny</div>
+          <div class="dr-lv">Niveau 2 · Éclosion</div>
+          <div class="xpb"><div class="xpb-f" style="width:45%"></div></div>
+        </div>
+        <div class="mode-bar">🌀 Mode TDAH — sessions courtes + boosts</div>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Ton parcours</div>
+        <div class="mod-mini done"><span class="mod-ico">👋</span><div><div class="mod-nm">Bonjour Majorque</div><div class="mod-ds">Salutations de base</div><span class="mbadge mfree">✓ Gratuit</span></div><span style="margin-left:auto;font-size:12px">⭐⭐⭐</span></div>
+        <div class="mod-mini"><span class="mod-ico">👨‍👩‍👧</span><div><div class="mod-nm">La famille</div><div class="mod-ds">Père, mère, enfants…</div><span class="mbadge mfree">✓ Gratuit</span></div><span style="margin-left:auto;font-size:12px">→</span></div>
+        <div class="mod-mini locked"><span class="mod-ico">🎨</span><div><div class="mod-nm">Les couleurs</div><div class="mod-ds">Rouge, bleu, vert…</div><span class="mbadge mprem">⭐ Premium</span></div><span style="margin-left:auto;font-size:12px">🔒</span></div>
+      </div>
+      <div class="step-info">
+        <h3>Carte des modules</h3>
+        <p>Dragon qui évolue avec les XP, bandeau du mode actif, modules débloqués au fur et à mesure. 6 modules · 48 mots.</p>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 5 : LEÇON (CARTE MOT) -->
+    <div class="step-card">
+      <div class="step-screen">
+        <span class="step-num">Étape 5a</span>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:6px;">
+          <div style="background:rgba(255,255,255,0.06);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;">←</div>
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:20px;height:7px;overflow:hidden;"><div style="height:100%;width:30%;background:linear-gradient(90deg,var(--acc),var(--green));border-radius:20px;"></div></div>
+          <span style="font-size:10px;color:var(--muted)">3/13</span>
+        </div>
+        <div class="word-card-m">
+          <span class="w-em">🙏</span>
+          <div class="w-fr">🇫🇷 En français : <strong>Merci</strong></div>
+          <div class="w-ca">Gràcies</div>
+          <div class="w-pron">[GRA-si-es]</div>
+          <div class="w-es">
+            <span class="es-flag">🇪🇸</span>
+            <span class="w-es-txt">Gracias</span>
+            <span class="w-es-pron">[GRA-si-as]</span>
+          </div>
+          <span class="sim-b sim-ok">✓ Proche du français</span>
+          <div class="tip-m">💡 Très proches ! Le 'c' catalan se prononce 's' devant i ou e. Même racine latine "gratia".</div>
+        </div>
+        <button class="btn-mock">Suivant →</button>
+      </div>
+      <div class="step-info">
+        <h3>Carte vocabulaire</h3>
+        <p>Le mot en FR + CA + ES, prononciation, badge "proche / différent" et astuce culturelle. Bouton écoute synthèse vocale.</p>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 5b : QUIZ -->
+    <div class="step-card">
+      <div class="step-screen">
+        <span class="step-num">Étape 5b</span>
+        <div class="tdah-b" style="margin-top:10px">🔥 6 mots appris !</div>
+        <div class="quiz-q-m">
+          <span class="q-em">🙏</span>
+          <div class="q-num">Question 2/4</div>
+          <div class="q-txt">Comment dit-on 'Merci' en catalan ?</div>
+        </div>
+        <div class="choices-grid">
+          <div class="choice-m wrong">Adéu</div>
+          <div class="choice-m correct">Gràcies</div>
+          <div class="choice-m">Bon dia</div>
+          <div class="choice-m">Sí</div>
+        </div>
+        <div class="fb-ok">✓ Correct ! Bien joué !</div>
+        <button class="btn-mock">⚡ Continuer !</button>
+      </div>
+      <div class="step-info">
+        <h3>Quiz interactif</h3>
+        <p>4 choix, feedback immédiat coloré. En mode TDAH : toast de boost tous les 2 mots + confettis à chaque bonne réponse.</p>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 6 : RÉSULTAT -->
+    <div class="step-card">
+      <div class="step-screen">
+        <span class="step-num">Étape 6</span>
+        <div class="res-center">
+          <div class="res-big">🏆</div>
+          <div class="res-title">INCROYABLE !!!</div>
+          <div class="res-sub">4/4 bonnes réponses</div>
+          <div class="res-xp">+35 XP <span>gagné cette leçon</span></div>
+          <div class="stars-m">⭐⭐⭐</div>
+        </div>
+        <button class="btn-mock" style="margin-bottom:8px">Module suivant →</button>
+        <button class="btn-mock" style="background:rgba(255,255,255,0.06);color:var(--text)">Retour au parcours</button>
+      </div>
+      <div class="step-info">
+        <h3>Résultat de leçon</h3>
+        <p>XP gagné, étoiles, titre adapté au profil (TDAH : "INCROYABLE !!!" · Adulte : "Très bien."). Confettis si 3 étoiles.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION : PROFILS COGNITIFS -->
+<div class="section">
+  <div class="sec-label">Accessibilité</div>
+  <div class="sec-title">5 modes d'apprentissage</div>
+  <p class="sec-sub">Chaque mode adapte l'interface, les textes, les feedbacks et le rythme. Pas un style de façade — une vraie différence pédagogique validée scientifiquement.</p>
+
+  <div class="cogn-section">
+    <div class="cogn-grid-full">
+
+      <div class="cogn-card standard">
+        <span class="cogn-ico">🐉</span>
+        <div class="cogn-nm">Standard</div>
+        <p class="cogn-desc">Parcours complet, interface équilibrée. Pour tous ceux qui ne se retrouvent dans aucun autre profil.</p>
+        <div class="cogn-tags">
+          <span class="ctag purple">10 mots / session</span>
+          <span class="ctag purple">Feedback normal</span>
+        </div>
+      </div>
+
+      <div class="cogn-card tdah">
+        <span class="cogn-ico">🌀</span>
+        <div class="cogn-nm">TDAH</div>
+        <p class="cogn-desc">Sessions courtes (5 mots), récompenses toutes les 2 bonnes réponses, confettis à chaque bonne réponse, messages ultra-enthousiastes.</p>
+        <div class="cogn-tags">
+          <span class="ctag orange">5 mots / session</span>
+          <span class="ctag orange">Toast boost</span>
+          <span class="ctag orange">Confettis fréquents</span>
+        </div>
+      </div>
+
+      <div class="cogn-card dys">
+        <span class="cogn-ico">📖</span>
+        <div class="cogn-nm">Dys</div>
+        <p class="cogn-desc">Police Arial avec espacement agrandi, hauteur de ligne 1.9, priorité à l'écoute (synthèse vocale), feedback calme et rassurant.</p>
+        <div class="cogn-tags">
+          <span class="ctag blue">Arial, letter-spacing</span>
+          <span class="ctag blue">Line-height 1.9</span>
+          <span class="ctag blue">Oral prioritaire</span>
+        </div>
+      </div>
+
+      <div class="cogn-card hpi">
+        <span class="cogn-ico">🚀</span>
+        <div class="cogn-nm">HPI / Avancé</div>
+        <p class="cogn-desc">Interface sobre Inter, contexte étymologique approfondi, deux boutons d'écoute séparés CA / ES, feedback intellectuel.</p>
+        <div class="cogn-tags">
+          <span class="ctag blue">Étymologie</span>
+          <span class="ctag blue">Interface sobre</span>
+          <span class="ctag blue">Double écoute</span>
+        </div>
+      </div>
+
+      <div class="cogn-card adult">
+        <span class="cogn-ico">😊</span>
+        <div class="cogn-nm">Adulte serein</div>
+        <p class="cogn-desc">Pas de pression. "Presque — chaque erreur aide à mémoriser." Feedback neutre, ton professionnel, interface sobre.</p>
+        <div class="cogn-tags">
+          <span class="ctag green">Pas de timer</span>
+          <span class="ctag green">Ton neutre</span>
+          <span class="ctag green">Police Inter</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION : MODULES -->
+<div class="section">
+  <div class="sec-label">Contenu</div>
+  <div class="sec-title">6 modules · 48 mots · 24 questions</div>
+  <p class="sec-sub">Chaque mot vient avec sa prononciation catalan et espagnol, un badge "proche / différent du français", et une astuce culturelle ou étymologique.</p>
+
+  <div class="modules-grid">
+    <div class="module-full done">
+      <div class="mf-ico">👋</div>
+      <div class="mf-info">
+        <div class="mf-title">Bonjour Majorque</div>
+        <div class="mf-desc">Salutations et présentations · 10 mots</div>
+        <div class="mf-words">
+          <span class="mf-word">Bon dia</span><span class="mf-word">Gràcies</span><span class="mf-word">Adéu</span>
+          <span class="mf-word">Si us plau</span><span class="mf-word">Sí / No</span><span class="mf-word">Com estàs</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-full done">
+      <div class="mf-ico">👨‍👩‍👧</div>
+      <div class="mf-info">
+        <div class="mf-title">La famille</div>
+        <div class="mf-desc">Père, mère, enfants, grands-parents · 10 mots</div>
+        <div class="mf-words">
+          <span class="mf-word">Pare</span><span class="mf-word">Mare</span><span class="mf-word">Fill / Filla</span>
+          <span class="mf-word">Germà</span><span class="mf-word">Avi / Àvia</span><span class="mf-word">Família</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-full">
+      <div class="mf-ico">🎨</div>
+      <div class="mf-info">
+        <div class="mf-title">Les couleurs</div>
+        <div class="mf-desc">Rouge, bleu, vert, jaune… · 8 mots</div>
+        <div class="mf-words">
+          <span class="mf-word">Vermell</span><span class="mf-word">Blau</span><span class="mf-word">Verd</span>
+          <span class="mf-word">Groc</span><span class="mf-word">Negre</span><span class="mf-word">Blanc</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-full">
+      <div class="mf-ico">🔢</div>
+      <div class="mf-info">
+        <div class="mf-title">Les chiffres</div>
+        <div class="mf-desc">De 1 à 10 · 10 mots</div>
+        <div class="mf-words">
+          <span class="mf-word">Un / Dos / Tres</span><span class="mf-word">Quatre / Cinc</span>
+          <span class="mf-word">Sis / Set / Vuit</span><span class="mf-word">Nou / Deu</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-full">
+      <div class="mf-ico">🍽️</div>
+      <div class="mf-info">
+        <div class="mf-title">La nourriture</div>
+        <div class="mf-desc">Pain, eau, fruits, restaurant · 8 mots</div>
+        <div class="mf-words">
+          <span class="mf-word">Pa (pain)</span><span class="mf-word">Aigua</span><span class="mf-word">Peix</span>
+          <span class="mf-word">Formatge</span><span class="mf-word">Pollastre</span><span class="mf-word">Cafè</span>
+        </div>
+      </div>
+    </div>
+    <div class="module-full">
+      <div class="mf-ico">🏫</div>
+      <div class="mf-info">
+        <div class="mf-title">À l'école</div>
+        <div class="mf-desc">Pour les enfants à Majorque · 8 mots</div>
+        <div class="mf-words">
+          <span class="mf-word">Escola</span><span class="mf-word">Mestre</span><span class="mf-word">Llibre</span>
+          <span class="mf-word">Quadern</span><span class="mf-word">Amic</span><span class="mf-word">Deures</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION : INSTALLER L'APP -->
+<div class="section">
+  <div class="pwa-box">
+    <div style="font-size:48px;margin-bottom:12px;">📲</div>
+    <div class="pwa-title">Installer Drac sur ton téléphone</div>
+    <p class="pwa-sub">Drac est une PWA — une vraie app installable sans passer par l'App Store. Icône sur l'écran d'accueil, fonctionne hors ligne, aucun compte requis.</p>
+    <div class="pwa-steps">
+      <div class="pwa-step">
+        <div class="num">1</div>
+        <p>Ouvre drac-app.vercel.app dans Safari (iPhone) ou Chrome (Android)</p>
+      </div>
+      <div class="pwa-step">
+        <div class="num">2</div>
+        <p>Appuie sur le bouton Partager (iOS) ou les 3 points (Android)</p>
+      </div>
+      <div class="pwa-step">
+        <div class="num">3</div>
+        <p>"Ajouter à l'écran d'accueil" → L'icône 🐉 apparaît</p>
+      </div>
+    </div>
+    <a class="pwa-cta" href="https://drac-app.vercel.app" target="_blank">🐉 Ouvrir Drac maintenant</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Drac · Appli d'apprentissage du catalan & espagnol depuis le français · <a href="https://drac-app.vercel.app">drac-app.vercel.app</a></p>
+  <p style="margin-top:6px;">Un outil <a href="https://vivre-a-majorque.vercel.app">Vivre à Majorque</a> · par Amely depuis Campos, Majorque 🌿</p>
+</footer>
+
+</body>
+</html>
