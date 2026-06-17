@@ -1291,7 +1291,7 @@ function renderFlash(item, isDuo) {
   const tipEl = w.tip
     ? `<div class="${isAdult ? "tip-box" : "tip-box"}">💡 ${w.tip}</div>`
     : "";
-  const cultureEl = (sessionIdx === 0 && curMod && curMod.culture)
+  const cultureEl = (sessIdx === 0 && curMod && curMod.culture)
     ? `<div class="culture-block"><strong>🏝️ Majorque — Le saviez-vous ?</strong> ${curMod.culture.replace(/^[^\s]+\s/,'')}</div>`
     : "";
 
