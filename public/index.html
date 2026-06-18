@@ -167,6 +167,9 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 .flash-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 20px;text-align:center;margin-bottom:14px;}
 .word-em{font-size:54px;display:block;margin-bottom:10px;}
 .word-fr{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:5px;}
+.word-fr-big{font-size:28px;font-weight:900;color:var(--fg);margin:8px 0 10px;letter-spacing:-.3px;line-height:1.2;}
+.btn-next-word{display:block;width:100%;margin-top:16px;padding:18px 24px;background:var(--acc);color:#fff;border:none;border-radius:18px;font-size:20px;font-weight:800;cursor:pointer;transition:transform .1s,opacity .15s;text-align:center;}
+.btn-next-word:active{transform:scale(.97);opacity:.85;}
 .word-ca{font-size:32px;font-weight:900;font-family:'Caveat',cursive;letter-spacing:.5px;margin-bottom:3px;}
 .word-pron{font-size:12px;color:var(--acc);margin-bottom:8px;}
 .word-es-row{display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,.04);border-radius:8px;padding:6px 11px;margin-bottom:8px;}
@@ -1523,23 +1526,16 @@ function renderFlash(item, isDuo) {
     : "";
 
   document.getElementById("sessContent").innerHTML = `
-    <span class="item-type-badge">🃏 FLASH — mémorise</span>
     <div class="flash-card">
       <span class="word-em">${w.em}</span>
-      <div class="word-fr">🇫🇷 ${w.fr}</div>
+      <div class="word-fr-big">${w.fr}</div>
       <div class="word-ca">${w.ca}</div>
       <div class="word-pron">[${w.caP}]</div>
       ${esEl}${simB}
       <button class="btn-listen" id="bLC">🔊 Écouter</button>
       ${tipEl}${cultureEl}${phraseEl}
     </div>
-    <div style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:8px">À quelle vitesse l'as-tu retenu ?</div>
-    <div class="rating-row" id="ratingRow">
-      <button class="rating-btn rb-1" data-r="1"><span class="rb-lbl" style="color:var(--red)">😓 Encore</span><span class="rb-int">< 10 min</span></button>
-      <button class="rating-btn rb-2" data-r="2"><span class="rb-lbl" style="color:#F5A020">😐 Difficile</span><span class="rb-int" id="int2">—</span></button>
-      <button class="rating-btn rb-3" data-r="3"><span class="rb-lbl" style="color:var(--green)">🙂 Bien</span><span class="rb-int" id="int3">—</span></button>
-      <button class="rating-btn rb-4" data-r="4"><span class="rb-lbl" style="color:var(--blue)">😄 Facile</span><span class="rb-int" id="int4">—</span></button>
-    </div>`;
+    <button class="btn-next-word" id="btnNextWord">Suivant →</button>`;
 
   // Pré-calculer les intervalles pour info
   const card = item.card;
@@ -1550,10 +1546,9 @@ function renderFlash(item, isDuo) {
   });
 
   document.getElementById("bLC").addEventListener("click", () => spk(w.ca, isDuo ? w.es : null));
-  document.querySelectorAll(".rating-btn").forEach(btn => {
-    btn.addEventListener("click", function() {
-      applyRating(parseInt(this.dataset.r), true);
-    });
+  // Bouton Suivant → (FSRS auto = 3/Bien)
+  const btnNext = document.getElementById("btnNextWord");
+  if (btnNext) btnNext.addEventListener("click", () => applyRating(3));
   });
 }
 
