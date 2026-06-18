@@ -304,6 +304,7 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
       <div class="feat"><span class="feat-ico">👨‍👩‍👧</span><div class="feat-txt"><strong>5 profils cognitifs · Mode famille</strong><span>Standard · TDAH · Dys · HPI · Adulte serein</span></div></div>
     </div>
     <button class="btn-prim" id="btnStart" style="max-width:380px">C'est parti ! 🐉</button>
+    <button class="btn-sec" id="btnAlreadyAccount" style="max-width:380px;margin-top:10px;font-size:13px">J'ai déjà un compte →</button>
   </div>
 </div>
 
@@ -401,6 +402,16 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
   <div style="display:flex;gap:8px;margin-bottom:16px">
   <button class="btn-sec" id="btnSwitch" style="flex:1">Changer de profil</button>
   <button class="btn-sec" id="btnEditProf" style="flex:1">✏️ Modifier</button>
+</div>
+<div id="installBanner" style="display:none;background:linear-gradient(135deg,rgba(124,92,191,.15),rgba(45,212,160,.08));border:1px solid rgba(124,92,191,.3);border-radius:14px;padding:14px 16px;margin-bottom:16px">
+  <div style="display:flex;align-items:center;gap:12px">
+    <span style="font-size:28px">📲</span>
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:800;margin-bottom:2px">Installer Drac sur ton téléphone</div>
+      <div style="font-size:11px;color:var(--muted)">Accès direct depuis l'écran d'accueil, même sans connexion</div>
+    </div>
+    <button id="btnInstall" style="background:var(--acc);color:#fff;border:none;border-radius:20px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;font-family:'Nunito',sans-serif">Installer</button>
+  </div>
 </div>
 </div>
 
@@ -2254,10 +2265,49 @@ document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
 document.getElementById("btnStart").addEventListener("click", () => {
   show("sAuth");
 });
+document.getElementById("btnAlreadyAccount").addEventListener("click", () => {
+  show("sAuth");
+});
 // Afficher banner bêta sur l'onboarding si applicable
 setTimeout(() => {
   if (getBetaTester()) showBetaWelcome();
 }, 100);
+
+// ═══════════════════════════════════════════════════════════════
+// PWA INSTALL PROMPT
+// ═══════════════════════════════════════════════════════════════
+let deferredInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  // Afficher le banner d'installation sur sMap
+  const banner = document.getElementById("installBanner");
+  if (banner) banner.style.display = "block";
+});
+
+window.addEventListener("appinstalled", () => {
+  deferredInstallPrompt = null;
+  const banner = document.getElementById("installBanner");
+  if (banner) banner.style.display = "none";
+  showToast("✅ Drac installé sur ton téléphone !");
+});
+
+document.getElementById("btnInstall").addEventListener("click", async () => {
+  if (!deferredInstallPrompt) {
+    // iOS : afficher les instructions manuelles
+    showModal("📲", "Installer sur iPhone",
+      "Appuie sur le bouton Partager ↑ en bas de Safari, puis choisis « Sur l'écran d'accueil ».");
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  if (outcome === "accepted") {
+    const banner = document.getElementById("installBanner");
+    if (banner) banner.style.display = "none";
+  }
+});
 document.getElementById("btnPlay").addEventListener("click", () => {
   if (selId) { const p = profiles.find(x => x.id === selId); if (p) { applyMode(p); renderMap(); show("sMap"); } }
 });
