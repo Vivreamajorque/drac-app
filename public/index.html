@@ -986,11 +986,13 @@ function afterAuth() {
   syncLoad().then(loaded => {
     if (loaded) {
       showToast('☁️ Profils restaurés !')
-      goHome()
-    } else if (profiles.length > 0) {
-      // Profils locaux disponibles → syncer vers cloud
-      syncSave()
-      goHome()
+    }
+    if (profiles.length > 0) {
+      // Profil sélectionné disponible → aller directement à la map
+      const p = prof();
+      if (p) { applyMode(p); renderMap(); show('sMap'); }
+      else goHome();
+      if (!loaded) syncSave();
     } else {
       initCreate(); show('sCreate')
     }
@@ -1210,6 +1212,7 @@ let profiles = [], selId = null;
 let curSession = [], sessIdx = 0, sessCorrect = 0, sessStart = 0;
 let itemStartTime = 0;
 let curLevel = "Pré-A1";
+let curMod = null;
 let selAva = AVATARS[0], selAge = "9-12", selCogn = "standard", selLang = "duo";
 
 // ═══════════════════════════════════════════════════════════════
@@ -1256,6 +1259,7 @@ async function syncLoad() {
 
 function save() {
   localStorage.setItem("drac4_p", JSON.stringify(profiles));
+  if (selId) localStorage.setItem("drac4_sel", selId);
   // Sync cloud en arrière-plan (debounce 2s)
   clearTimeout(window._syncTimer);
   window._syncTimer = setTimeout(() => syncSave(), 2000);
@@ -1263,6 +1267,10 @@ function save() {
 function load() {
   try { const d = localStorage.getItem("drac4_p"); if (d) profiles = JSON.parse(d); }
   catch(e) { profiles = []; }
+  // Restaurer le profil sélectionné
+  const savedSel = localStorage.getItem("drac4_sel");
+  if (savedSel && profiles.find(p => p.id === savedSel)) selId = savedSel;
+  else if (profiles.length > 0) selId = profiles[0].id;
 }
 function prof() { return profiles.find(p => p.id === selId) || profiles[0] || null; }
 
@@ -1982,23 +1990,10 @@ function finishSession() {
     <div class="res-stat"><div class="v" style="color:var(--blue)">${stats.retention || 0}%</div><div class="l">Rétention</div></div>
     <div class="res-stat"><div class="v" style="color:var(--acc2)">${stats.due || 0}</div><div class="l">À réviser</div></div>`;
 
-  // Récap des mots vus
-  const nextReviewEl = document.getElementById("nextReview");
-  if (seenWords.length > 0) {
-    const wordPills = seenWords.slice(0, 8).map(w =>
-      `<span style="display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;margin:3px">${w.ca} <span style="color:var(--muted);font-size:10px">${w.fr}</span></span>`
-    ).join("");
-    nextReviewEl.innerHTML = `
-      <div style="margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700">Mots de cette session</div>
-      <div style="line-height:2">${wordPills}\</div>`;
-  }
-
   // Bouton "Module suivant" si disponible
   const nextModBtn = document.getElementById("btnResNext");
   if (curMod && nextModBtn) {
-    const curLevel = curMod.level;
-    const p2 = prof();
-    const modsOfLevel = MODULES.filter(m => m.level === curLevel && !m.id.startsWith("GR_"));
+    const modsOfLevel = MODULES.filter(m => m.level === curMod.level && !m.id.startsWith("GR_"));
     const curIdx = modsOfLevel.findIndex(m => m.id === curMod.id);
     const nextMod = modsOfLevel[curIdx + 1];
     if (nextMod) {
@@ -2014,15 +2009,18 @@ function finishSession() {
   const againBtn = document.getElementById("btnResAgain");
   if (againBtn && curMod) againBtn.textContent = "🔁 Refaire " + curMod.title;
 
-  // Stats grid — uniquement les stats utiles (déjà défini ci-dessus — doublon supprimé)
-
-  // Prochaine révision
+  // Récap mots vus + prochaine révision dans le même élément
   const nr = document.getElementById("nextReview");
-  if (stats.due > 0) {
-    nr.textContent = "🔁 " + stats.due + " révision" + (stats.due > 1 ? "s" : "") + " en attente — lance-les maintenant !";
-    nr.style.display = "block";
-  } else if (tomorrowDue > 0) {
-    nr.textContent = "📅 " + tomorrowDue + " mot" + (tomorrowDue > 1 ? "s" : "") + " à réviser demain";
+  if (seenWords.length > 0) {
+    const wordPills = seenWords.slice(0, 8).map(w =>
+      `<span style="display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;margin:3px">${w.ca} <span style="color:var(--muted);font-size:10px">${w.fr}</span></span>`
+    ).join("");
+    const dueMsg = stats.due > 0
+      ? `<div style="margin-top:10px;font-size:12px;color:var(--acc2);font-weight:700">🔁 ${stats.due} révision${stats.due > 1 ? "s" : ""} en attente</div>`
+      : "";
+    nr.innerHTML = `
+      <div style="margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700">Mots de cette session</div>
+      <div style="line-height:2">${wordPills}</div>${dueMsg}`;
     nr.style.display = "block";
   } else {
     nr.style.display = "none";
