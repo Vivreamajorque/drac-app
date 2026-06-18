@@ -266,6 +266,15 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 
 /* ── RESPONSIVE ── */
 @media(max-width:360px){.choices,.cogn-grid,.rating-row{grid-template-columns:1fr;}}
+
+.phrase-fr-ref{font-size:18px;font-weight:800;color:var(--fg);margin:8px 0;line-height:1.3;}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:var(--bg2);border-radius:12px;margin-bottom:10px;min-height:48px;justify-content:center;}
+.word-tile{background:var(--card);border:1.5px solid var(--acc);border-radius:20px;padding:8px 14px;font-size:15px;font-weight:700;color:var(--acc);cursor:pointer;transition:all .15s;}
+.word-tile:hover:not(.used){background:var(--acc);color:#fff;transform:translateY(-2px);}
+.word-tile.used{opacity:.3;cursor:default;transform:none;}
+.word-tile.placed{background:var(--acc);color:#fff;border-color:var(--acc);}
+.phrase-answer-zone{min-height:50px;background:var(--card);border:2px dashed var(--border);border-radius:12px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;}
+.answer-placeholder{color:var(--muted);font-size:13px;font-style:italic;}
 </style>
 </head>
 <body>
@@ -744,7 +753,7 @@ const SESSION = {
 
   // Séquence pédagogique pour un nouveau mot
   // Un nouveau mot passe par : flash → recog → fill → recall
-  NEW_WORD_SEQUENCE: ['flash', 'recog', 'fill', 'recall'],
+  NEW_WORD_SEQUENCE: ['flash', 'recog', 'fill', 'phrase', 'recall'],
 
   // Pour les révisions selon l'interval
   getExerciseType(card, daysSince) {
@@ -1489,7 +1498,134 @@ function renderSessionItem() {
     case "recog":   renderRecog(item, isDuo); break;
     case "fill":    renderFill(item, isDuo);  break;
     case "recall":  renderRecall(item, isDuo); break;
+    case "phrase":  renderPhrase(item, isDuo); break;
     default:        renderFlash(item, isDuo);
+  }
+}
+
+// ── PHRASE : remettre les mots dans le bon ordre ──────────────────
+function renderPhrase(item, isDuo) {
+  const w = item.word;
+  const mod = MODULES.find(m => m.id === w.modId);
+  const phrases = mod ? (mod.phrases || []) : [];
+
+  // Prendre une phrase du module ou construire depuis le mot
+  let phraseFr, phraseCa;
+  if (phrases.length > 0) {
+    const ph = phrases[Math.floor(Math.random() * phrases.length)];
+    phraseFr = ph.fr;
+    phraseCa = ph.ca;
+  } else {
+    // Construire une micro-phrase depuis le mot
+    phraseFr = w.fr;
+    phraseCa = w.ca;
+  }
+
+  // Mélanger les mots de la phrase catalane
+  const words = phraseCa.replace(/[?!.,]/g, '').split(' ').filter(Boolean);
+  const shuffled = [...words].sort(() => Math.random() - .5);
+
+  // S'assurer que c'est bien mélangé
+  let attempts = 0;
+  while (shuffled.join(' ') === words.join(' ') && attempts < 5) {
+    shuffled.sort(() => Math.random() - .5);
+    attempts++;
+  }
+
+  document.getElementById("sessContent").innerHTML = `
+    <span class="item-type-badge">🔀 CONSTRUIRE LA PHRASE</span>
+    <div class="quiz-q">
+      <div class="q-prompt" style="margin-bottom:6px">Remets les mots dans le bon ordre :</div>
+      <div class="phrase-fr-ref">🇫🇷 ${phraseFr}</div>
+    </div>
+    <div class="word-bank" id="wordBank">
+      ${shuffled.map((w, i) => `<button class="word-tile" data-word="${w}" data-idx="${i}" onclick="selectWordTile(this)">${w}</button>`).join('')}
+    </div>
+    <div class="phrase-answer-zone" id="answerZone">
+      <div class="answer-placeholder">Tape ici pour construire la phrase</div>
+    </div>
+    <div id="phraseResult" style="display:none;text-align:center;padding:10px;border-radius:12px;margin-top:8px;font-weight:800;font-size:15px"></div>
+    <button class="btn-next-word" id="btnCheckPhrase" style="margin-top:12px" onclick="checkPhrase('${words.join(' ')}')">
+      Vérifier ✓
+    </button>`;
+
+  // Variables pour suivre la réponse construite
+  window._phraseSelected = [];
+  window._phraseCorrect = words.join(' ');
+}
+
+function selectWordTile(btn) {
+  if (btn.classList.contains('used')) return;
+  const word = btn.dataset.word;
+  window._phraseSelected = window._phraseSelected || [];
+  window._phraseSelected.push({word, btn});
+  btn.classList.add('used');
+
+  // Mettre à jour la zone de réponse
+  const zone = document.getElementById('answerZone');
+  zone.innerHTML = window._phraseSelected.map((item, i) =>
+    `<button class="word-tile placed" onclick="removePhraseWord(${i})">${item.word}</button>`
+  ).join(' ');
+}
+
+function removePhraseWord(idx) {
+  const removed = window._phraseSelected.splice(idx, 1)[0];
+  removed.btn.classList.remove('used');
+  // Mettre à jour la zone
+  const zone = document.getElementById('answerZone');
+  if (window._phraseSelected.length === 0) {
+    zone.innerHTML = '<div class="answer-placeholder">Tape ici pour construire la phrase</div>';
+  } else {
+    zone.innerHTML = window._phraseSelected.map((item, i) =>
+      `<button class="word-tile placed" onclick="removePhraseWord(${i})">${item.word}</button>`
+    ).join(' ');
+  }
+  // Remettre le mot dans la banque
+  const bank = document.getElementById('wordBank');
+  if (bank) {
+    Array.from(bank.querySelectorAll('.word-tile')).forEach(btn => {
+      if (btn.dataset.word === removed.word && btn.classList.contains('used')) {
+        btn.classList.remove('used');
+        return;
+      }
+    });
+  }
+}
+
+function checkPhrase(correct) {
+  const answer = (window._phraseSelected || []).map(i => i.word).join(' ');
+  const resultEl = document.getElementById('phraseResult');
+  const btn = document.getElementById('btnCheckPhrase');
+
+  if (!answer) {
+    resultEl.style.display = 'block';
+    resultEl.style.background = 'rgba(255,107,107,.15)';
+    resultEl.style.color = 'var(--red)';
+    resultEl.textContent = 'Place les mots d\'abord !';
+    return;
+  }
+
+  const isCorrect = answer.trim() === correct.trim();
+  resultEl.style.display = 'block';
+
+  if (isCorrect) {
+    resultEl.style.background = 'rgba(45,212,160,.15)';
+    resultEl.style.color = 'var(--green)';
+    resultEl.textContent = '✓ Parfait !';
+    btn.textContent = 'Suivant →';
+    btn.onclick = () => applyRating(3);
+    // Flash vert
+    const sc = document.getElementById('sessContent');
+    if (sc) { sc.style.boxShadow = '0 0 0 2px rgba(45,212,160,.5)'; setTimeout(() => sc.style.boxShadow = '', 500); }
+  } else {
+    resultEl.style.background = 'rgba(255,107,107,.12)';
+    resultEl.style.color = 'var(--red)';
+    resultEl.innerHTML = `✗ Pas tout à fait... La bonne réponse :<br><strong style="color:var(--fg)">${correct}</strong>`;
+    btn.textContent = 'Continuer →';
+    btn.onclick = () => applyRating(2);
+    // Flash rouge
+    const sc = document.getElementById('sessContent');
+    if (sc) { sc.style.boxShadow = '0 0 0 2px rgba(255,107,107,.5)'; setTimeout(() => sc.style.boxShadow = '', 500); }
   }
 }
 
