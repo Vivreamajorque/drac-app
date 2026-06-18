@@ -1126,15 +1126,6 @@ function afterAuth() {
 }
 
 function logout() {
-  localStorage.removeItem(AUTH_KEY)
-  localStorage.removeItem(EMAIL_KEY)
-  localStorage.removeItem(PRENOM_KEY)
-  localStorage.removeItem(ROLE_KEY)
-  show('sAuth')
-}
-
-// Init auth
-function logout() {
   if (!confirm('Se déconnecter ? Ta progression reste sauvegardée dans le cloud.')) return
   localStorage.removeItem(AUTH_KEY)
   localStorage.removeItem(EMAIL_KEY)
@@ -2527,10 +2518,7 @@ document.getElementById("btnInstallHome").addEventListener("click", async () => 
     if (isInStandalone) {
       showToast("✅ Drac est déjà installé sur ton téléphone !");
     } else if (isIOS) {
-      showModal("📲", "Installer sur iPhone",
-        "1. Appuie sur le bouton Partager ↑ en bas de Safari
-2. Choisis « Sur l'écran d'accueil »
-3. Appuie sur « Ajouter »");
+      showModal("📲", "Installer sur iPhone", "1. Appuie sur le bouton Partager ↑ en bas de Safari\n2. Choisis \u00ab Sur l'\u00e9cran d'accueil \u00bb\n3. Appuie sur \u00ab Ajouter \u00bb");
     } else {
       showModal("📲", "Installer Drac",
         "Dans ton navigateur, ouvre le menu (⋮) et choisis « Ajouter à l'écran d'accueil » ou « Installer l'application ».");
