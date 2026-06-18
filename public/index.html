@@ -241,9 +241,6 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 .next-review{background:rgba(91,163,245,.1);border:1px solid rgba(91,163,245,.25);border-radius:var(--rs);padding:12px 16px;font-size:13px;color:#5BA3F5;text-align:center;margin-bottom:14px;width:100%;}
 
 /* ── BUTTONS ── */
-.pin-inp{width:56px;height:64px;border-radius:14px;border:2px solid var(--border);background:var(--card);color:var(--fg);font-size:28px;font-weight:800;text-align:center;font-family:'Nunito',sans-serif;-moz-appearance:textfield;outline:none;transition:border-color .15s;}
-.pin-inp:focus{border-color:var(--acc);}
-.pin-inp::-webkit-inner-spin-button,.pin-inp::-webkit-outer-spin-button{-webkit-appearance:none;}
 .btn-prim{background:linear-gradient(135deg,var(--acc),#5A3E9E);color:#fff;border:none;border-radius:26px;padding:14px 28px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;}
 .btn-prim:hover{transform:translateY(-1px);box-shadow:0 7px 20px rgba(124,92,191,.3);}
 .btn-sec{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:26px;padding:13px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;}
@@ -292,94 +289,8 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 <div class="toast" id="toast"></div>
 
 <!-- ═══ ONBOARDING ═══ -->
-<div class="screen on" id="sOnboard">
-  <div class="ob-wrap">
-    <div class="ob-logo-row"><span style="font-size:90px;line-height:1;display:block">🐉</span><div class="ob-title">Drac</div></div>
-    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(45,212,160,.15);border:1px solid rgba(45,212,160,.3);border-radius:20px;padding:5px 14px;margin-bottom:14px;">
-      <span style="font-size:12px">🆓</span>
-      <span style="font-size:12px;font-weight:800;color:#2DD4A0;">100% gratuit</span>
-    </div>
-    <p class="ob-sub">Apprends le catalan et l'espagnol depuis le français, à Majorque.</p>
-    <div class="feat-list">
-      <div class="feat"><span class="feat-ico">🧠</span><div class="feat-txt"><strong>Algorithme FSRS — le meilleur au monde</strong><span>Chaque mot revu au bon moment, avant que tu l'oublies</span></div></div>
-      <div class="feat"><span class="feat-ico">🏴</span><div class="feat-txt"><strong>Mallorquí inclus</strong><span>Le dialecte authentique des Baléares</span></div></div>
-      <div class="feat"><span class="feat-ico">🧩</span><div class="feat-txt"><strong>6 types d'exercices</strong><span>Flash → Reconnaissance → Associations → Production</span></div></div>
-      <div class="feat"><span class="feat-ico">👨‍👩‍👧</span><div class="feat-txt"><strong>5 profils cognitifs · Mode famille</strong><span>Standard · TDAH · Dys · HPI · Adulte serein</span></div></div>
-    </div>
-    <button class="btn-prim" id="btnStart" style="max-width:380px">C'est parti ! 🐉</button>
-    <button class="btn-sec" id="btnAlreadyAccount" style="max-width:380px;margin-top:10px;font-size:13px">J'ai déjà un compte →</button>
-    <button id="btnInstallHome" style="max-width:380px;margin-top:16px;background:none;border:1px dashed rgba(124,92,191,.4);border-radius:24px;padding:10px 20px;font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%">
-      <span style="font-size:16px">📲</span> Installer l'app sur mon téléphone
-    </button>
-  </div>
-</div>
 
 
-<!-- ═══ AUTH ═══ -->
-<div class="screen" id="sAuth">
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;">
-    <span style="font-size:64px;margin-bottom:14px;display:block">🐉</span>
-    <h1 style="font-family:'Caveat',cursive;font-size:40px;color:var(--acc);margin-bottom:6px">Drac</h1>
-    <p style="font-size:14px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:24px;max-width:300px">
-      Apprends le catalan et l'espagnol depuis le français.<br>
-      <span style="color:var(--green)">Bêta 100% gratuite.</span>
-    </p>
-
-    <!-- Étape 1 : email -->
-    <div id="authStep1" style="width:100%;max-width:360px">
-      <p id="authModeLabel" style="font-size:15px;color:var(--fg);font-weight:700;text-align:center;margin:0 0 16px">Créer mon compte 🐉</p>
-      <input id="authEmail" class="name-inp" placeholder="Ton adresse email" type="email" autocomplete="email"
-             style="margin-bottom:10px;font-size:16px">
-      <!-- Prénom (inscription uniquement) -->
-      <input id="authPrenom" class="name-inp" placeholder="Ton prénom" type="text" autocomplete="given-name"
-             style="margin-bottom:10px;font-size:16px;display:none">
-      <!-- PIN -->
-      <div style="margin-bottom:10px">
-        <p style="font-size:12px;color:var(--muted);text-align:center;margin:0 0 8px" id="pinLabel">Ton code à 4 chiffres</p>
-        <div style="display:flex;gap:10px;justify-content:center">
-          <input class="pin-inp" id="pin1" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-          <input class="pin-inp" id="pin2" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-          <input class="pin-inp" id="pin3" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-          <input class="pin-inp" id="pin4" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-        </div>
-      </div>
-      <div id="authError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:10px;text-align:center"></div>
-      <button class="btn-prim" id="btnAuthGo" style="font-size:16px">C'est parti 🐉</button>
-      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5" id="authLegalTxt">
-        En créant ton compte tu acceptes de recevoir des emails de Drac.
-      </p>
-      <button id="btnForgotPin" style="display:none;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:4px;text-align:center;width:100%;margin-top:4px">
-        Code oublié ?
-      </button>
-    </div>
-
-    <!-- Étape 2 : reset envoyé -->
-    <div id="authStep2" style="display:none;width:100%;max-width:360px;text-align:center">
-      <div style="font-size:56px;margin-bottom:16px">📬</div>
-      <h2 style="color:var(--fg);margin:0 0 10px;font-size:20px">Vérifie tes emails !</h2>
-      <p style="color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:24px">
-        Un lien pour choisir un nouveau code a été envoyé à<br>
-        <strong id="authEmailDisplay" style="color:var(--acc)"></strong>
-      </p>
-      <button class="btn-sec" id="btnAuthChangeEmail" style="font-size:13px">
-        Retour
-      </button>
-    </div>
-
-    <!-- Étape 3 : nouveau PIN après reset -->
-    <div id="authStep3" style="display:none;width:100%;max-width:360px;text-align:center">
-      <p style="font-size:15px;color:var(--fg);font-weight:700;margin:0 0 16px">Choisis ton nouveau code 🔑</p>
-      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:12px">
-        <input class="pin-inp" id="rpin1" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-        <input class="pin-inp" id="rpin2" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-        <input class="pin-inp" id="rpin3" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-        <input class="pin-inp" id="rpin4" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
-      </div>
-      <div id="resetError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:10px;text-align:center"></div>
-      <button class="btn-prim" id="btnResetConfirm">Enregistrer mon code ✓</button>
-    </div>
-  </div>
-</div>
 
 <!-- ═══ FAMILLE ═══ -->
 <div class="screen" id="sHome">
@@ -1125,7 +1036,7 @@ async function doAuth(email, prenom) {
 
 function afterAuth() {
   const auth = getAuthState()
-  if (!auth) { show('sAuth'); return }
+  // auth désactivée
   // Essayer de charger depuis le cloud d'abord
   syncLoad().then(loaded => {
     if (loaded) {
@@ -1144,18 +1055,114 @@ function afterAuth() {
 }
 
 function logout() {
-  if (!confirm('Se déconnecter ? Ta progression reste sauvegardée dans le cloud.')) return
-  localStorage.removeItem(AUTH_KEY)
-  localStorage.removeItem(EMAIL_KEY)
-  localStorage.removeItem(PRENOM_KEY)
-  localStorage.removeItem(ROLE_KEY)
+  if (!confirm('Réinitialiser ? Ta progression locale sera effacée.')) return
   localStorage.removeItem('drac4_p')
-  profiles = []
-  selId = null
-  showToast('À bientôt ! 👋')
-  setTimeout(() => { show('sOnboard'); }, 800)
+  localStorage.removeItem('drac4_sel')
+  profiles = []; selId = null
+  showToast('Réinitialisé !')
+  setTimeout(() => { initCreate(); show('sCreate'); }, 800)
 }
 
+function initAuth() {
+  checkBetaMode();
+  if (profiles.length > 0) {
+    const p = prof();
+    if (p) { applyMode(p); renderMap(); show('sMap'); }
+    else goHome();
+  } else {
+    initCreate(); show('sCreate');
+  }
+}
+
+
+
+// ═══════════════════════════════════════════════════════════════
+// MAGIC LINK AUTH
+// ═══════════════════════════════════════════════════════════════
+const MAGIC_API = 'https://vivre-a-majorque.vercel.app/api/drac-magic'
+
+async function sendMagicLink(email) {
+  const btn = document.getElementById('btnAuthGo')
+  const errEl = document.getElementById('authError')
+  btn.disabled = true
+  btn.textContent = '⏳ Envoi en cours...'
+  errEl.style.display = 'none'
+
+  try {
+    const r = await fetch(MAGIC_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'send', email: email.trim().toLowerCase() })
+    })
+    const d = await r.json()
+    if (!d.success) throw new Error(d.error || 'Erreur envoi')
+
+    // Afficher étape 2
+    document.getElementById('authStep1').style.display = 'none'
+    document.getElementById('authStep2').style.display = 'block'
+    document.getElementById('authEmailDisplay').textContent = email.trim().toLowerCase()
+
+  } catch(e) {
+    errEl.textContent = e.message || 'Erreur. Réessaie.'
+    errEl.style.display = 'block'
+    btn.disabled = false
+    btn.textContent = 'Envoyer mon lien magique 🔗'
+  }
+}
+
+async function verifyMagicToken(token) {
+  try {
+    const r = await fetch(MAGIC_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'verify', token })
+    })
+    const d = await r.json()
+    if (!d.success) throw new Error(d.error || 'Lien invalide')
+
+    // Sauvegarder la session
+    localStorage.setItem(AUTH_KEY,   d.token)
+    localStorage.setItem(EMAIL_KEY,  d.email)
+    localStorage.setItem(PRENOM_KEY, d.email.split('@')[0])
+    localStorage.setItem(ROLE_KEY,   d.role)
+
+    showToast(d.message || '✅ Connecté !')
+    afterAuth()
+  } catch(e) {
+    // Afficher l'erreur sur l'écran auth
+    initCreate(); show('sCreate')
+    const errEl = document.getElementById('authError')
+    errEl.textContent = e.message
+    errEl.style.display = 'block'
+  }
+}
+
+// Vérifier si un magic token est dans l'URL au chargement
+function checkMagicLinkInURL() {
+  const params = new URLSearchParams(window.location.search)
+  const magic = params.get('magic')
+  if (magic) {
+    // Nettoyer l'URL
+    window.history.replaceState({}, '', window.location.pathname)
+    // Afficher un écran de chargement
+    initCreate(); show('sCreate')
+    document.getElementById('authStep1').style.display = 'none'
+    document.getElementById('authStep2').style.display = 'none'
+    // Vérifier le token
+    const loadingEl = document.createElement('div')
+    loadingEl.style.cssText = 'text-align:center;padding:40px;color:var(--muted)'
+    loadingEl.innerHTML = '<div style="font-size:40px;margin-bottom:12px">🔗</div><p>Connexion en cours...</p>'
+    document.querySelector('#sAuth > div').appendChild(loadingEl)
+    verifyMagicToken(magic)
+    return true
+  }
+  return false
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// MODE BÊTA-TESTEUR
+// ═══════════════════════════════════════════════════════════════
 function checkBetaMode() {
   const params = new URLSearchParams(window.location.search);
   const beta = params.get('beta');
@@ -1268,348 +1275,6 @@ function save() {
   clearTimeout(window._syncTimer);
   window._syncTimer = setTimeout(() => syncSave(), 2000);
 }
-function load() {
-  try { const d = localStorage.getItem("drac4_p"); if (d) profiles = JSON.parse(d); }
-  catch(e) { profiles = []; }
-  // Restaurer le profil sélectionné
-  const savedSel = localStorage.getItem("drac4_sel");
-  if (savedSel && profiles.find(p => p.id === savedSel)) selId = savedSel;
-  else if (profiles.length > 0) selId = profiles[0].id;
-}
-function prof() { return profiles.find(p => p.id === selId) || profiles[0] || null; }
-
-// ═══════════════════════════════════════════════════════════════
-// MODE COGNITIF
-// ═══════════════════════════════════════════════════════════════
-
-function initAuth() {
-  // 0. Mode bêta-testeur dans l'URL ?
-  checkBetaMode();
-  // 0b. Reset PIN dans l'URL ?
-  if (checkResetInURL()) return
-  // 1. Déjà connecté sur Drac ?
-  const dracAuth = getAuthState()
-  if (dracAuth) { afterAuth(); return }
-
-  // 2. Déjà connecté sur VAM ? Auto-login silencieux
-  const vamAuth = checkVAMToken()
-  if (vamAuth) {
-    // Créer un token Drac depuis le token VAM (sans appel API)
-    localStorage.setItem(EMAIL_KEY,  vamAuth.email)
-    localStorage.setItem(ROLE_KEY,   vamAuth.role)
-    localStorage.setItem(PRENOM_KEY, vamAuth.email.split('@')[0])
-    // On utilise le token VAM directement comme token Drac temporaire
-    localStorage.setItem(AUTH_KEY, localStorage.getItem('vmaq_premium_token'))
-    showToast('✅ Connecté avec ton compte VAM !')
-    afterAuth()
-    return
-  }
-
-  // 3. Rien → vérifier si première visite ou non
-  const hasVisited = localStorage.getItem('drac_last_email') || localStorage.getItem('drac4_p')
-  if (hasVisited) {
-    // Déjà utilisé → direct sAuth en mode reconnexion
-    show('sAuth')
-    // Mode reconnexion : titre et bouton adaptés
-    const label = document.getElementById('authModeLabel')
-    const infoBox = document.getElementById('authInfoBox')
-    const btn = document.getElementById('btnAuthGo')
-    if (label) label.textContent = 'Se reconnecter 👋'
-    if (infoBox) infoBox.style.display = 'none'
-    if (btn) btn.textContent = 'Recevoir mon lien de connexion 🔗'
-    setTimeout(() => {
-      const lastEmail = localStorage.getItem('drac_last_email')
-      if (lastEmail) {
-        const inp = document.getElementById('authEmail')
-        if (inp) inp.value = lastEmail
-        const err = document.getElementById('authError')
-        if (err) {
-          err.style.display = 'block'
-          err.style.background = 'rgba(124,92,191,.12)'
-          err.style.color = 'var(--acc)'
-          err.textContent = '🔐 Ta session a expiré — entre ton code pour te reconnecter.'
-        }
-      }
-    }, 100)
-  } else {
-    // Première visite → onboarding
-    show('sOnboard')
-  }
-}
-
-
-
-// ═══════════════════════════════════════════════════════════════
-// MAGIC LINK AUTH
-// ═══════════════════════════════════════════════════════════════
-const PIN_API = 'https://vivre-a-majorque.vercel.app/api/drac-pin'
-
-// ── Helpers PIN ───────────────────────────────────────────────
-
-function getPinValue(prefix) {
-  const v = [1,2,3,4].map(i => {
-    const el = document.getElementById(prefix + i)
-    return el ? el.value.trim() : ''
-  }).join('')
-  return v
-}
-
-function clearPin(prefix) {
-  [1,2,3,4].forEach(i => {
-    const el = document.getElementById(prefix + i)
-    if (el) el.value = ''
-  })
-}
-
-function setupPinInputs(prefix) {
-  [1,2,3,4].forEach(i => {
-    const el = document.getElementById(prefix + i)
-    if (!el) return
-    el.addEventListener('input', () => {
-      // Garder un seul chiffre
-      el.value = el.value.replace(/[^0-9]/g, '').slice(-1)
-      if (el.value && i < 4) {
-        const next = document.getElementById(prefix + (i+1))
-        if (next) next.focus()
-      }
-      // Si les 4 cases sont remplies → valider auto
-      if (getPinValue(prefix).length === 4 && prefix === 'pin') {
-        setTimeout(() => document.getElementById('btnAuthGo').click(), 100)
-      }
-    })
-    el.addEventListener('keydown', e => {
-      if (e.key === 'Backspace' && !el.value && i > 1) {
-        const prev = document.getElementById(prefix + (i-1))
-        if (prev) { prev.value = ''; prev.focus() }
-      }
-    })
-    el.addEventListener('focus', () => el.select())
-  })
-}
-
-// ── Mode auth : 'register' ou 'login' ────────────────────────
-let authMode = 'register'
-
-function setAuthMode(mode) {
-  authMode = mode
-  const label    = document.getElementById('authModeLabel')
-  const prenom   = document.getElementById('authPrenom')
-  const pinLabel = document.getElementById('pinLabel')
-  const btn      = document.getElementById('btnAuthGo')
-  const legal    = document.getElementById('authLegalTxt')
-  const forgot   = document.getElementById('btnForgotPin')
-
-  if (mode === 'register') {
-    if (label)    label.textContent = 'Créer mon compte 🐉'
-    if (prenom)   prenom.style.display = 'block'
-    if (pinLabel) pinLabel.textContent = 'Choisis ton code à 4 chiffres'
-    if (btn)      btn.textContent = 'Créer mon compte 🐉'
-    if (legal)    legal.style.display = 'block'
-    if (forgot)   forgot.style.display = 'none'
-  } else {
-    if (label)    label.textContent = 'Se connecter 👋'
-    if (prenom)   prenom.style.display = 'none'
-    if (pinLabel) pinLabel.textContent = 'Ton code à 4 chiffres'
-    if (btn)      btn.textContent = 'Se connecter ✓'
-    if (legal)    legal.style.display = 'none'
-    if (forgot)   forgot.style.display = 'block'
-  }
-  clearPin('pin')
-  const err = document.getElementById('authError')
-  if (err) err.style.display = 'none'
-  // Focus email si vide
-  const emailEl = document.getElementById('authEmail')
-  if (emailEl && !emailEl.value) {
-    setTimeout(() => emailEl.focus(), 150)
-  } else {
-    setTimeout(() => { const p1 = document.getElementById('pin1'); if (p1) p1.focus() }, 150)
-  }
-}
-
-// ── Auth principale ───────────────────────────────────────────
-
-async function doAuthPin() {
-  const btn    = document.getElementById('btnAuthGo')
-  const errEl  = document.getElementById('authError')
-  const email  = document.getElementById('authEmail').value.trim().toLowerCase()
-  const pin    = getPinValue('pin')
-  const prenom = authMode === 'register' ? (document.getElementById('authPrenom')?.value.trim() || '') : ''
-
-  errEl.style.display = 'none'
-
-  if (!email || !email.includes('@')) {
-    errEl.textContent = 'Email invalide — vérifie le format.'
-    errEl.style.display = 'block'; return
-  }
-  if (pin.length !== 4) {
-    errEl.textContent = 'Entre les 4 chiffres de ton code.'
-    errEl.style.display = 'block'
-    document.getElementById('pin1')?.focus(); return
-  }
-
-  btn.disabled = true
-  btn.textContent = '⏳ Connexion...'
-
-  try {
-    const r = await fetch(PIN_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: authMode, email, pin, prenom }),
-    })
-    const d = await r.json()
-
-    if (!d.success) {
-      errEl.textContent = d.error || 'Erreur. Réessaie.'
-      errEl.style.display = 'block'
-      btn.disabled = false
-      btn.textContent = authMode === 'register' ? 'Créer mon compte 🐉' : 'Se connecter ✓'
-      // Si email déjà inscrit → basculer en login
-      if (r.status === 409) {
-        setTimeout(() => {
-          errEl.textContent = 'Email déjà inscrit → entre ton code pour te connecter.'
-          setAuthMode('login')
-        }, 1500)
-      }
-      return
-    }
-
-    // Succès → sauvegarder session
-    localStorage.setItem(AUTH_KEY,           d.token)
-    localStorage.setItem(EMAIL_KEY,          d.email)
-    localStorage.setItem(PRENOM_KEY,         d.prenom || prenom || d.email.split('@')[0])
-    localStorage.setItem(ROLE_KEY,           d.role)
-    localStorage.setItem('drac_last_email',  d.email)
-
-    showToast(d.message || '✅ Connecté !')
-    afterAuth()
-
-  } catch {
-    errEl.textContent = 'Erreur réseau. Vérifie ta connexion.'
-    errEl.style.display = 'block'
-    btn.disabled = false
-    btn.textContent = authMode === 'register' ? 'Créer mon compte 🐉' : 'Se connecter ✓'
-  }
-}
-
-// ── Reset PIN ─────────────────────────────────────────────────
-
-async function sendPinReset() {
-  const email = document.getElementById('authEmail').value.trim().toLowerCase()
-  if (!email || !email.includes('@')) {
-    const e = document.getElementById('authError')
-    e.textContent = "Entre ton email d'abord."
-    e.style.display = 'block'; return
-  }
-
-  try {
-    await fetch(PIN_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'reset', email }),
-    })
-  } catch {}
-
-  document.getElementById('authStep1').style.display = 'none'
-  document.getElementById('authStep2').style.display = 'block'
-  document.getElementById('authEmailDisplay').textContent = email
-}
-
-async function confirmPinReset(token) {
-  const pin = getPinValue('rpin')
-  const errEl = document.getElementById('resetError')
-  errEl.style.display = 'none'
-
-  if (pin.length !== 4) {
-    errEl.textContent = 'Entre les 4 chiffres de ton nouveau code.'
-    errEl.style.display = 'block'; return
-  }
-
-  const btn = document.getElementById('btnResetConfirm')
-  btn.disabled = true; btn.textContent = '⏳ Enregistrement...'
-
-  try {
-    const r = await fetch(PIN_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'reset_confirm', email: '', reset_token: token, new_pin: pin }),
-    })
-    const d = await r.json()
-
-    if (!d.success) {
-      errEl.textContent = d.error || 'Erreur. Réessaie.'
-      errEl.style.display = 'block'
-      btn.disabled = false; btn.textContent = 'Enregistrer mon code ✓'; return
-    }
-
-    localStorage.setItem(AUTH_KEY,           d.token)
-    localStorage.setItem(EMAIL_KEY,          d.email)
-    localStorage.setItem(PRENOM_KEY,         d.email.split('@')[0])
-    localStorage.setItem(ROLE_KEY,           d.role)
-    localStorage.setItem('drac_last_email',  d.email)
-
-    showToast('✅ Nouveau code enregistré !')
-    afterAuth()
-  } catch {
-    errEl.textContent = 'Erreur réseau.'
-    errEl.style.display = 'block'
-    btn.disabled = false; btn.textContent = 'Enregistrer mon code ✓'
-  }
-}
-
-// ── Vérifier si reset token dans l'URL ───────────────────────
-function checkResetInURL() {
-  const params = new URLSearchParams(window.location.search)
-  const token  = params.get('reset')
-  if (!token) return false
-  window.history.replaceState({}, '', window.location.pathname)
-  show('sAuth')
-  document.getElementById('authStep1').style.display = 'none'
-  document.getElementById('authStep3').style.display = 'block'
-  // Setup des cases PIN reset
-  setupPinInputs('rpin')
-  document.getElementById('btnResetConfirm').addEventListener('click', () => confirmPinReset(token))
-  return true
-}
-
-// ═══════════════════════════════════════════════════════════════
-// ── Init cases PIN ──
-setupPinInputs('pin');
-
-// ── Bouton principal (register ou login) ──
-document.getElementById("btnAuthGo").addEventListener("click", doAuthPin);
-
-// ── Enter sur le champ email → focus pin1 ──
-document.getElementById("authEmail").addEventListener("keydown", e => {
-  if (e.key === "Enter") { document.getElementById("pin1")?.focus(); }
-});
-
-// ── Retour depuis step2 (reset envoyé) ──
-document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
-  document.getElementById("authStep1").style.display = "block";
-  document.getElementById("authStep2").style.display = "none";
-});
-
-// ── Code oublié ──
-document.getElementById("btnForgotPin").addEventListener("click", sendPinReset);
-
-// ── Bouton "C'est parti" → register ──
-document.getElementById("btnStart").addEventListener("click", () => {
-  setAuthMode("register");
-  show("sAuth");
-});
-
-// ── Bouton "J'ai déjà un compte" → login ──
-document.getElementById("btnAlreadyAccount").addEventListener("click", () => {
-  setAuthMode("login");
-  const lastEmail = localStorage.getItem("drac_last_email");
-  if (lastEmail) {
-    const inp = document.getElementById("authEmail");
-    if (inp) { inp.value = lastEmail; setTimeout(() => document.getElementById("pin1")?.focus(), 200); }
-  }
-  show("sAuth");
-});
-
-
 function load() {
   try { const d = localStorage.getItem("drac4_p"); if (d) profiles = JSON.parse(d); }
   catch(e) { profiles = []; }
@@ -2369,7 +2034,6 @@ function applyRating(rating, correct) {
 // ═══════════════════════════════════════════════════════════════
 // FIN DE SESSION
 // ═══════════════════════════════════════════════════════════════
-
 function finishSession() {
   const p = prof(); if (!p) return;
   const cogn = p.cogn || "standard";
@@ -2687,7 +2351,7 @@ document.getElementById("btnStart").addEventListener("click", () => {
   if (infoBox) infoBox.style.display = "flex";
   if (btn) btn.textContent = "Envoyer mon lien magique 🔗";
   document.getElementById("authEmail").placeholder = "Ton adresse email";
-  show("sAuth");
+  initCreate(); show('sCreate');
 });
 document.getElementById("btnAlreadyAccount").addEventListener("click", () => {
   // Mode reconnexion
@@ -2700,15 +2364,13 @@ document.getElementById("btnAlreadyAccount").addEventListener("click", () => {
   document.getElementById("authEmail").placeholder = "Ton adresse email";
   document.getElementById("authEmail").value = "";
   document.getElementById("authError").style.display = "none";
-  show("sAuth");
+  initCreate(); show('sCreate');
   setTimeout(() => document.getElementById("authEmail").focus(), 200);
 });
 // Afficher banner bêta sur l'onboarding si applicable
 setTimeout(() => {
   if (getBetaTester()) showBetaWelcome();
 }, 100);
-
-
 
 // ═══════════════════════════════════════════════════════════════
 // PWA INSTALL PROMPT
@@ -2772,7 +2434,7 @@ document.getElementById("btnPlay").addEventListener("click", () => {
 });
 document.getElementById("btnAddProf").addEventListener("click", goCreate);
 document.getElementById("btnBackS").addEventListener("click", () => { applyMode(prof()); renderMap(); show("sMap"); });
-document.getElementById("btnBackC").addEventListener("click", () => { if (profiles.length > 0) goHome(); else show("sOnboard"); });
+document.getElementById("btnBackC").addEventListener("click", () => { if (profiles.length > 0) goHome(); else initCreate(); show('sCreate'); });
 document.getElementById("btnCreate").addEventListener("click", createProfile);
 document.getElementById("mBtn").addEventListener("click", () => document.getElementById("mOv").classList.remove("show"));
 document.getElementById("btnResHome").addEventListener("click", () => { applyMode(prof()); renderMap(); show("sMap"); });
@@ -2800,24 +2462,7 @@ initCreate();
 
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").then(reg => {
-      reg.addEventListener("updatefound", () => {
-        const newSW = reg.installing;
-        if (!newSW) return;
-        newSW.addEventListener("statechange", () => {
-          if (newSW.state === "installed" && navigator.serviceWorker.controller) {
-            // Nouvelle version prête — afficher le toast
-            const t = document.createElement("div");
-            t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7C5CBF,#5A3E9E);color:#fff;padding:14px 20px;border-radius:24px;font-size:13px;font-weight:800;z-index:9999;box-shadow:0 4px 20px rgba(124,92,191,.5);text-align:center;cursor:pointer;max-width:300px;line-height:1.4;font-family:'Nunito',sans-serif";
-            t.innerHTML = "✨ Nouvelle version disponible !<br><span style='font-size:11px;font-weight:400;opacity:.85'>Ferme et rouvre l'app pour en profiter</span>";
-            t.addEventListener("click", () => t.remove());
-            document.body.appendChild(t);
-            // Disparaît automatiquement après 8 secondes
-            setTimeout(() => t.remove(), 8000);
-          }
-        });
-      });
-    }).catch(() => {});
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
   }
 });
 </script>
