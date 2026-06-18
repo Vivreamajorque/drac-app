@@ -1485,7 +1485,7 @@ function startModule(modId) {
   const modWords = ALL_WORDS.filter(w => w.modId === modId);
 
   // Construire la session FSRS
-  curMod = MODULES.find(m => m.id === modId);
+  curMod = mod;
   // Afficher le nom du module dans le header
   const modNameEl = document.getElementById("sessModName");
   if (modNameEl && curMod) modNameEl.textContent = curMod.icon + " " + curMod.title;
@@ -1496,6 +1496,15 @@ function startModule(modId) {
     curSession = modWords.slice(0, SESSION.SESSION_SIZE[p.cogn] || 15).map(w => ({
       word: w, card: FSRS.newCard(w.id), type: "flash", isNew: true, urgency: "new"
     }));
+  }
+
+  // Ajouter les quiz du module à la fin (max 3)
+  if (mod.quiz && mod.quiz.length > 0) {
+    const quizItems = mod.quiz.slice(0, 3).map(q => ({
+      word: null, card: null, type: "quiz", isNew: false, urgency: "quiz",
+      quizData: q
+    }));
+    curSession = [...curSession, ...quizItems];
   }
 
   sessIdx = 0; sessCorrect = 0; sessStart = Date.now();
@@ -1543,6 +1552,7 @@ function renderSessionItem() {
     case "fill":    renderFill(item, isDuo);  break;
     case "recall":  renderRecall(item, isDuo); break;
     case "phrase":  renderPhrase(item, isDuo); break;
+    case "quiz":    renderModQuiz(item, isDuo); break;
     default:        renderFlash(item, isDuo);
   }
 }
@@ -1812,7 +1822,56 @@ function renderFill(item, isDuo) {
   });
 }
 
-// ── RECALL : écrire en catalan ──
+// ── QUIZ MODULE : questions QCM du module ──────────────────────
+function renderModQuiz(item, isDuo) {
+  const q = item.quizData;
+  const opts = q.opts;
+  const ans = q.ans;
+
+  document.getElementById("sessContent").innerHTML = `
+    <span class="item-type-badge">🧩 QUIZ</span>
+    <div class="quiz-q">
+      <span class="q-em">${q.em || '🎯'}</span>
+      <div class="q-word" style="font-size:16px;line-height:1.4">${q.q}</div>
+    </div>
+    <div class="choices" id="chx">
+      ${opts.map((o, i) => `<button class="choice" data-i="${i}">${o}</button>`).join("")}
+    </div>
+    <div class="fb-bar" id="fb"></div>
+    <button class="btn-prim" id="btnNext" style="display:none">Continuer →</button>`;
+
+  document.querySelectorAll(".choice").forEach(btn => {
+    btn.addEventListener("click", function() {
+      const chosen = parseInt(this.dataset.i);
+      const correct = chosen === ans;
+      // Marquer les choix
+      document.querySelectorAll(".choice").forEach((b, i) => {
+        b.style.pointerEvents = "none";
+        if (i === ans) b.classList.add("reveal");
+      });
+      this.classList.add(correct ? "correct" : "wrong");
+      const fb = document.getElementById("fb");
+      fb.style.display = "block";
+      const p = prof();
+      const cogn = p ? p.cogn : "standard";
+      if (correct) {
+        fb.className = "fb-bar ok";
+        fb.textContent = (FB_OK[cogn] || FB_OK.standard)[Math.floor(Math.random() * 4)];
+        confetti(12);
+      } else {
+        fb.className = "fb-bar ko";
+        fb.textContent = "La bonne réponse : " + opts[ans];
+      }
+      if (correct) sessCorrect++;
+      const btnNext = document.getElementById("btnNext");
+      btnNext.style.display = "block";
+      btnNext.addEventListener("click", () => {
+        sessIdx++;
+        setTimeout(renderSessionItem, 200);
+      });
+    });
+  });
+}
 function renderRecall(item, isDuo) {
   const w = item.word;
   document.getElementById("sessContent").innerHTML = `
@@ -1904,6 +1963,13 @@ function applyRating(rating, correct) {
   const item = curSession[sessIdx];
   const timeMs = Date.now() - itemStartTime;
 
+  // Les items quiz gèrent eux-mêmes la progression — applyRating ne doit pas les toucher
+  if (item.type === "quiz") {
+    sessIdx++;
+    setTimeout(renderSessionItem, 200);
+    return;
+  }
+
   // Rating auto si exercice recog/fill/recall (pas flash)
   const finalRating = item.type === "flash" ? rating
     : SESSION.toRating(correct, timeMs, false);
@@ -1915,7 +1981,6 @@ function applyRating(rating, correct) {
   if (correct) {
     sessCorrect++;
     p.xp = (p.xp || 0) + (rating >= 3 ? 2 : 1);
-    // Flash vert rapide sur la carte
     const sc = document.getElementById("sessContent");
     if (sc && rating >= 3) {
       sc.style.transition = "box-shadow .15s";
@@ -1923,7 +1988,6 @@ function applyRating(rating, correct) {
       setTimeout(() => { sc.style.boxShadow = ""; }, 300);
     }
   } else {
-    // Flash rouge si incorrect
     const sc = document.getElementById("sessContent");
     if (sc) {
       sc.style.transition = "box-shadow .15s";
@@ -1940,7 +2004,6 @@ function applyRating(rating, correct) {
   // Marquer le module comme vu si premier item
   if (item.isNew && !p.done?.includes(item.word.modId)) {
     if (!p.done) p.done = [];
-    // Vérifier si tous les mots du module ont été vus
     const mod = MODULES.find(m => m.id === item.word.modId);
     if (mod) {
       const allModWords = ALL_WORDS.filter(w => w.modId === mod.id);
@@ -1967,8 +2030,8 @@ function finishSession() {
   const cards = p.fsrs || {};
   const stats = FSRS.getRetentionStats(cards);
 
-  // Mots vus dans cette session
-  const seenWords = curSession.map(item => item.word).filter(Boolean);
+  // Mots vus dans cette session (hors items quiz)
+  const seenWords = curSession.filter(item => item.word).map(item => item.word);
   const seenCount = seenWords.length;
 
   // Titre selon perf
@@ -2337,29 +2400,7 @@ initCreate();
 
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").then(reg => {
-      // Vérifier les mises à jour toutes les 30 secondes
-      setInterval(() => reg.update(), 30000);
-      
-      // Quand un nouveau SW est prêt, l'activer immédiatement
-      reg.addEventListener("updatefound", () => {
-        const newSW = reg.installing;
-        if (!newSW) return;
-        newSW.addEventListener("statechange", () => {
-          if (newSW.state === "installed" && navigator.serviceWorker.controller) {
-            // Nouveau contenu disponible — recharger automatiquement
-            newSW.postMessage("skipWaiting");
-            window.location.reload();
-          }
-        });
-      });
-    }).catch(() => {});
-    
-    // Si le SW prend le contrôle → recharger pour avoir la dernière version
-    let refreshing = false;
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (!refreshing) { refreshing = true; window.location.reload(); }
-    });
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
   }
 });
 </script>
