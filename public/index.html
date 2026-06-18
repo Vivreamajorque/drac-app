@@ -1005,6 +1005,19 @@ function logout() {
 }
 
 // Init auth
+function logout() {
+  if (!confirm('Se déconnecter ? Ta progression reste sauvegardée dans le cloud.')) return
+  localStorage.removeItem(AUTH_KEY)
+  localStorage.removeItem(EMAIL_KEY)
+  localStorage.removeItem(PRENOM_KEY)
+  localStorage.removeItem(ROLE_KEY)
+  localStorage.removeItem('drac4_p')
+  profiles = []
+  selId = null
+  showToast('À bientôt ! 👋')
+  setTimeout(() => { show('sOnboard'); }, 800)
+}
+
 function initAuth() {
   // 0. Mode bêta-testeur dans l'URL ?
   checkBetaMode();
@@ -1030,6 +1043,21 @@ function initAuth() {
 
   // 3. Rien → écran auth
   show('sAuth')
+  // Pré-remplir email si session précédente expirée
+  setTimeout(() => {
+    const lastEmail = localStorage.getItem('drac_last_email')
+    if (lastEmail) {
+      const inp = document.getElementById('authEmail')
+      if (inp) inp.value = lastEmail
+      const err = document.getElementById('authError')
+      if (err) {
+        err.style.display = 'block'
+        err.style.background = 'rgba(124,92,191,.12)'
+        err.style.color = 'var(--acc)'
+        err.textContent = '🔗 Ta session a expiré — renvoie-toi un lien magique !'
+      }
+    }
+  }, 100)
 }
 
 
