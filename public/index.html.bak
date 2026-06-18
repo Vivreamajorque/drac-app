@@ -321,8 +321,7 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 
     <!-- Étape 1 : email -->
     <div id="authStep1" style="width:100%;max-width:360px">
-      <p id="authModeLabel" style="font-size:15px;color:var(--fg);font-weight:700;text-align:center;margin:0 0 14px">Créer mon compte 🐉</p>
-      <div id="authInfoBox" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
         <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;gap:10px;align-items:center">
           <span style="font-size:18px">🔗</span>
           <span style="font-size:12px;color:var(--muted)">Tu recevras un <strong style="color:var(--fg)">lien magique</strong> par email — clique dessus, t'es connecté(e)</span>
@@ -2461,29 +2460,10 @@ document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
 })
 
 document.getElementById("btnStart").addEventListener("click", () => {
-  // Mode nouveau compte
-  const label = document.getElementById("authModeLabel");
-  const infoBox = document.getElementById("authInfoBox");
-  const btn = document.getElementById("btnAuthGo");
-  if (label) label.textContent = "Créer mon compte 🐉";
-  if (infoBox) infoBox.style.display = "flex";
-  if (btn) btn.textContent = "Envoyer mon lien magique 🔗";
-  document.getElementById("authEmail").placeholder = "Ton adresse email";
   show("sAuth");
 });
 document.getElementById("btnAlreadyAccount").addEventListener("click", () => {
-  // Mode reconnexion
-  const label = document.getElementById("authModeLabel");
-  const infoBox = document.getElementById("authInfoBox");
-  const btn = document.getElementById("btnAuthGo");
-  if (label) label.textContent = "Se reconnecter 👋";
-  if (infoBox) infoBox.style.display = "none";
-  if (btn) btn.textContent = "Recevoir mon lien de connexion 🔗";
-  document.getElementById("authEmail").placeholder = "Ton adresse email";
-  document.getElementById("authEmail").value = "";
-  document.getElementById("authError").style.display = "none";
   show("sAuth");
-  setTimeout(() => document.getElementById("authEmail").focus(), 200);
 });
 // Afficher banner bêta sur l'onboarding si applicable
 setTimeout(() => {
