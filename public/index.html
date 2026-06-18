@@ -293,8 +293,8 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
   <div class="ob-wrap">
     <div class="ob-logo-row"><span style="font-size:90px;line-height:1;display:block">🐉</span><div class="ob-title">Drac</div></div>
     <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(45,212,160,.15);border:1px solid rgba(45,212,160,.3);border-radius:20px;padding:5px 14px;margin-bottom:14px;">
-      <span style="font-size:12px">✨</span>
-      <span style="font-size:12px;font-weight:800;color:#2DD4A0;">BÊTA — Accès 100% gratuit</span>
+      <span style="font-size:12px">🆓</span>
+      <span style="font-size:12px;font-weight:800;color:#2DD4A0;">100% gratuit</span>
     </div>
     <p class="ob-sub">Apprends le catalan et l'espagnol depuis le français, à Majorque.</p>
     <div class="feat-list">
@@ -1444,8 +1444,6 @@ function renderMap() {
   }
 
   filtered.forEach((mod, idx) => {
-    const prevDone = idx === 0 || (p.done||[]).includes(filtered[idx-1].id);
-    const unlocked = prevDone || !!getBetaTester(); // Bêta-testeurs = tout débloqué
     const done = (p.done||[]).includes(mod.id);
 
     // Stats FSRS pour ce module
@@ -1456,7 +1454,7 @@ function renderMap() {
 
     const lvCls = "lvl-" + mod.level.replace("-","").replace("é","e");
     const card = document.createElement("div");
-    card.className = "mod-card" + (unlocked ? "" : " locked") + (done ? " done" : "");
+    card.className = "mod-card" + (done ? " done" : "");
     card.innerHTML = `
       <div class="mod-ico">${mod.icon}</div>
       <div class="mod-info">
@@ -1464,13 +1462,11 @@ function renderMap() {
         <div class="mod-sub">${mod.desc}</div>
         <div class="mod-meta">
           <span class="mod-lvl ${lvCls}">${mod.level}</span>
-          <span class="mod-badge ${mod.free ? "badge-free" : "badge-free"}">${mod.free ? "✓ Gratuit" : "🆓 Bêta"}</span>
         </div>
         ${modLearned > 0 ? `<div class="mod-retention">🧠 ${modLearned}/${mod.words.length} vus · ${modMature} mémorisés</div>` : ""}
       </div>
-      <div class="mod-stars">${done ? "✓" : (unlocked ? "→" : "🔒")}</div>`;
-    if (unlocked) card.addEventListener("click", () => startModule(mod.id));
-    else card.addEventListener("click", () => showModal("🔒","Module verrouillé","Termine le module précédent pour débloquer."));
+      <div class="mod-stars">${done ? "✓" : "→"}</div>`;
+    card.addEventListener("click", () => startModule(mod.id));
     ml.appendChild(card);
   });
 }
