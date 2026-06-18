@@ -1,7 +1,7 @@
-const CACHE = "drac-1781718619"
+const CACHE = "drac-1781761920"
 self.addEventListener("install", e => { self.skipWaiting() })
 self.addEventListener("activate", e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()))
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))).then(() => self.clients.claim()))
 })
 self.addEventListener("fetch", e => {
   e.respondWith(fetch(e.request.clone()).then(res => {
