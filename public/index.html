@@ -241,6 +241,9 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 .next-review{background:rgba(91,163,245,.1);border:1px solid rgba(91,163,245,.25);border-radius:var(--rs);padding:12px 16px;font-size:13px;color:#5BA3F5;text-align:center;margin-bottom:14px;width:100%;}
 
 /* ── BUTTONS ── */
+.pin-inp{width:56px;height:64px;border-radius:14px;border:2px solid var(--border);background:var(--card);color:var(--fg);font-size:28px;font-weight:800;text-align:center;font-family:'Nunito',sans-serif;-moz-appearance:textfield;outline:none;transition:border-color .15s;}
+.pin-inp:focus{border-color:var(--acc);}
+.pin-inp::-webkit-inner-spin-button,.pin-inp::-webkit-outer-spin-button{-webkit-appearance:none;}
 .btn-prim{background:linear-gradient(135deg,var(--acc),#5A3E9E);color:#fff;border:none;border-radius:26px;padding:14px 28px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;}
 .btn-prim:hover{transform:translateY(-1px);box-shadow:0 7px 20px rgba(124,92,191,.3);}
 .btn-sec{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:26px;padding:13px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;width:100%;}
@@ -317,48 +320,63 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;">
     <span style="font-size:64px;margin-bottom:14px;display:block">🐉</span>
     <h1 style="font-family:'Caveat',cursive;font-size:40px;color:var(--acc);margin-bottom:6px">Drac</h1>
-    <p style="font-size:14px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:28px;max-width:300px">
+    <p style="font-size:14px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:24px;max-width:300px">
       Apprends le catalan et l'espagnol depuis le français.<br>
       <span style="color:var(--green)">Bêta 100% gratuite.</span>
     </p>
 
     <!-- Étape 1 : email -->
     <div id="authStep1" style="width:100%;max-width:360px">
-      <p id="authModeLabel" style="font-size:15px;color:var(--fg);font-weight:700;text-align:center;margin:0 0 14px">Créer mon compte 🐉</p>
-      <div id="authInfoBox" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;gap:10px;align-items:center">
-          <span style="font-size:18px">🔗</span>
-          <span style="font-size:12px;color:var(--muted)">Tu recevras un <strong style="color:var(--fg)">lien magique</strong> par email — clique dessus, t'es connecté(e)</span>
-        </div>
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;gap:10px;align-items:center">
-          <span style="font-size:18px">🔒</span>
-          <span style="font-size:12px;color:var(--muted)">Pas de mot de passe · Ta progression est <strong style="color:var(--fg)">sauvegardée</strong> partout</span>
+      <p id="authModeLabel" style="font-size:15px;color:var(--fg);font-weight:700;text-align:center;margin:0 0 16px">Créer mon compte 🐉</p>
+      <input id="authEmail" class="name-inp" placeholder="Ton adresse email" type="email" autocomplete="email"
+             style="margin-bottom:10px;font-size:16px">
+      <!-- Prénom (inscription uniquement) -->
+      <input id="authPrenom" class="name-inp" placeholder="Ton prénom" type="text" autocomplete="given-name"
+             style="margin-bottom:10px;font-size:16px;display:none">
+      <!-- PIN -->
+      <div style="margin-bottom:10px">
+        <p style="font-size:12px;color:var(--muted);text-align:center;margin:0 0 8px" id="pinLabel">Ton code à 4 chiffres</p>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <input class="pin-inp" id="pin1" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
+          <input class="pin-inp" id="pin2" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
+          <input class="pin-inp" id="pin3" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
+          <input class="pin-inp" id="pin4" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
         </div>
       </div>
-      <input id="authEmail" class="name-inp" placeholder="Ton adresse email" type="email" autocomplete="email"
-             style="margin-bottom:12px;font-size:16px">
-      <div id="authError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
-      <button class="btn-prim" id="btnAuthGo" style="font-size:16px">Envoyer mon lien magique 🔗</button>
-      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5">
-        En continuant tu acceptes de recevoir des emails de Drac.
+      <div id="authError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:10px;text-align:center"></div>
+      <button class="btn-prim" id="btnAuthGo" style="font-size:16px">C'est parti 🐉</button>
+      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5" id="authLegalTxt">
+        En créant ton compte tu acceptes de recevoir des emails de Drac.
       </p>
+      <button id="btnForgotPin" style="display:none;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:4px;text-align:center;width:100%;margin-top:4px">
+        Code oublié ?
+      </button>
     </div>
 
-    <!-- Étape 2 : email envoyé -->
+    <!-- Étape 2 : reset envoyé -->
     <div id="authStep2" style="display:none;width:100%;max-width:360px;text-align:center">
       <div style="font-size:56px;margin-bottom:16px">📬</div>
       <h2 style="color:var(--fg);margin:0 0 10px;font-size:20px">Vérifie tes emails !</h2>
       <p style="color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:24px">
-        On a envoyé un lien à<br>
-        <strong id="authEmailDisplay" style="color:var(--acc)"></strong><br>
-        <span style="font-size:12px">Valable 15 minutes · Vérifie aussi tes spams</span>
+        Un lien pour choisir un nouveau code a été envoyé à<br>
+        <strong id="authEmailDisplay" style="color:var(--acc)"></strong>
       </p>
-      <button class="btn-sec" id="btnAuthRetry" style="font-size:13px;margin-bottom:8px">
-        Renvoyer le lien
-      </button>
       <button class="btn-sec" id="btnAuthChangeEmail" style="font-size:13px">
-        Changer d'email
+        Retour
       </button>
+    </div>
+
+    <!-- Étape 3 : nouveau PIN après reset -->
+    <div id="authStep3" style="display:none;width:100%;max-width:360px;text-align:center">
+      <p style="font-size:15px;color:var(--fg);font-weight:700;margin:0 0 16px">Choisis ton nouveau code 🔑</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:12px">
+        <input class="pin-inp" id="rpin1" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
+        <input class="pin-inp" id="rpin2" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
+        <input class="pin-inp" id="rpin3" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
+        <input class="pin-inp" id="rpin4" type="number" min="0" max="9" maxlength="1" inputmode="numeric">
+      </div>
+      <div id="resetError" style="display:none;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:10px;text-align:center"></div>
+      <button class="btn-prim" id="btnResetConfirm">Enregistrer mon code ✓</button>
     </div>
   </div>
 </div>
@@ -1141,8 +1159,8 @@ function logout() {
 function initAuth() {
   // 0. Mode bêta-testeur dans l'URL ?
   checkBetaMode();
-  // 0b. Magic link dans l'URL ?
-  if (checkMagicLinkInURL()) return
+  // 0b. Reset PIN dans l'URL ?
+  if (checkResetInURL()) return
   // 1. Déjà connecté sur Drac ?
   const dracAuth = getAuthState()
   if (dracAuth) { afterAuth(); return }
@@ -1183,7 +1201,7 @@ function initAuth() {
           err.style.display = 'block'
           err.style.background = 'rgba(124,92,191,.12)'
           err.style.color = 'var(--acc)'
-          err.textContent = '🔗 Ta session a expiré — clique sur le bouton pour recevoir un nouveau lien !'
+          err.textContent = '🔐 Ta session a expiré — entre ton code pour te reconnecter.'
         }
       }
     }, 100)
@@ -1198,1299 +1216,272 @@ function initAuth() {
 // ═══════════════════════════════════════════════════════════════
 // MAGIC LINK AUTH
 // ═══════════════════════════════════════════════════════════════
-const MAGIC_API = 'https://vivre-a-majorque.vercel.app/api/drac-magic'
+const PIN_API = 'https://vivre-a-majorque.vercel.app/api/drac-pin'
 
-async function sendMagicLink(email) {
-  const btn = document.getElementById('btnAuthGo')
-  const errEl = document.getElementById('authError')
-  btn.disabled = true
-  btn.textContent = '⏳ Envoi en cours...'
-  errEl.style.display = 'none'
+// ── Helpers PIN ───────────────────────────────────────────────
 
-  try {
-    const r = await fetch(MAGIC_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'send', email: email.trim().toLowerCase() })
+function getPinValue(prefix) {
+  const v = [1,2,3,4].map(i => {
+    const el = document.getElementById(prefix + i)
+    return el ? el.value.trim() : ''
+  }).join('')
+  return v
+}
+
+function clearPin(prefix) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById(prefix + i)
+    if (el) el.value = ''
+  })
+}
+
+function setupPinInputs(prefix) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById(prefix + i)
+    if (!el) return
+    el.addEventListener('input', () => {
+      // Garder un seul chiffre
+      el.value = el.value.replace(/[^0-9]/g, '').slice(-1)
+      if (el.value && i < 4) {
+        const next = document.getElementById(prefix + (i+1))
+        if (next) next.focus()
+      }
+      // Si les 4 cases sont remplies → valider auto
+      if (getPinValue(prefix).length === 4 && prefix === 'pin') {
+        setTimeout(() => document.getElementById('btnAuthGo').click(), 100)
+      }
     })
-    const d = await r.json()
-    if (!d.success) throw new Error(d.error || 'Erreur envoi')
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !el.value && i > 1) {
+        const prev = document.getElementById(prefix + (i-1))
+        if (prev) { prev.value = ''; prev.focus() }
+      }
+    })
+    el.addEventListener('focus', () => el.select())
+  })
+}
 
-    // Afficher étape 2
-    document.getElementById('authStep1').style.display = 'none'
-    document.getElementById('authStep2').style.display = 'block'
-    document.getElementById('authEmailDisplay').textContent = email.trim().toLowerCase()
+// ── Mode auth : 'register' ou 'login' ────────────────────────
+let authMode = 'register'
 
-  } catch(e) {
-    errEl.textContent = e.message || 'Erreur. Réessaie.'
-    errEl.style.display = 'block'
-    btn.disabled = false
-    btn.textContent = 'Envoyer mon lien magique 🔗'
+function setAuthMode(mode) {
+  authMode = mode
+  const label    = document.getElementById('authModeLabel')
+  const prenom   = document.getElementById('authPrenom')
+  const pinLabel = document.getElementById('pinLabel')
+  const btn      = document.getElementById('btnAuthGo')
+  const legal    = document.getElementById('authLegalTxt')
+  const forgot   = document.getElementById('btnForgotPin')
+
+  if (mode === 'register') {
+    if (label)    label.textContent = 'Créer mon compte 🐉'
+    if (prenom)   prenom.style.display = 'block'
+    if (pinLabel) pinLabel.textContent = 'Choisis ton code à 4 chiffres'
+    if (btn)      btn.textContent = 'Créer mon compte 🐉'
+    if (legal)    legal.style.display = 'block'
+    if (forgot)   forgot.style.display = 'none'
+  } else {
+    if (label)    label.textContent = 'Se connecter 👋'
+    if (prenom)   prenom.style.display = 'none'
+    if (pinLabel) pinLabel.textContent = 'Ton code à 4 chiffres'
+    if (btn)      btn.textContent = 'Se connecter ✓'
+    if (legal)    legal.style.display = 'none'
+    if (forgot)   forgot.style.display = 'block'
+  }
+  clearPin('pin')
+  const err = document.getElementById('authError')
+  if (err) err.style.display = 'none'
+  // Focus email si vide
+  const emailEl = document.getElementById('authEmail')
+  if (emailEl && !emailEl.value) {
+    setTimeout(() => emailEl.focus(), 150)
+  } else {
+    setTimeout(() => { const p1 = document.getElementById('pin1'); if (p1) p1.focus() }, 150)
   }
 }
 
-async function verifyMagicToken(token) {
+// ── Auth principale ───────────────────────────────────────────
+
+async function doAuthPin() {
+  const btn    = document.getElementById('btnAuthGo')
+  const errEl  = document.getElementById('authError')
+  const email  = document.getElementById('authEmail').value.trim().toLowerCase()
+  const pin    = getPinValue('pin')
+  const prenom = authMode === 'register' ? (document.getElementById('authPrenom')?.value.trim() || '') : ''
+
+  errEl.style.display = 'none'
+
+  if (!email || !email.includes('@')) {
+    errEl.textContent = 'Email invalide — vérifie le format.'
+    errEl.style.display = 'block'; return
+  }
+  if (pin.length !== 4) {
+    errEl.textContent = 'Entre les 4 chiffres de ton code.'
+    errEl.style.display = 'block'
+    document.getElementById('pin1')?.focus(); return
+  }
+
+  btn.disabled = true
+  btn.textContent = '⏳ Connexion...'
+
   try {
-    const r = await fetch(MAGIC_API, {
+    const r = await fetch(PIN_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'verify', token })
+      body: JSON.stringify({ action: authMode, email, pin, prenom }),
     })
     const d = await r.json()
-    if (!d.success) throw new Error(d.error || 'Lien invalide')
 
-    // Sauvegarder la session
-    localStorage.setItem(AUTH_KEY,        d.token)
-    localStorage.setItem(EMAIL_KEY,       d.email)
-    localStorage.setItem(PRENOM_KEY,      d.email.split('@')[0])
-    localStorage.setItem(ROLE_KEY,        d.role)
-    localStorage.setItem('drac_last_email', d.email)
+    if (!d.success) {
+      errEl.textContent = d.error || 'Erreur. Réessaie.'
+      errEl.style.display = 'block'
+      btn.disabled = false
+      btn.textContent = authMode === 'register' ? 'Créer mon compte 🐉' : 'Se connecter ✓'
+      // Si email déjà inscrit → basculer en login
+      if (r.status === 409) {
+        setTimeout(() => {
+          errEl.textContent = 'Email déjà inscrit → entre ton code pour te connecter.'
+          setAuthMode('login')
+        }, 1500)
+      }
+      return
+    }
+
+    // Succès → sauvegarder session
+    localStorage.setItem(AUTH_KEY,           d.token)
+    localStorage.setItem(EMAIL_KEY,          d.email)
+    localStorage.setItem(PRENOM_KEY,         d.prenom || prenom || d.email.split('@')[0])
+    localStorage.setItem(ROLE_KEY,           d.role)
+    localStorage.setItem('drac_last_email',  d.email)
 
     showToast(d.message || '✅ Connecté !')
     afterAuth()
-  } catch(e) {
-    // Afficher l'erreur sur l'écran auth
-    show('sAuth')
-    const errEl = document.getElementById('authError')
-    errEl.textContent = e.message
+
+  } catch {
+    errEl.textContent = 'Erreur réseau. Vérifie ta connexion.'
     errEl.style.display = 'block'
+    btn.disabled = false
+    btn.textContent = authMode === 'register' ? 'Créer mon compte 🐉' : 'Se connecter ✓'
   }
 }
 
-// Vérifier si un magic token est dans l'URL au chargement
-function checkMagicLinkInURL() {
-  const params = new URLSearchParams(window.location.search)
-  const magic = params.get('magic')
-  if (magic) {
-    // Nettoyer l'URL
-    window.history.replaceState({}, '', window.location.pathname)
-    // Afficher un écran de chargement
-    show('sAuth')
-    document.getElementById('authStep1').style.display = 'none'
-    document.getElementById('authStep2').style.display = 'none'
-    // Vérifier le token
-    const loadingEl = document.createElement('div')
-    loadingEl.style.cssText = 'text-align:center;padding:40px;color:var(--muted)'
-    loadingEl.innerHTML = '<div style="font-size:40px;margin-bottom:12px">🔗</div><p>Connexion en cours...</p>'
-    document.querySelector('#sAuth > div').appendChild(loadingEl)
-    verifyMagicToken(magic)
-    return true
+// ── Reset PIN ─────────────────────────────────────────────────
+
+async function sendPinReset() {
+  const email = document.getElementById('authEmail').value.trim().toLowerCase()
+  if (!email || !email.includes('@')) {
+    const e = document.getElementById('authError')
+    e.textContent = "Entre ton email d'abord."
+    e.style.display = 'block'; return
   }
-  return false
-}
 
-
-// ═══════════════════════════════════════════════════════════════
-// MODE BÊTA-TESTEUR
-// ═══════════════════════════════════════════════════════════════
-function checkBetaMode() {
-  const params = new URLSearchParams(window.location.search);
-  const beta = params.get('beta');
-  if (!beta) return false;
-
-  // Nettoyer l'URL mais garder en mémoire
-  localStorage.setItem('drac_beta_tester', beta);
-  window.history.replaceState({}, '', window.location.pathname);
-  return true;
-}
-
-function getBetaTester() {
-  return localStorage.getItem('drac_beta_tester');
-}
-
-function showBetaWelcome() {
-  const name = getBetaTester();
-  if (!name) return;
-
-  // Personnaliser l'onboarding avec un message bêta
-  const existing = document.getElementById('betaWelcomeBanner');
-  if (existing) return;
-
-  const banner = document.createElement('div');
-  banner.id = 'betaWelcomeBanner';
-  banner.style.cssText = `
-    background: linear-gradient(135deg, rgba(124,92,191,.15), rgba(90,173,165,.1));
-    border: 1px solid rgba(124,92,191,.3);
-    border-radius: 14px;
-    padding: 16px 18px;
-    margin: 0 0 20px;
-    text-align: center;
-  `;
-
-  const firstName = name.charAt(0).toUpperCase() + name.slice(1);
-  banner.innerHTML = `
-    <div style="font-size:24px;margin-bottom:8px">🎓</div>
-    <div style="font-size:14px;font-weight:800;color:var(--acc);margin-bottom:4px">Bienvenue ${firstName} !</div>
-    <div style="font-size:12px;color:var(--muted);line-height:1.5">
-      Tu es invité(e) à tester Drac en avant-première.<br>
-      Ton avis compte beaucoup — <strong style="color:var(--fg)">explore librement !</strong>
-    </div>
-    <a href="mailto:amely.attias@gmail.com?subject=Avis bêta Drac 🐉&body=Bonjour Amely,%0A%0AJ'ai testé Drac et voici mes impressions :%0A%0A✅ Ce qui m'a plu :%0A%0A❌ Ce qui m'a manqué :%0A%0A💡 Mes suggestions :%0A%0A----%0AEnvoyé depuis l'app Drac"
-       style="display:inline-block;margin-top:12px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--fg);text-decoration:none">
-      ✉️ Donner mon avis à Amely
-    </a>
-  `;
-
-  // Insérer dans l'onboarding
-  const obSub = document.querySelector('.ob-sub');
-  if (obSub) obSub.parentNode.insertBefore(banner, obSub);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════
-let profiles = [], selId = null;
-let curSession = [], sessIdx = 0, sessCorrect = 0, sessStart = 0;
-let itemStartTime = 0;
-let curLevel = "Pré-A1";
-let curMod = null;
-let selAva = AVATARS[0], selAge = "9-12", selCogn = "standard", selLang = "duo";
-
-// ═══════════════════════════════════════════════════════════════
-// STORAGE
-// ═══════════════════════════════════════════════════════════════
-
-// ═══════════════════════════════════════════════════════════════
-// SYNC CLOUD — sauvegarde/restauration des profils par email
-// ═══════════════════════════════════════════════════════════════
-const SYNC_API = 'https://vivre-a-majorque.vercel.app/api/drac-sync'
-
-async function syncSave() {
-  const email = localStorage.getItem(EMAIL_KEY)
-  const token = localStorage.getItem(AUTH_KEY)
-  if (!email || !token || !profiles.length) return
   try {
-    await fetch(SYNC_API, {
+    await fetch(PIN_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'save', email, token, profiles })
+      body: JSON.stringify({ action: 'reset', email }),
     })
-  } catch(e) { /* silencieux si offline */ }
+  } catch {}
+
+  document.getElementById('authStep1').style.display = 'none'
+  document.getElementById('authStep2').style.display = 'block'
+  document.getElementById('authEmailDisplay').textContent = email
 }
 
-async function syncLoad() {
-  const email = localStorage.getItem(EMAIL_KEY)
-  const token = localStorage.getItem(AUTH_KEY)
-  if (!email || !token) return false
+async function confirmPinReset(token) {
+  const pin = getPinValue('rpin')
+  const errEl = document.getElementById('resetError')
+  errEl.style.display = 'none'
+
+  if (pin.length !== 4) {
+    errEl.textContent = 'Entre les 4 chiffres de ton nouveau code.'
+    errEl.style.display = 'block'; return
+  }
+
+  const btn = document.getElementById('btnResetConfirm')
+  btn.disabled = true; btn.textContent = '⏳ Enregistrement...'
+
   try {
-    const r = await fetch(SYNC_API, {
+    const r = await fetch(PIN_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'load', email, token })
+      body: JSON.stringify({ action: 'reset_confirm', email: '', reset_token: token, new_pin: pin }),
     })
     const d = await r.json()
-    if (d.success && d.profiles && d.profiles.length) {
-      profiles = d.profiles
-      save() // mettre à jour le localStorage aussi
-      return true
+
+    if (!d.success) {
+      errEl.textContent = d.error || 'Erreur. Réessaie.'
+      errEl.style.display = 'block'
+      btn.disabled = false; btn.textContent = 'Enregistrer mon code ✓'; return
     }
-  } catch(e) { /* silencieux si offline */ }
-  return false
+
+    localStorage.setItem(AUTH_KEY,           d.token)
+    localStorage.setItem(EMAIL_KEY,          d.email)
+    localStorage.setItem(PRENOM_KEY,         d.email.split('@')[0])
+    localStorage.setItem(ROLE_KEY,           d.role)
+    localStorage.setItem('drac_last_email',  d.email)
+
+    showToast('✅ Nouveau code enregistré !')
+    afterAuth()
+  } catch {
+    errEl.textContent = 'Erreur réseau.'
+    errEl.style.display = 'block'
+    btn.disabled = false; btn.textContent = 'Enregistrer mon code ✓'
+  }
 }
 
-function save() {
-  localStorage.setItem("drac4_p", JSON.stringify(profiles));
-  if (selId) localStorage.setItem("drac4_sel", selId);
-  // Sync cloud en arrière-plan (debounce 2s)
-  clearTimeout(window._syncTimer);
-  window._syncTimer = setTimeout(() => syncSave(), 2000);
-}
-function load() {
-  try { const d = localStorage.getItem("drac4_p"); if (d) profiles = JSON.parse(d); }
-  catch(e) { profiles = []; }
-  // Restaurer le profil sélectionné
-  const savedSel = localStorage.getItem("drac4_sel");
-  if (savedSel && profiles.find(p => p.id === savedSel)) selId = savedSel;
-  else if (profiles.length > 0) selId = profiles[0].id;
-}
-function prof() { return profiles.find(p => p.id === selId) || profiles[0] || null; }
-
-// ═══════════════════════════════════════════════════════════════
-// MODE COGNITIF
-// ═══════════════════════════════════════════════════════════════
-function applyMode(p) {
-  document.body.className = "";
-  if (!p) return;
-  if (p.cogn === "tdah")  document.body.classList.add("m-tdah");
-  if (p.cogn === "dys")   document.body.classList.add("m-dys");
-  if (p.cogn === "hpi")   document.body.classList.add("m-hpi");
-  if (p.cogn === "adult") document.body.classList.add("m-adult");
+// ── Vérifier si reset token dans l'URL ───────────────────────
+function checkResetInURL() {
+  const params = new URLSearchParams(window.location.search)
+  const token  = params.get('reset')
+  if (!token) return false
+  window.history.replaceState({}, '', window.location.pathname)
+  show('sAuth')
+  document.getElementById('authStep1').style.display = 'none'
+  document.getElementById('authStep3').style.display = 'block'
+  // Setup des cases PIN reset
+  setupPinInputs('rpin')
+  document.getElementById('btnResetConfirm').addEventListener('click', () => confirmPinReset(token))
+  return true
 }
 
 // ═══════════════════════════════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════════════════════════════
-function show(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("on"));
-  document.getElementById(id).classList.add("on");
-  window.scrollTo(0, 0);
-}
-function goHome() { renderHome(); show("sHome"); }
-function goMap()  {
-  const p = prof(); if (!p) return;
-  applyMode(p); renderMap(); show("sMap");
-  // Bouton feedback flottant bêta-testeur
-  const tester = getBetaTester();
-  if (tester && !document.getElementById('betaFeedbackBtn')) {
-    const btn = document.createElement('a');
-    btn.id = 'betaFeedbackBtn';
-    btn.href = 'mailto:amely.attias@gmail.com?subject=Avis%20b%C3%AAta%20Drac%20%F0%9F%90%89&body=Bonjour%20Amely%2C%0A%0AJ%27ai%20test%C3%A9%20Drac%20et%20voici%20mes%20impressions%20%3A%0A%0A%E2%9C%85%20Ce%20qui%20m%27a%20plu%20%3A%0A%0A%E2%9D%8C%20Ce%20qui%20m%27a%20manqu%C3%A9%20%3A%0A%0A%F0%9F%92%A1%20Mes%20suggestions%20%3A%0A%0A----%0AEnvoy%C3%A9%20depuis%20Drac';
-    btn.style.cssText = 'position:fixed;bottom:20px;right:16px;z-index:999;background:linear-gradient(135deg,#7C5CBF,#5A3E9E);color:#fff;text-decoration:none;border-radius:24px;padding:10px 16px;font-size:12px;font-weight:800;box-shadow:0 4px 20px rgba(124,92,191,.4);';
-    btn.innerHTML = '&#10003;&#10003; Mon avis &#8594;';
-    document.body.appendChild(btn);
-  }
-}
-function goCreate() { initCreate(); show("sCreate"); }
+// ── Init cases PIN ──
+setupPinInputs('pin');
 
-// ═══════════════════════════════════════════════════════════════
-// ÉCRAN FAMILLE
-// ═══════════════════════════════════════════════════════════════
-function renderHome() {
-  const g = document.getElementById("profGrid");
-  g.innerHTML = "";
-  profiles.forEach(p => {
-    const st = getDragonStage(p.xp || 0);
-    const ns = DRAGON_STAGES[DRAGON_STAGES.indexOf(st) + 1];
-    const pct = ns ? Math.round(((p.xp||0) - st.min) / (ns.min - st.min) * 100) : 100;
-    const cards = p.fsrs || {};
-    const stats = FSRS.getRetentionStats(cards);
-    const c = document.createElement("div");
-    c.className = "prof-card" + (selId === p.id ? " sel" : "");
-    c.innerHTML = `
-      <span class="cogn-tag tag-${p.cogn}">${p.cogn === "standard" ? "STD" : p.cogn === "adult" ? "😊" : p.cogn.toUpperCase()}</span>
-      <span class="prof-ava">${p.avatar}</span>
-      <div class="prof-name">${p.name}</div>
-      <div class="prof-stat">${st.em} ${st.name} · ${p.xp||0} XP</div>
-      ${stats.due > 0 ? `<div style="font-size:10px;color:var(--acc2);font-weight:700">🔁 ${stats.due} révision${stats.due>1?"s":""}</div>` : ""}
-      <div class="prof-xpbar"><div class="prof-xpfill" style="width:${pct}%"></div></div>`;
-    c.addEventListener("click", () => {
-      selId = p.id;
-      document.querySelectorAll(".prof-card").forEach(x => x.classList.remove("sel"));
-      c.classList.add("sel");
-      document.getElementById("btnPlay").disabled = false;
-    });
-    g.appendChild(c);
-  });
-  if (profiles.length < 4) {
-    const add = document.createElement("div");
-    add.className = "prof-add";
-    add.innerHTML = "＋<br><span style='font-size:11px'>Ajouter</span>";
-    add.addEventListener("click", goCreate);
-    g.appendChild(add);
-  }
-  document.getElementById("btnPlay").disabled = !selId;
-}
+// ── Bouton principal (register ou login) ──
+document.getElementById("btnAuthGo").addEventListener("click", doAuthPin);
 
-// ═══════════════════════════════════════════════════════════════
-// MAP DES MODULES
-// ═══════════════════════════════════════════════════════════════
-function getDragonStage(xp) {
-  return DRAGON_STAGES.find(s => xp >= s.min && xp < s.max) || DRAGON_STAGES[DRAGON_STAGES.length - 1];
-}
-
-function renderMap() {
-  const p = prof(); if (!p) return;
-  const cards = p.fsrs || {};
-  const stats = FSRS.getRetentionStats(cards);
-
-  // Header
-  document.getElementById("xpChip").textContent = "⚡ " + (p.xp||0) + " XP";
-
-  // Dragon
-  const st = getDragonStage(p.xp || 0);
-  const ns = DRAGON_STAGES[DRAGON_STAGES.indexOf(st) + 1];
-  const pct = ns ? Math.round(((p.xp||0) - st.min) / (ns.min - st.min) * 100) : 100;
-  document.getElementById("drEm").textContent = st.em;
-  document.getElementById("drName").textContent = "Dragon de " + p.name;
-  document.getElementById("drLevel").textContent = "Niveau " + (DRAGON_STAGES.indexOf(st)+1) + " · " + st.name;
-  document.getElementById("xpFill").style.width = pct + "%";
-  document.getElementById("xpLbl").textContent = (p.xp||0) + " / " + (ns ? ns.min : "MAX") + " XP";
-
-  // Stats
-  document.getElementById("sSt").textContent   = p.streak || 0;
-  document.getElementById("sStar").textContent = Object.values(cards).filter(c => c.interval >= 21).length;
-  document.getElementById("sDone").textContent = stats.total;
-  document.getElementById("sRet").textContent  = stats.total > 0 ? stats.retention + "%" : "—";
-
-  // Bouton révisions urgentes
-  const wrap = document.getElementById("reviewBtnWrap");
-  if (stats.due > 0) {
-    wrap.style.display = "block";
-    const btn = document.getElementById("btnReview");
-    btn.className = "review-btn" + (stats.due > 20 ? " overdue" : "");
-    document.getElementById("dueBadge").textContent = stats.due;
-  } else {
-    wrap.style.display = "none";
-  }
-
-  // Mode bar
-  const mb = document.getElementById("modeBar");
-  const ML = {standard:"🐉 Mode Standard · FSRS v5",tdah:"🌀 Mode TDAH — 8 items max · boosts",dys:"📖 Mode Dys — police adaptée · oral",hpi:"🚀 HPI — moins de répétitions · étymologie",adult:"😊 Adulte serein — pas de pression"};
-  const MC = {standard:"rgba(124,92,191,.14)",tdah:"rgba(255,107,53,.16)",dys:"rgba(91,163,245,.14)",hpi:"rgba(91,163,245,.12)",adult:"rgba(45,212,160,.14)"};
-  const MTc = {standard:"#C4A9FF",tdah:"#FF9A7A",dys:"#93C5FD",hpi:"#93C5FD",adult:"#2DD4A0"};
-  mb.textContent = ML[p.cogn] || "🐉 Mode Standard";
-  mb.style.background = MC[p.cogn] || "rgba(255,255,255,.04)";
-  mb.style.color = MTc[p.cogn] || "#C4A9FF";
-
-  // Level tabs
-  const tabs = document.getElementById("levelTabs");
-  tabs.innerHTML = "";
-  LEVELS.forEach(lv => {
-    const t = document.createElement("div");
-    t.className = "ltab" + (curLevel === lv ? " active" : "");
-    t.textContent = lv;
-    t.addEventListener("click", () => { curLevel = lv; renderMap(); });
-    tabs.appendChild(t);
-  });
-
-  // Modules
-  const ml = document.getElementById("modList");
-  ml.innerHTML = "";
-  const levelKey = curLevel.replace("-","").replace("é","e"); // "Pré-A1" → "PreA1"
-  // Mapping niveau → level dans les modules
-    const levelMap = {"Grammaire": null}; // null = filtrer par id GR_
-    const filtered = MODULES.filter(m => {
-    const isGrammar = m.id.startsWith('GR_');
-    if (curLevel === 'Grammaire') return isGrammar;
-    if (isGrammar) return false;
-    const lMatch = m.level === curLevel;
-    const ageOk = m.age === 'all' || p.age === 'adulte' || p.age === 'ado';
-    return lMatch && ageOk;
-  });
-
-  if (!filtered.length) {
-    ml.innerHTML = `<div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">Aucun module pour ce niveau.</div>`;
-    return;
-  }
-
-  filtered.forEach((mod, idx) => {
-    const done = (p.done||[]).includes(mod.id);
-    const unlocked = idx === 0 || (p.done||[]).includes(filtered[idx-1].id);
-
-    // Stats FSRS pour ce module
-    const modWords = ALL_WORDS.filter(w => w.modId === mod.id);
-    const modCards = modWords.map(w => cards[w.id]).filter(Boolean);
-    const modLearned = modCards.length;
-    const modMature = modCards.filter(c => c.interval >= 21).length;
-
-    const lvCls = "lvl-" + mod.level.replace("-","").replace("é","e");
-    const card = document.createElement("div");
-    card.className = "mod-card" + (done ? " done" : "") + (unlocked ? "" : " locked");
-    card.innerHTML = `
-      <div class="mod-ico">${mod.icon}</div>
-      <div class="mod-info">
-        <div class="mod-title">${mod.title}</div>
-        <div class="mod-sub">${mod.desc}</div>
-        <div class="mod-meta">
-          <span class="mod-lvl ${lvCls}">${mod.level}</span>
-        </div>
-        ${modLearned > 0 ? `<div class="mod-retention">🧠 ${modLearned}/${mod.words.length} vus · ${modMature} mémorisés</div>` : ""}
-      </div>
-      <div class="mod-stars">${done ? "✓" : (unlocked ? "→" : "🔒")}</div>`;
-    if (unlocked) {
-      card.addEventListener("click", () => startModule(mod.id));
-    } else {
-      card.addEventListener("click", () => showToast("Termine le module précédent d'abord !"));
-    }
-    ml.appendChild(card);
-  });
-}
-
-// ═══════════════════════════════════════════════════════════════
-// SESSION
-// ═══════════════════════════════════════════════════════════════
-function startModule(modId) {
-  const p = prof(); if (!p) return;
-  if (!p.fsrs) p.fsrs = {};
-
-  const mod = MODULES.find(m => m.id === modId);
-  if (!mod) return;
-
-  // Mots de ce module avec leurs IDs
-  const modWords = ALL_WORDS.filter(w => w.modId === modId);
-
-  // Construire la session FSRS
-  curMod = mod;
-  // Afficher le nom du module dans le header
-  const modNameEl = document.getElementById("sessModName");
-  if (modNameEl && curMod) modNameEl.textContent = curMod.icon + " " + curMod.title;
-  curSession = SESSION.buildSession(modWords, p.fsrs, p, p.cogn);
-
-  // Si pas de mots à voir, prendre les N premiers comme nouveaux
-  if (!curSession.length) {
-    curSession = modWords.slice(0, SESSION.SESSION_SIZE[p.cogn] || 15).map(w => ({
-      word: w, card: FSRS.newCard(w.id), type: "flash", isNew: true, urgency: "new"
-    }));
-  }
-
-  // Ajouter les quiz du module à la fin (max 3)
-  if (mod.quiz && mod.quiz.length > 0) {
-    const quizItems = mod.quiz.slice(0, 3).map(q => ({
-      word: null, card: null, type: "quiz", isNew: false, urgency: "quiz",
-      quizData: q
-    }));
-    curSession = [...curSession, ...quizItems];
-  }
-
-  sessIdx = 0; sessCorrect = 0; sessStart = Date.now();
-  show("sSession");
-  renderSessionItem();
-}
-
-function startReviewSession() {
-  const p = prof(); if (!p) return;
-  if (!p.fsrs) p.fsrs = {};
-
-  const validWords = ALL_WORDS.filter(w =>
-    w.age === "all" || p.age === "adulte" || p.age === "ado" || w.age !== "adult"
-  );
-  const dueCards = FSRS.getDue(p.fsrs)
-    .filter(c => validWords.find(w => w.id === c.id))
-    .slice(0, SESSION.SESSION_SIZE[p.cogn] || 15);
-
-  curSession = dueCards.map(card => {
-    const word = validWords.find(w => w.id === card.id);
-    return { word, card, type: SESSION.getExerciseType(card, 0), isNew: false, urgency: "due" };
-  });
-
-  sessIdx = 0; sessCorrect = 0; sessStart = Date.now();
-  show("sSession");
-  renderSessionItem();
-}
-
-function renderSessionItem() {
-  const pct = Math.round(sessIdx / curSession.length * 100);
-  document.getElementById("lFill").style.width = pct + "%";
-  document.getElementById("lLbl").textContent = sessIdx + "/" + curSession.length;
-
-  if (sessIdx >= curSession.length) { finishSession(); return; }
-
-  const item = curSession[sessIdx];
-  itemStartTime = Date.now();
-  const p = prof();
-  const isDuo = p && p.lang === "duo";
-
-  // Choisir le bon rendu selon le type
-  switch (item.type) {
-    case "flash":   renderFlash(item, isDuo); break;
-    case "recog":   renderRecog(item, isDuo); break;
-    case "fill":    renderFill(item, isDuo);  break;
-    case "recall":  renderRecall(item, isDuo); break;
-    case "phrase":  renderPhrase(item, isDuo); break;
-    case "quiz":    renderModQuiz(item, isDuo); break;
-    default:        renderFlash(item, isDuo);
-  }
-}
-
-// ── PHRASE : remettre les mots dans le bon ordre ──────────────────
-function renderPhrase(item, isDuo) {
-  const w = item.word;
-  const mod = MODULES.find(m => m.id === w.modId);
-  const phrases = mod ? (mod.phrases || []) : [];
-
-  // Prendre une phrase du module ou construire depuis le mot
-  let phraseFr, phraseCa;
-  if (phrases.length > 0) {
-    const ph = phrases[Math.floor(Math.random() * phrases.length)];
-    phraseFr = ph.fr;
-    phraseCa = ph.ca;
-  } else {
-    // Construire une micro-phrase depuis le mot
-    phraseFr = w.fr;
-    phraseCa = w.ca;
-  }
-
-  // Mélanger les mots de la phrase catalane
-  const words = phraseCa.replace(/[?!.,]/g, '').split(' ').filter(Boolean);
-  const shuffled = [...words].sort(() => Math.random() - .5);
-
-  // S'assurer que c'est bien mélangé
-  let attempts = 0;
-  while (shuffled.join(' ') === words.join(' ') && attempts < 5) {
-    shuffled.sort(() => Math.random() - .5);
-    attempts++;
-  }
-
-  document.getElementById("sessContent").innerHTML = `
-    <span class="item-type-badge">🔀 CONSTRUIRE LA PHRASE</span>
-    <div class="quiz-q">
-      <div class="q-prompt" style="margin-bottom:6px">Remets les mots dans le bon ordre :</div>
-      <div class="phrase-fr-ref">🇫🇷 ${phraseFr}</div>
-    </div>
-    <div class="word-bank" id="wordBank">
-      ${shuffled.map((w, i) => `<button class="word-tile" data-word="${w}" data-idx="${i}" onclick="selectWordTile(this)">${w}</button>`).join('')}
-    </div>
-    <div class="phrase-answer-zone" id="answerZone">
-      <div class="answer-placeholder">Tape ici pour construire la phrase</div>
-    </div>
-    <div id="phraseResult" style="display:none;text-align:center;padding:10px;border-radius:12px;margin-top:8px;font-weight:800;font-size:15px"></div>
-    <button class="btn-next-word" id="btnCheckPhrase" style="margin-top:12px" onclick="checkPhrase('${words.join(' ')}')">
-      Vérifier ✓
-    </button>`;
-
-  // Variables pour suivre la réponse construite
-  window._phraseSelected = [];
-  window._phraseCorrect = words.join(' ');
-}
-
-function selectWordTile(btn) {
-  if (btn.classList.contains('used')) return;
-  const word = btn.dataset.word;
-  window._phraseSelected = window._phraseSelected || [];
-  window._phraseSelected.push({word, btn});
-  btn.classList.add('used');
-
-  // Mettre à jour la zone de réponse
-  const zone = document.getElementById('answerZone');
-  zone.innerHTML = window._phraseSelected.map((item, i) =>
-    `<button class="word-tile placed" onclick="removePhraseWord(${i})">${item.word}</button>`
-  ).join(' ');
-}
-
-function removePhraseWord(idx) {
-  const removed = window._phraseSelected.splice(idx, 1)[0];
-  removed.btn.classList.remove('used');
-  // Mettre à jour la zone
-  const zone = document.getElementById('answerZone');
-  if (window._phraseSelected.length === 0) {
-    zone.innerHTML = '<div class="answer-placeholder">Tape ici pour construire la phrase</div>';
-  } else {
-    zone.innerHTML = window._phraseSelected.map((item, i) =>
-      `<button class="word-tile placed" onclick="removePhraseWord(${i})">${item.word}</button>`
-    ).join(' ');
-  }
-  // Remettre le mot dans la banque
-  const bank = document.getElementById('wordBank');
-  if (bank) {
-    Array.from(bank.querySelectorAll('.word-tile')).forEach(btn => {
-      if (btn.dataset.word === removed.word && btn.classList.contains('used')) {
-        btn.classList.remove('used');
-        return;
-      }
-    });
-  }
-}
-
-function checkPhrase(correct) {
-  const answer = (window._phraseSelected || []).map(i => i.word).join(' ');
-  const resultEl = document.getElementById('phraseResult');
-  const btn = document.getElementById('btnCheckPhrase');
-
-  if (!answer) {
-    resultEl.style.display = 'block';
-    resultEl.style.background = 'rgba(255,107,107,.15)';
-    resultEl.style.color = 'var(--red)';
-    resultEl.textContent = 'Place les mots d\'abord !';
-    return;
-  }
-
-  const isCorrect = answer.trim() === correct.trim();
-  resultEl.style.display = 'block';
-
-  if (isCorrect) {
-    resultEl.style.background = 'rgba(45,212,160,.15)';
-    resultEl.style.color = 'var(--green)';
-    resultEl.textContent = '✓ Parfait !';
-    btn.textContent = 'Suivant →';
-    btn.onclick = () => applyRating(3);
-    // Flash vert
-    const sc = document.getElementById('sessContent');
-    if (sc) { sc.style.boxShadow = '0 0 0 2px rgba(45,212,160,.5)'; setTimeout(() => sc.style.boxShadow = '', 500); }
-  } else {
-    resultEl.style.background = 'rgba(255,107,107,.12)';
-    resultEl.style.color = 'var(--red)';
-    resultEl.innerHTML = `✗ Pas tout à fait... La bonne réponse :<br><strong style="color:var(--fg)">${correct}</strong>`;
-    btn.textContent = 'Continuer →';
-    btn.onclick = () => applyRating(2);
-    // Flash rouge
-    const sc = document.getElementById('sessContent');
-    if (sc) { sc.style.boxShadow = '0 0 0 2px rgba(255,107,107,.5)'; setTimeout(() => sc.style.boxShadow = '', 500); }
-  }
-}
-
-// ── FLASH : voir + écouter + évaluer soi-même ──
-function renderFlash(item, isDuo) {
-  const w = item.word;
-  const p = prof();
-  const isAdult = p && (p.cogn === "adult" || p.cogn === "hpi");
-  const isTdah  = p && p.cogn === "tdah";
-  const simB = w.sim
-    ? `<span class="sim-badge sim">✓ Proche du français</span>`
-    : `<span class="sim-badge diff">⚠ Mot différent</span>`;
-  const esEl = isDuo && w.es && w.es !== "—"
-    ? `<div class="word-es-row"><span style="font-size:14px">🇪🇸</span><span class="word-es">${w.es}</span><span class="word-es-pron">[${w.esP}]</span></div>`
-    : "";
-  const tipEl = w.tip
-    ? `<div class="${isAdult ? "tip-box" : "tip-box"}">💡 ${w.tip}</div>`
-    : "";
-  const cultureEl = (sessIdx === 0 && curMod && curMod.culture)
-    ? `<div class="culture-block"><strong>🏝️ Majorque — Le saviez-vous ?</strong> ${curMod.culture.replace(/^[^\s]+\s/,'')}</div>`
-    : "";
-
-  // Exemple en situation : priorité au champ w.ex du mot, sinon phrase du module contenant le mot
-  let ph = null;
-  if (w.ex) {
-    ph = w.ex;
-  } else {
-    const mod = MODULES.find(m => m.id === w.modId);
-    const phrases = mod ? (mod.phrases || []) : [];
-    const caKey = w.ca.toLowerCase().split('/')[0].replace(/[.?!,;:]/g,'').trim();
-    const frKey = w.fr.toLowerCase().split('(')[0].split('/')[0].replace(/[.?!,;:]/g,'').trim();
-    ph = phrases.find(p => p.ca && p.ca.toLowerCase().includes(caKey))
-      || phrases.find(p => p.fr && p.fr.toLowerCase().includes(frKey))
-      || null;
-  }
-  const phraseEl = ph
-    ? `<div class="phrase-box">
-         <div class="ph-title">💬 Exemple en situation
-           <button class="btn-listen" id="bLPh" style="float:right;margin:0;padding:4px 12px;font-size:11px">🔊</button>
-         </div>
-         <div class="ph-fr"><span style="font-size:10px;opacity:.6">FR</span> ${ph.fr}</div>
-         <div class="ph-ca">🏴 ${ph.ca}</div>
-         ${isDuo && ph.es && ph.es !== "—" ? `<div class="ph-es">🇪🇸 ${ph.es}</div>` : ""}
-         ${ph.note ? `<div class="ph-note">📌 ${ph.note}</div>` : ""}
-       </div>`
-    : "";
-
-  // Mallorquí : afficher si le mot a une variante mal:
-  const malEl = w.mal
-    ? `<div style="background:rgba(255,216,77,.08);border:1px solid rgba(255,216,77,.2);border-radius:10px;padding:8px 12px;margin-top:8px;font-size:12px">
-         <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#FFD84D;margin-bottom:3px;display:block">🏴 Mallorquí</span>
-         <span style="font-weight:700;color:var(--yel)">${w.mal}</span>
-         ${w.malP ? `<span style="color:var(--muted);margin-left:6px">[${w.malP}]</span>` : ""}
-         ${w.malNote ? `<span style="color:var(--muted);font-size:11px;display:block;margin-top:3px">${w.malNote}</span>` : ""}
-       </div>`
-    : "";
-
-  document.getElementById("sessContent").innerHTML = `
-    <div class="flash-card">
-      <span class="word-em">${w.em}</span>
-      <div class="word-fr-big">${w.fr}</div>
-      <div class="word-ca">${w.ca}</div>
-      <div class="word-pron">[${w.caP}]</div>
-      ${esEl}${simB}
-      <button class="btn-listen" id="bLC">🔊 Écouter</button>
-      ${tipEl}${malEl}${cultureEl}${phraseEl}
-    </div>
-    <button class="btn-next-word" id="btnNextWord">Suivant →</button>`;
-
-  document.getElementById("bLC").addEventListener("click", () => spk(w.ca, isDuo ? w.es : null));
-  // Vocal sur l'exemple en situation
-  const bLPh = document.getElementById("bLPh");
-  if (bLPh && ph) bLPh.addEventListener("click", (e) => { e.stopPropagation(); spk(ph.ca, isDuo && ph.es && ph.es !== "—" ? ph.es : null); });
-  // Bouton Suivant → (FSRS auto = 3/Bien)
-  const btnNext = document.getElementById("btnNextWord");
-  if (btnNext) btnNext.addEventListener("click", () => applyRating(3));
-}
-
-// ── RECOG : voir FR, choisir CA parmi 4 ──
-function renderRecog(item, isDuo) {
-  const w = item.word;
-  const p = prof();
-  const q = MODULES.find(m => m.id === w.modId)?.quiz?.[0];
-
-  // Distracteurs du même module en priorité, sinon même niveau
-  const sameModWords = ALL_WORDS.filter(x => x.modId === w.modId && x.id !== w.id);
-  const sameLevelWords = ALL_WORDS.filter(x => {
-    const mod = MODULES.find(m => m.id === x.modId);
-    const wMod = MODULES.find(m => m.id === w.modId);
-    return mod && wMod && mod.level === wMod.level && x.id !== w.id;
-  });
-  const pool = sameModWords.length >= 3 ? sameModWords : sameLevelWords;
-  const distractors = pool
-    .sort(() => Math.random() - .5)
-    .slice(0, 3);
-  const opts = [w.ca, ...distractors.map(x => x.ca)].sort(() => Math.random() - .5);
-  const ans = opts.indexOf(w.ca);
-
-  document.getElementById("sessContent").innerHTML = `
-    <span class="item-type-badge">🎯 RECONNAISSANCE</span>
-    <div class="quiz-q">
-      <span class="q-em">${w.em}</span>
-      <div class="q-prompt">Comment dit-on en catalan ?</div>
-      <div class="q-word">🇫🇷 ${w.fr}</div>
-    </div>
-    <div class="choices" id="chx">
-      ${opts.map((o,i) => `<button class="choice" data-i="${i}">${o}</button>`).join("")}
-    </div>
-    <div class="fb-bar" id="fb"></div>
-    <button class="btn-prim" id="btnNext" style="display:none">Continuer →</button>`;
-
-  document.querySelectorAll(".choice").forEach(btn => {
-    btn.addEventListener("click", function() {
-      const chosen = parseInt(this.dataset.i);
-      const correct = chosen === ans;
-      resolveChoice(correct, ans, opts, w);
-    });
-  });
-}
-
-// ── FILL : phrase à trou ──
-function renderFill(item, isDuo) {
-  const w = item.word;
-  const p = prof();
-  const ex = SESSION.makeFill(w, ALL_WORDS);
-
-  document.getElementById("sessContent").innerHTML = `
-    <span class="item-type-badge">✍️ COMPLÉTER</span>
-    <div class="quiz-q">
-      <span class="q-em">${w.em}</span>
-      <div class="q-prompt">🇫🇷 ${w.fr}</div>
-      <div class="q-word" style="font-size:14px">${ex.prompt}</div>
-    </div>
-    <div class="choices" id="chx">
-      ${ex.options.map((o,i) => `<button class="choice" data-i="${i}" data-val="${o}">${o}</button>`).join("")}
-    </div>
-    <div class="fb-bar" id="fb"></div>
-    <button class="btn-prim" id="btnNext" style="display:none">Continuer →</button>`;
-
-  document.querySelectorAll(".choice").forEach(btn => {
-    btn.addEventListener("click", function() {
-      const val = this.dataset.val;
-      const correct = val === ex.answer;
-      const ansIdx = ex.options.indexOf(ex.answer);
-      resolveChoice(correct, ansIdx, ex.options, w);
-    });
-  });
-}
-
-// ── QUIZ MODULE : questions QCM du module ──────────────────────
-function renderModQuiz(item, isDuo) {
-  const q = item.quizData;
-  const opts = q.opts;
-  const ans = q.ans;
-
-  document.getElementById("sessContent").innerHTML = `
-    <span class="item-type-badge">🧩 QUIZ</span>
-    <div class="quiz-q">
-      <span class="q-em">${q.em || '🎯'}</span>
-      <div class="q-word" style="font-size:16px;line-height:1.4">${q.q}</div>
-    </div>
-    <div class="choices" id="chx">
-      ${opts.map((o, i) => `<button class="choice" data-i="${i}">${o}</button>`).join("")}
-    </div>
-    <div class="fb-bar" id="fb"></div>
-    <button class="btn-prim" id="btnNext" style="display:none">Continuer →</button>`;
-
-  document.querySelectorAll(".choice").forEach(btn => {
-    btn.addEventListener("click", function() {
-      const chosen = parseInt(this.dataset.i);
-      const correct = chosen === ans;
-      // Marquer les choix
-      document.querySelectorAll(".choice").forEach((b, i) => {
-        b.style.pointerEvents = "none";
-        if (i === ans) b.classList.add("reveal");
-      });
-      this.classList.add(correct ? "correct" : "wrong");
-      const fb = document.getElementById("fb");
-      fb.style.display = "block";
-      const p = prof();
-      const cogn = p ? p.cogn : "standard";
-      if (correct) {
-        fb.className = "fb-bar ok";
-        fb.textContent = (FB_OK[cogn] || FB_OK.standard)[Math.floor(Math.random() * 4)];
-        confetti(12);
-      } else {
-        fb.className = "fb-bar ko";
-        fb.textContent = "La bonne réponse : " + opts[ans];
-      }
-      if (correct) sessCorrect++;
-      const btnNext = document.getElementById("btnNext");
-      btnNext.style.display = "block";
-      btnNext.addEventListener("click", () => {
-        sessIdx++;
-        setTimeout(renderSessionItem, 200);
-      });
-    });
-  });
-}
-function renderRecall(item, isDuo) {
-  const w = item.word;
-  document.getElementById("sessContent").innerHTML = `
-    <span class="item-type-badge">🧠 RAPPEL ACTIF</span>
-    <div class="quiz-q" style="margin-bottom:14px">
-      <span class="q-em">${w.em}</span>
-      <div class="q-prompt">Écris en catalan :</div>
-      <div class="q-word">🇫🇷 ${w.fr}</div>
-    </div>
-    <input class="recall-inp" id="recallInp" placeholder="Tape en catalan…" autocomplete="off" autocorrect="off" spellcheck="false">
-    <div class="keyboard-hint">Appuie sur Entrée pour valider</div>
-    <div class="fb-bar" id="fb"></div>
-    <button class="btn-prim" id="btnCheck">Vérifier</button>
-    <button class="btn-prim" id="btnNext" style="display:none;margin-top:8px">Continuer →</button>`;
-
-  const inp = document.getElementById("recallInp");
-  inp.focus();
-
-  function check() {
-    const val = inp.value.trim().toLowerCase();
-    const expected = w.ca.toLowerCase().replace(/[àáâã]/g,'a').replace(/[èéêë]/g,'e').replace(/[ìíîï]/g,'i').replace(/[òóôõ]/g,'o').replace(/[ùúûü]/g,'u').replace(/[ç]/g,'c').replace(/[·]/g,'');
-    const valN = val.replace(/[àáâã]/g,'a').replace(/[èéêë]/g,'e').replace(/[ìíîï]/g,'i').replace(/[òóôõ]/g,'o').replace(/[ùúûü]/g,'u').replace(/[ç]/g,'c').replace(/[·]/g,'');
-    const correct = valN === expected || val === w.ca.toLowerCase();
-
-    inp.className = "recall-inp " + (correct ? "correct" : "wrong");
-    const fb = document.getElementById("fb");
-    fb.style.display = "block";
-    const p = prof();
-    const cogn = p ? p.cogn : "standard";
-    const okMsgs = FB_OK[cogn] || FB_OK.standard;
-    const koMsgs = FB_KO[cogn] || FB_KO.standard;
-
-    if (correct) {
-      fb.className = "fb-bar ok";
-      fb.textContent = okMsgs[Math.floor(Math.random()*okMsgs.length)];
-      confetti(18);
-    } else {
-      fb.className = "fb-bar ko";
-      fb.textContent = koMsgs[0] + " " + w.ca;
-    }
-    document.getElementById("btnCheck").style.display = "none";
-    document.getElementById("btnNext").style.display = "block";
-    document.getElementById("btnNext").addEventListener("click", () => applyRating(correct ? 3 : 1, correct));
-  }
-
-  document.getElementById("btnCheck").addEventListener("click", check);
-  inp.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
-}
-
-function resolveChoice(correct, ansIdx, opts, w) {
-  document.querySelectorAll(".choice").forEach((b, i) => {
-    b.style.pointerEvents = "none";
-    if (i === ansIdx) b.classList.add("reveal");
-    if (!correct && b.classList.contains("sel")) b.classList.add("wrong");
-  });
-  // Marquer la réponse cliquée
-  document.querySelectorAll(".choice").forEach((b, i) => {
-    if (parseInt(b.dataset.i) === document.querySelector(".choice:focus")?.dataset?.i) {}
-  });
-  // Trouver le bouton cliqué
-  event.currentTarget?.classList.add(correct ? "correct" : "wrong");
-
-  const fb = document.getElementById("fb");
-  fb.style.display = "block";
-  const p = prof();
-  const cogn = p ? p.cogn : "standard";
-  const okMsgs = FB_OK[cogn] || FB_OK.standard;
-  const koMsgs = FB_KO[cogn] || FB_KO.standard;
-
-  if (correct) {
-    fb.className = "fb-bar ok";
-    fb.textContent = okMsgs[Math.floor(Math.random()*okMsgs.length)];
-    if (cogn === "tdah") confetti(24); else confetti(12);
-  } else {
-    fb.className = "fb-bar ko";
-    fb.textContent = koMsgs[Math.floor(Math.random()*koMsgs.length)] + " " + opts[ansIdx];
-  }
-
-  const btn = document.getElementById("btnNext");
-  btn.style.display = "block";
-  btn.addEventListener("click", () => applyRating(correct ? 3 : 1, correct));
-}
-
-// ── Appliquer le rating FSRS et passer à l'item suivant ──
-function applyRating(rating, correct) {
-  const p = prof(); if (!p) return;
-  if (!p.fsrs) p.fsrs = {};
-
-  const item = curSession[sessIdx];
-  const timeMs = Date.now() - itemStartTime;
-
-  // Les items quiz gèrent eux-mêmes la progression — applyRating ne doit pas les toucher
-  if (item.type === "quiz") {
-    sessIdx++;
-    setTimeout(renderSessionItem, 200);
-    return;
-  }
-
-  // Rating auto si exercice recog/fill/recall (pas flash)
-  const finalRating = item.type === "flash" ? rating
-    : SESSION.toRating(correct, timeMs, false);
-
-  // Appliquer FSRS
-  const updatedCard = FSRS.review(item.card, finalRating, p.cogn);
-  p.fsrs[item.word.id] = updatedCard;
-
-  if (correct) {
-    sessCorrect++;
-    p.xp = (p.xp || 0) + (rating >= 3 ? 2 : 1);
-    const sc = document.getElementById("sessContent");
-    if (sc && rating >= 3) {
-      sc.style.transition = "box-shadow .15s";
-      sc.style.boxShadow = "0 0 0 2px rgba(45,212,160,.5)";
-      setTimeout(() => { sc.style.boxShadow = ""; }, 300);
-    }
-  } else {
-    const sc = document.getElementById("sessContent");
-    if (sc) {
-      sc.style.transition = "box-shadow .15s";
-      sc.style.boxShadow = "0 0 0 2px rgba(255,107,107,.5)";
-      setTimeout(() => { sc.style.boxShadow = ""; }, 300);
-    }
-  }
-
-  // Mode TDAH : toast tous les 2 items corrects
-  if (p.cogn === "tdah" && sessCorrect > 0 && sessCorrect % 2 === 0) {
-    showToast("🌟 " + sessCorrect + " bons ! Continue !");
-  }
-
-  // Marquer le module comme vu si premier item
-  if (item.isNew && !p.done?.includes(item.word.modId)) {
-    if (!p.done) p.done = [];
-    const mod = MODULES.find(m => m.id === item.word.modId);
-    if (mod) {
-      const allModWords = ALL_WORDS.filter(w => w.modId === mod.id);
-      const seenAll = allModWords.every(w => p.fsrs[w.id]);
-      if (seenAll && !p.done.includes(mod.id)) p.done.push(mod.id);
-    }
-  }
-
-  checkStreak(p);
-  save();
-
-  sessIdx++;
-  setTimeout(renderSessionItem, 300);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// FIN DE SESSION
-// ═══════════════════════════════════════════════════════════════
-function finishSession() {
-  const p = prof(); if (!p) return;
-  const cogn = p.cogn || "standard";
-  const duration = Math.round((Date.now() - sessStart) / 1000);
-  const accuracy = curSession.length > 0 ? Math.round(sessCorrect / curSession.length * 100) : 0;
-  const cards = p.fsrs || {};
-  const stats = FSRS.getRetentionStats(cards);
-
-  // Mots vus dans cette session (hors items quiz)
-  const seenWords = curSession.filter(item => item.word).map(item => item.word);
-  const seenCount = seenWords.length;
-
-  // Marquer le module courant comme done pour débloquer le suivant
-  if (curMod) {
-    if (!p.done) p.done = [];
-    if (!p.done.includes(curMod.id)) {
-      p.done.push(curMod.id);
-      save();
-    }
-  }
-
-  // Titre selon perf
-  const titles = {
-    standard: {good:"Module terminé ! 🎉",ok:"Bonne session !",low:"Continue, tu progresses !"},
-    tdah:     {good:"EXCELLENT !!!",       ok:"SUPER !!!",     low:"Bien joué !"},
-    dys:      {good:"Bravo !",            ok:"Bien joué !",   low:"Tu progresses !"},
-    hpi:      {good:"Excellent.",         ok:"Très bien.",    low:"Continue."},
-    adult:    {good:"Très bien.",         ok:"Bien.",         low:"Bonne progression."}
-  };
-  const t = titles[cogn] || titles.standard;
-  const tier = accuracy >= 80 ? "good" : accuracy >= 60 ? "ok" : "low";
-
-  document.getElementById("rEm").textContent = accuracy >= 80 ? "🏆" : accuracy >= 60 ? "🎉" : "💪";
-  document.getElementById("rTit").textContent = t[tier];
-
-  // Sous-titre informatif
-  const modTitle = curMod ? curMod.title : "";
-  document.getElementById("rSub").textContent = modTitle ? `${modTitle} · ${seenCount} mots` : `${seenCount} mots · ${duration}s`;
-
-  // Stats grid — uniquement les stats utiles
-  const sg = document.getElementById("resStatsGrid");
-  sg.innerHTML = `
-    <div class="res-stat"><div class="v">${accuracy}%</div><div class="l">Réussite</div></div>
-    <div class="res-stat"><div class="v" style="color:var(--green)">${seenCount}</div><div class="l">Mots vus</div></div>
-    <div class="res-stat"><div class="v" style="color:var(--blue)">${stats.retention || 0}%</div><div class="l">Rétention</div></div>
-    <div class="res-stat"><div class="v" style="color:var(--acc2)">${stats.due || 0}</div><div class="l">À réviser</div></div>`;
-
-  // Bouton "Module suivant" si disponible
-  const nextModBtn = document.getElementById("btnResNext");
-  if (curMod && nextModBtn) {
-    const modsOfLevel = MODULES.filter(m => m.level === curMod.level && !m.id.startsWith("GR_"));
-    const curIdx = modsOfLevel.findIndex(m => m.id === curMod.id);
-    const nextMod = modsOfLevel[curIdx + 1];
-    if (nextMod) {
-      nextModBtn.style.display = "block";
-      nextModBtn.textContent = nextMod.icon + " " + nextMod.title + " →";
-      nextModBtn.onclick = () => startModule(nextMod.id);
-    } else {
-      nextModBtn.style.display = "none";
-    }
-  }
-
-  // Texte bouton "réviser ce module"
-  const againBtn = document.getElementById("btnResAgain");
-  if (againBtn && curMod) againBtn.textContent = "🔁 Refaire " + curMod.title;
-
-  // Récap mots vus + prochaine révision dans le même élément
-  const nr = document.getElementById("nextReview");
-  if (seenWords.length > 0) {
-    const wordPills = seenWords.slice(0, 8).map(w =>
-      `<span style="display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;margin:3px">${w.ca} <span style="color:var(--muted);font-size:10px">${w.fr}</span></span>`
-    ).join("");
-    const dueMsg = stats.due > 0
-      ? `<div style="margin-top:10px;font-size:12px;color:var(--acc2);font-weight:700">🔁 ${stats.due} révision${stats.due > 1 ? "s" : ""} en attente</div>`
-      : "";
-    nr.innerHTML = `
-      <div style="margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700">Mots de cette session</div>
-      <div style="line-height:2">${wordPills}</div>${dueMsg}`;
-    nr.style.display = "block";
-  } else {
-    nr.style.display = "none";
-  }
-
-  if (accuracy >= 80) confetti(50);
-  else if (accuracy >= 60) confetti(20);
-  show("sResult");
-}
-
-// ═══════════════════════════════════════════════════════════════
-// CRÉER PROFIL
-// ═══════════════════════════════════════════════════════════════
-function editProfile(profId) {
-  const p = profiles.find(x => x.id === profId);
-  if (!p) return;
-  // Pré-remplir avec les valeurs existantes
-  selAva  = p.avatar  || AVATARS[0];
-  selAge  = p.age     || "9-12";
-  selCogn = p.cogn    || "standard";
-  selLang = p.lang    || "duo";
-  initCreate();
-  // Remettre le prénom
-  document.getElementById("inpName").value = p.name || "";
-  // Changer le titre
-  document.querySelector("#sCreate .page-title").textContent = "Modifier le profil";
-  document.querySelector("#sCreate .page-sub").textContent   = p.name;
-  // Changer le bouton pour "Enregistrer"
-  const btn = document.getElementById("btnCreate");
-  btn.textContent = "Enregistrer ✓";
-  btn.dataset.editId = profId;
-  show("sCreate");
-}
-
-function initCreate() {
-  selAva = AVATARS[0]; selAge = "9-12"; selCogn = "standard"; selLang = "duo";
-  document.getElementById("inpName").value = "";
-
-  const ag = document.getElementById("avaGrid"); ag.innerHTML = "";
-  AVATARS.forEach(av => {
-    const b = document.createElement("div");
-    b.className = "ava-opt" + (av === selAva ? " sel" : "");
-    b.textContent = av;
-    b.addEventListener("click", () => { selAva = av; document.querySelectorAll(".ava-opt").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); });
-    ag.appendChild(b);
-  });
-
-  const ar = document.getElementById("ageRow"); ar.innerHTML = "";
-  AGE_OPTS.forEach(o => {
-    const b = document.createElement("button");
-    b.className = "age-btn" + (o.v === selAge ? " sel" : "");
-    b.textContent = o.l;
-    b.addEventListener("click", () => { selAge = o.v; document.querySelectorAll(".age-btn").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); });
-    ar.appendChild(b);
-  });
-
-  const cg = document.getElementById("cognGrid"); cg.innerHTML = "";
-  COGN_OPTS.forEach(o => {
-    const b = document.createElement("button");
-    b.className = "cogn-btn" + (o.v === selCogn ? " sel" : "");
-    b.innerHTML = `<span class="cogn-ico">${o.ico}</span><div class="cogn-name">${o.name}</div><div class="cogn-desc">${o.desc}</div>`;
-    b.addEventListener("click", () => { selCogn = o.v; document.querySelectorAll(".cogn-btn").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); });
-    cg.appendChild(b);
-  });
-
-  const lr = document.getElementById("langRow"); lr.innerHTML = "";
-  LANG_OPTS.forEach(o => {
-    const b = document.createElement("button");
-    b.className = "lang-btn" + (o.v === selLang ? " sel" : "");
-    b.textContent = o.l;
-    b.addEventListener("click", () => { selLang = o.v; document.querySelectorAll(".lang-btn").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); });
-    lr.appendChild(b);
-  });
-}
-
-function createProfile() {
-  const name = document.getElementById("inpName").value.trim();
-  if (!name) { showModal("⚠️","Prénom manquant","Saisis un prénom."); return; }
-  const btn = document.getElementById("btnCreate");
-  const editId = btn.dataset.editId;
-
-  if (editId) {
-    // MODE MODIFICATION — on garde XP, fsrs, done, streak
-    const idx = profiles.findIndex(x => x.id === editId);
-    if (idx >= 0) {
-      profiles[idx] = {
-        ...profiles[idx],
-        name, avatar: selAva, age: selAge, cogn: selCogn, lang: selLang
-      };
-      selId = editId;
-      delete btn.dataset.editId;
-    }
-  } else {
-    // MODE CRÉATION
-    if (profiles.length >= 4) { showModal("👥","4 profils max","Supprime un profil existant."); return; }
-    const p = {
-      id: "p_" + Date.now(), name, avatar: selAva, age: selAge,
-      cogn: selCogn, lang: selLang,
-      xp: 0, done: [], fsrs: {}, streak: 0, lastDate: null
-    };
-    profiles.push(p); selId = p.id;
-  }
-
-  save();
-  showToast("✅ Profil mis à jour !");
-  const p = prof();
-  applyMode(p); renderMap(); show("sMap");
-}
-
-// ═══════════════════════════════════════════════════════════════
-// UTILITAIRES
-// ═══════════════════════════════════════════════════════════════
-function formatInterval(days) {
-  if (days < 1) return "< 1j";
-  if (days === 1) return "1j";
-  if (days < 7) return days + "j";
-  if (days < 30) return Math.round(days/7) + "sem";
-  return Math.round(days/30) + "mois";
-}
-
-function checkStreak(p) {
-  const today = new Date().toDateString();
-  if (p.lastDate === today) return;
-  const yest = new Date(Date.now() - 86400000).toDateString();
-  p.streak = (p.lastDate === yest) ? (p.streak || 0) + 1 : 1;
-  p.lastDate = today;
-}
-
-function showModal(em, title, body) {
-  document.getElementById("mEm").textContent = em;
-  document.getElementById("mTit").textContent = title;
-  document.getElementById("mBod").textContent = body;
-  document.getElementById("mOv").classList.add("show");
-}
-
-function showToast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2200);
-}
-
-function getBestVoice(lang) {
-  // Chercher la meilleure voix disponible pour une langue
-  const voices = window.speechSynthesis.getVoices();
-  // Correspondance exacte d'abord
-  let v = voices.find(v => v.lang === lang);
-  // Puis préfixe langue (ex: "ca" pour "ca-ES", "ca-AD")
-  if (!v) v = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
-  // Fallback sur voix par défaut
-  return v || null;
-}
-
-function spk(ca, es) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  
-  // Charger les voix (peut être async au premier appel)
-  const voices = window.speechSynthesis.getVoices();
-  if (voices.length === 0) {
-    // Attendre que les voix soient chargées
-    window.speechSynthesis.onvoiceschanged = () => spk(ca, es);
-    return;
-  }
-  
-  if (ca) {
-    const u = new SpeechSynthesisUtterance(ca);
-    u.lang = "ca-ES";
-    u.rate = 0.82;
-    const caVoice = getBestVoice("ca-ES");
-    if (caVoice) u.voice = caVoice;
-    window.speechSynthesis.speak(u);
-  }
-  
-  if (es && es !== "—") {
-    // Pause silencieuse entre catalan et espagnol
-    const pause = new SpeechSynthesisUtterance(" . ");
-    pause.volume = 0;
-    pause.rate = 0.5;
-    window.speechSynthesis.speak(pause);
-    
-    const u2 = new SpeechSynthesisUtterance(es);
-    u2.lang = "es-ES";
-    u2.rate = 0.85;
-    const esVoice = getBestVoice("es-ES");
-    if (esVoice) u2.voice = esVoice;
-    window.speechSynthesis.speak(u2);
-  }
-}
-
-const CFC = ["#A78BFA","#00E5B4","#FFD60A","#FB7185","#38BDF8","#FF6B35","#FD79A8"];
-function confetti(n) {
-  const w = document.getElementById("cf");
-  for (let i = 0; i < n; i++) {
-    const p = document.createElement("div"); p.className = "cf";
-    p.style.cssText = `left:${Math.random()*100}vw;background:${CFC[Math.floor(Math.random()*CFC.length)]};width:${Math.random()*8+5}px;height:${Math.random()*11+7}px;--d:${(Math.random()*1.2+1).toFixed(1)}s;--dl:${(Math.random()*.3).toFixed(2)}s`;
-    w.appendChild(p); p.addEventListener("animationend", function() { this.remove(); });
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════
-// EVENT LISTENERS
-// ═══════════════════════════════════════════════════════════════
-// Auth Magic Link
-document.getElementById("btnAuthGo").addEventListener("click", () => {
-  const email = document.getElementById("authEmail").value.trim()
-  if (!email || !email.includes("@")) {
-    const e = document.getElementById("authError")
-    e.textContent = "Email invalide — vérifie le format."
-    e.style.display = "block"
-    return
-  }
-  sendMagicLink(email)
-})
+// ── Enter sur le champ email → focus pin1 ──
 document.getElementById("authEmail").addEventListener("keydown", e => {
-  if (e.key === "Enter") document.getElementById("btnAuthGo").click()
-})
-document.getElementById("btnAuthRetry").addEventListener("click", () => {
-  const email = document.getElementById("authEmailDisplay").textContent
-  if (email) sendMagicLink(email)
-})
-document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
-  document.getElementById("authStep1").style.display = "block"
-  document.getElementById("authStep2").style.display = "none"
-  const btn = document.getElementById("btnAuthGo")
-  btn.disabled = false
-  btn.textContent = "Envoyer mon lien magique 🔗"
-  document.getElementById("authEmail").value = ""
-  document.getElementById("authEmail").focus()
-})
+  if (e.key === "Enter") { document.getElementById("pin1")?.focus(); }
+});
 
+// ── Retour depuis step2 (reset envoyé) ──
+document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
+  document.getElementById("authStep1").style.display = "block";
+  document.getElementById("authStep2").style.display = "none";
+});
+
+// ── Code oublié ──
+document.getElementById("btnForgotPin").addEventListener("click", sendPinReset);
+
+// ── Bouton "C'est parti" → register ──
 document.getElementById("btnStart").addEventListener("click", () => {
-  // Mode nouveau compte
-  const label = document.getElementById("authModeLabel");
-  const infoBox = document.getElementById("authInfoBox");
-  const btn = document.getElementById("btnAuthGo");
-  if (label) label.textContent = "Créer mon compte 🐉";
-  if (infoBox) infoBox.style.display = "flex";
-  if (btn) btn.textContent = "Envoyer mon lien magique 🔗";
-  document.getElementById("authEmail").placeholder = "Ton adresse email";
+  setAuthMode("register");
   show("sAuth");
 });
+
+// ── Bouton "J'ai déjà un compte" → login ──
 document.getElementById("btnAlreadyAccount").addEventListener("click", () => {
-  // Mode reconnexion
-  const label = document.getElementById("authModeLabel");
-  const infoBox = document.getElementById("authInfoBox");
-  const btn = document.getElementById("btnAuthGo");
-  if (label) label.textContent = "Se reconnecter 👋";
-  if (infoBox) infoBox.style.display = "none";
-  if (btn) btn.textContent = "Recevoir mon lien de connexion 🔗";
-  document.getElementById("authEmail").placeholder = "Ton adresse email";
-  document.getElementById("authEmail").value = "";
-  document.getElementById("authError").style.display = "none";
+  setAuthMode("login");
+  const lastEmail = localStorage.getItem("drac_last_email");
+  if (lastEmail) {
+    const inp = document.getElementById("authEmail");
+    if (inp) { inp.value = lastEmail; setTimeout(() => document.getElementById("pin1")?.focus(), 200); }
+  }
   show("sAuth");
-  setTimeout(() => document.getElementById("authEmail").focus(), 200);
 });
-// Afficher banner bêta sur l'onboarding si applicable
-setTimeout(() => {
-  if (getBetaTester()) showBetaWelcome();
-}, 100);
 
 // ═══════════════════════════════════════════════════════════════
 // PWA INSTALL PROMPT
