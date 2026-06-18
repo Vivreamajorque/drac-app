@@ -1385,7 +1385,7 @@ function renderMap() {
 
   filtered.forEach((mod, idx) => {
     const prevDone = idx === 0 || (p.done||[]).includes(filtered[idx-1].id);
-    const unlocked = prevDone;
+    const unlocked = prevDone || !!getBetaTester(); // Bêta-testeurs = tout débloqué
     const done = (p.done||[]).includes(mod.id);
 
     // Stats FSRS pour ce module
