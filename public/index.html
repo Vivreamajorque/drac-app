@@ -1445,6 +1445,7 @@ function renderMap() {
 
   filtered.forEach((mod, idx) => {
     const done = (p.done||[]).includes(mod.id);
+    const unlocked = idx === 0 || (p.done||[]).includes(filtered[idx-1].id);
 
     // Stats FSRS pour ce module
     const modWords = ALL_WORDS.filter(w => w.modId === mod.id);
@@ -1454,7 +1455,7 @@ function renderMap() {
 
     const lvCls = "lvl-" + mod.level.replace("-","").replace("é","e");
     const card = document.createElement("div");
-    card.className = "mod-card" + (done ? " done" : "");
+    card.className = "mod-card" + (done ? " done" : "") + (unlocked ? "" : " locked");
     card.innerHTML = `
       <div class="mod-ico">${mod.icon}</div>
       <div class="mod-info">
@@ -1465,8 +1466,12 @@ function renderMap() {
         </div>
         ${modLearned > 0 ? `<div class="mod-retention">🧠 ${modLearned}/${mod.words.length} vus · ${modMature} mémorisés</div>` : ""}
       </div>
-      <div class="mod-stars">${done ? "✓" : "→"}</div>`;
-    card.addEventListener("click", () => startModule(mod.id));
+      <div class="mod-stars">${done ? "✓" : (unlocked ? "→" : "🔒")}</div>`;
+    if (unlocked) {
+      card.addEventListener("click", () => startModule(mod.id));
+    } else {
+      card.addEventListener("click", () => showToast("Termine le module précédent d'abord !"));
+    }
     ml.appendChild(card);
   });
 }
@@ -2040,6 +2045,15 @@ function finishSession() {
   // Mots vus dans cette session (hors items quiz)
   const seenWords = curSession.filter(item => item.word).map(item => item.word);
   const seenCount = seenWords.length;
+
+  // Marquer le module courant comme done pour débloquer le suivant
+  if (curMod) {
+    if (!p.done) p.done = [];
+    if (!p.done.includes(curMod.id)) {
+      p.done.push(curMod.id);
+      save();
+    }
+  }
 
   // Titre selon perf
   const titles = {
