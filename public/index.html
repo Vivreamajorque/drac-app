@@ -1679,13 +1679,18 @@ function renderFlash(item, isDuo) {
   // Phrase du module si dernier mot du flash
   const mod = MODULES.find(m => m.id === w.modId);
   const phrases = mod ? (mod.phrases || []) : [];
-  const phraseEl = phrases.length > 0
+  // Varier la phrase selon l'index du mot dans le module
+  const modWords = ALL_WORDS.filter(x => x.modId === w.modId);
+  const wordPosInMod = modWords.findIndex(x => x.id === w.id);
+  const phIdx = phrases.length > 0 ? wordPosInMod % phrases.length : 0;
+  const ph = phrases[phIdx] || phrases[0];
+  const phraseEl = ph
     ? `<div class="phrase-box">
          <div class="ph-title">💬 Exemple en situation</div>
-         <div class="ph-fr"><span style="font-size:10px;opacity:.6">FR</span> ${phrases[0].fr}</div>
-         <div class="ph-ca">🏴 ${phrases[0].ca}</div>
-         ${isDuo && phrases[0].es && phrases[0].es !== "—" ? `<div class="ph-es">🇪🇸 ${phrases[0].es}</div>` : ""}
-         ${phrases[0].note ? `<div class="ph-note">📌 ${phrases[0].note}</div>` : ""}
+         <div class="ph-fr"><span style="font-size:10px;opacity:.6">FR</span> ${ph.fr}</div>
+         <div class="ph-ca">🏴 ${ph.ca}</div>
+         ${isDuo && ph.es && ph.es !== "—" ? `<div class="ph-es">🇪🇸 ${ph.es}</div>` : ""}
+         ${ph.note ? `<div class="ph-note">📌 ${ph.note}</div>` : ""}
        </div>`
     : "";
 
@@ -1721,9 +1726,15 @@ function renderRecog(item, isDuo) {
   const p = prof();
   const q = MODULES.find(m => m.id === w.modId)?.quiz?.[0];
 
-  // Distracteurs depuis d'autres mots
-  const distractors = ALL_WORDS
-    .filter(x => x.id !== w.id)
+  // Distracteurs du même module en priorité, sinon même niveau
+  const sameModWords = ALL_WORDS.filter(x => x.modId === w.modId && x.id !== w.id);
+  const sameLevelWords = ALL_WORDS.filter(x => {
+    const mod = MODULES.find(m => m.id === x.modId);
+    const wMod = MODULES.find(m => m.id === w.modId);
+    return mod && wMod && mod.level === wMod.level && x.id !== w.id;
+  });
+  const pool = sameModWords.length >= 3 ? sameModWords : sameLevelWords;
+  const distractors = pool
     .sort(() => Math.random() - .5)
     .slice(0, 3);
   const opts = [w.ca, ...distractors.map(x => x.ca)].sort(() => Math.random() - .5);
@@ -2147,13 +2158,51 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 2200);
 }
 
+function getBestVoice(lang) {
+  // Chercher la meilleure voix disponible pour une langue
+  const voices = window.speechSynthesis.getVoices();
+  // Correspondance exacte d'abord
+  let v = voices.find(v => v.lang === lang);
+  // Puis préfixe langue (ex: "ca" pour "ca-ES", "ca-AD")
+  if (!v) v = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
+  // Fallback sur voix par défaut
+  return v || null;
+}
+
 function spk(ca, es) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  if (ca) { const u = new SpeechSynthesisUtterance(ca); u.lang = "ca-ES"; u.rate = 0.82; window.speechSynthesis.speak(u); }
+  
+  // Charger les voix (peut être async au premier appel)
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) {
+    // Attendre que les voix soient chargées
+    window.speechSynthesis.onvoiceschanged = () => spk(ca, es);
+    return;
+  }
+  
+  if (ca) {
+    const u = new SpeechSynthesisUtterance(ca);
+    u.lang = "ca-ES";
+    u.rate = 0.82;
+    const caVoice = getBestVoice("ca-ES");
+    if (caVoice) u.voice = caVoice;
+    window.speechSynthesis.speak(u);
+  }
+  
   if (es && es !== "—") {
-    const p2 = new SpeechSynthesisUtterance(" "); p2.lang = "ca-ES"; p2.rate = 0.1; window.speechSynthesis.speak(p2);
-    const u2 = new SpeechSynthesisUtterance(es); u2.lang = "es-ES"; u2.rate = 0.85; window.speechSynthesis.speak(u2);
+    // Pause silencieuse entre catalan et espagnol
+    const pause = new SpeechSynthesisUtterance(" . ");
+    pause.volume = 0;
+    pause.rate = 0.5;
+    window.speechSynthesis.speak(pause);
+    
+    const u2 = new SpeechSynthesisUtterance(es);
+    u2.lang = "es-ES";
+    u2.rate = 0.85;
+    const esVoice = getBestVoice("es-ES");
+    if (esVoice) u2.voice = esVoice;
+    window.speechSynthesis.speak(u2);
   }
 }
 
