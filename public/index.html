@@ -1055,23 +1055,29 @@ function initAuth() {
     return
   }
 
-  // 3. Rien → écran auth
-  show('sAuth')
-  // Pré-remplir email si session précédente expirée
-  setTimeout(() => {
-    const lastEmail = localStorage.getItem('drac_last_email')
-    if (lastEmail) {
-      const inp = document.getElementById('authEmail')
-      if (inp) inp.value = lastEmail
-      const err = document.getElementById('authError')
-      if (err) {
-        err.style.display = 'block'
-        err.style.background = 'rgba(124,92,191,.12)'
-        err.style.color = 'var(--acc)'
-        err.textContent = '🔗 Ta session a expiré — renvoie-toi un lien magique !'
+  // 3. Rien → vérifier si première visite ou non
+  const hasVisited = localStorage.getItem('drac_last_email') || localStorage.getItem('drac4_p')
+  if (hasVisited) {
+    // Déjà utilisé → direct sAuth avec message
+    show('sAuth')
+    setTimeout(() => {
+      const lastEmail = localStorage.getItem('drac_last_email')
+      if (lastEmail) {
+        const inp = document.getElementById('authEmail')
+        if (inp) inp.value = lastEmail
+        const err = document.getElementById('authError')
+        if (err) {
+          err.style.display = 'block'
+          err.style.background = 'rgba(124,92,191,.12)'
+          err.style.color = 'var(--acc)'
+          err.textContent = '🔗 Ta session a expiré — renvoie-toi un lien magique !'
+        }
       }
-    }
-  }, 100)
+    }, 100)
+  } else {
+    // Première visite → onboarding
+    show('sOnboard')
+  }
 }
 
 
