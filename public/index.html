@@ -994,7 +994,9 @@ function logout() {
 
 // Init auth
 function initAuth() {
-  // 0. Magic link dans l'URL ?
+  // 0. Mode bêta-testeur dans l'URL ?
+  checkBetaMode();
+  // 0b. Magic link dans l'URL ?
   if (checkMagicLinkInURL()) return
   // 1. Déjà connecté sur Drac ?
   const dracAuth = getAuthState()
@@ -1103,6 +1105,63 @@ function checkMagicLinkInURL() {
   return false
 }
 
+
+// ═══════════════════════════════════════════════════════════════
+// MODE BÊTA-TESTEUR
+// ═══════════════════════════════════════════════════════════════
+function checkBetaMode() {
+  const params = new URLSearchParams(window.location.search);
+  const beta = params.get('beta');
+  if (!beta) return false;
+
+  // Nettoyer l'URL mais garder en mémoire
+  localStorage.setItem('drac_beta_tester', beta);
+  window.history.replaceState({}, '', window.location.pathname);
+  return true;
+}
+
+function getBetaTester() {
+  return localStorage.getItem('drac_beta_tester');
+}
+
+function showBetaWelcome() {
+  const name = getBetaTester();
+  if (!name) return;
+
+  // Personnaliser l'onboarding avec un message bêta
+  const existing = document.getElementById('betaWelcomeBanner');
+  if (existing) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'betaWelcomeBanner';
+  banner.style.cssText = `
+    background: linear-gradient(135deg, rgba(124,92,191,.15), rgba(90,173,165,.1));
+    border: 1px solid rgba(124,92,191,.3);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 0 0 20px;
+    text-align: center;
+  `;
+
+  const firstName = name.charAt(0).toUpperCase() + name.slice(1);
+  banner.innerHTML = \`
+    <div style="font-size:24px;margin-bottom:8px">🎓</div>
+    <div style="font-size:14px;font-weight:800;color:var(--acc);margin-bottom:4px">Bienvenue \${firstName} !</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.5">
+      Tu es invité(e) à tester Drac en avant-première.<br>
+      Ton avis compte beaucoup — <strong style="color:var(--fg)">explore librement !</strong>
+    </div>
+    <a href="mailto:amely.attias@gmail.com?subject=Avis bêta Drac 🐉&body=Bonjour Amely,%0A%0AJ'ai testé Drac et voici mes impressions :%0A%0A✅ Ce qui m'a plu :%0A%0A❌ Ce qui m'a manqué :%0A%0A💡 Mes suggestions :%0A%0A----%0AEnvoyé depuis l'app Drac"
+       style="display:inline-block;margin-top:12px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--fg);text-decoration:none">
+      ✉️ Donner mon avis à Amely
+    </a>
+  \`;
+
+  // Insérer dans l'onboarding
+  const obSub = document.querySelector('.ob-sub');
+  if (obSub) obSub.parentNode.insertBefore(banner, obSub);
+}
+
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
@@ -1190,6 +1249,16 @@ function goHome() { renderHome(); show("sHome"); }
 function goMap()  {
   const p = prof(); if (!p) return;
   applyMode(p); renderMap(); show("sMap");
+  // Bouton feedback flottant bêta-testeur
+  const tester = getBetaTester();
+  if (tester && !document.getElementById('betaFeedbackBtn')) {
+    const btn = document.createElement('a');
+    btn.id = 'betaFeedbackBtn';
+    btn.href = 'mailto:amely.attias@gmail.com?subject=Avis%20b%C3%AAta%20Drac%20%F0%9F%90%89&body=Bonjour%20Amely%2C%0A%0AJ%27ai%20test%C3%A9%20Drac%20et%20voici%20mes%20impressions%20%3A%0A%0A%E2%9C%85%20Ce%20qui%20m%27a%20plu%20%3A%0A%0A%E2%9D%8C%20Ce%20qui%20m%27a%20manqu%C3%A9%20%3A%0A%0A%F0%9F%92%A1%20Mes%20suggestions%20%3A%0A%0A----%0AEnvoy%C3%A9%20depuis%20Drac';
+    btn.style.cssText = 'position:fixed;bottom:20px;right:16px;z-index:999;background:linear-gradient(135deg,#7C5CBF,#5A3E9E);color:#fff;text-decoration:none;border-radius:24px;padding:10px 16px;font-size:12px;font-weight:800;box-shadow:0 4px 20px rgba(124,92,191,.4);';
+    btn.innerHTML = '&#10003;&#10003; Mon avis &#8594;';
+    document.body.appendChild(btn);
+  }
 }
 function goCreate() { initCreate(); show("sCreate"); }
 
@@ -1972,8 +2041,12 @@ document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
 })
 
 document.getElementById("btnStart").addEventListener("click", () => {
-  show("sAuth");  // Toujours passer par l'auth
+  show("sAuth");
 });
+// Afficher banner bêta sur l'onboarding si applicable
+setTimeout(() => {
+  if (getBetaTester()) showBetaWelcome();
+}, 100);
 document.getElementById("btnPlay").addEventListener("click", () => {
   if (selId) { const p = profiles.find(x => x.id === selId); if (p) { applyMode(p); renderMap(); show("sMap"); } }
 });
