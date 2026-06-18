@@ -2582,7 +2582,24 @@ initCreate();
 
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").catch(() => {});
+    navigator.serviceWorker.register("/sw.js").then(reg => {
+      reg.addEventListener("updatefound", () => {
+        const newSW = reg.installing;
+        if (!newSW) return;
+        newSW.addEventListener("statechange", () => {
+          if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+            // Nouvelle version prête — afficher le toast
+            const t = document.createElement("div");
+            t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7C5CBF,#5A3E9E);color:#fff;padding:14px 20px;border-radius:24px;font-size:13px;font-weight:800;z-index:9999;box-shadow:0 4px 20px rgba(124,92,191,.5);text-align:center;cursor:pointer;max-width:300px;line-height:1.4;font-family:'Nunito',sans-serif";
+            t.innerHTML = "✨ Nouvelle version disponible !<br><span style='font-size:11px;font-weight:400;opacity:.85'>Ferme et rouvre l'app pour en profiter</span>";
+            t.addEventListener("click", () => t.remove());
+            document.body.appendChild(t);
+            // Disparaît automatiquement après 8 secondes
+            setTimeout(() => t.remove(), 8000);
+          }
+        });
+      });
+    }).catch(() => {});
   }
 });
 </script>
