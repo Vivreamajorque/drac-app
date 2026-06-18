@@ -1144,9 +1144,9 @@ function showBetaWelcome() {
   `;
 
   const firstName = name.charAt(0).toUpperCase() + name.slice(1);
-  banner.innerHTML = \`
+  banner.innerHTML = `
     <div style="font-size:24px;margin-bottom:8px">🎓</div>
-    <div style="font-size:14px;font-weight:800;color:var(--acc);margin-bottom:4px">Bienvenue \${firstName} !</div>
+    <div style="font-size:14px;font-weight:800;color:var(--acc);margin-bottom:4px">Bienvenue ${firstName} !</div>
     <div style="font-size:12px;color:var(--muted);line-height:1.5">
       Tu es invité(e) à tester Drac en avant-première.<br>
       Ton avis compte beaucoup — <strong style="color:var(--fg)">explore librement !</strong>
@@ -1155,7 +1155,7 @@ function showBetaWelcome() {
        style="display:inline-block;margin-top:12px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--fg);text-decoration:none">
       ✉️ Donner mon avis à Amely
     </a>
-  \`;
+  `;
 
   // Insérer dans l'onboarding
   const obSub = document.querySelector('.ob-sub');
@@ -1801,21 +1801,21 @@ function finishSession() {
 
   // Stats grid — uniquement les stats utiles
   const sg = document.getElementById("resStatsGrid");
-  sg.innerHTML = \`
+  sg.innerHTML = `
     <div class="res-stat"><div class="v">${accuracy}%</div><div class="l">Réussite</div></div>
     <div class="res-stat"><div class="v" style="color:var(--green)">${seenCount}</div><div class="l">Mots vus</div></div>
     <div class="res-stat"><div class="v" style="color:var(--blue)">${stats.retention || 0}%</div><div class="l">Rétention</div></div>
-    <div class="res-stat"><div class="v" style="color:var(--acc2)">${stats.due || 0}</div><div class="l">À réviser</div></div>\`;
+    <div class="res-stat"><div class="v" style="color:var(--acc2)">${stats.due || 0}</div><div class="l">À réviser</div></div>`;
 
   // Récap des mots vus
   const nextReviewEl = document.getElementById("nextReview");
   if (seenWords.length > 0) {
     const wordPills = seenWords.slice(0, 8).map(w =>
-      \`<span style="display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;margin:3px">\${w.ca} <span style="color:var(--muted);font-size:10px">\${w.fr}</span></span>\`
+      `<span style="display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;margin:3px">${w.ca} <span style="color:var(--muted);font-size:10px">${w.fr}</span></span>`
     ).join("");
-    nextReviewEl.innerHTML = \`
+    nextReviewEl.innerHTML = `
       <div style="margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700">Mots de cette session</div>
-      <div style="line-height:2">\${wordPills}\</div>\`;
+      <div style="line-height:2">${wordPills}\</div>`;
   }
 
   // Bouton "Module suivant" si disponible
