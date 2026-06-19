@@ -1759,7 +1759,6 @@ function renderFlash(item, isDuo) {
     </div>
     <button class="btn-next-word" id="btnNextWord">Suivant →</button>`;
 
-  document.getElementById("bLC").addEventListener("click", () => spk(w.ca, isDuo ? w.es : null));
   // Vocal sur l'exemple en situation
   const bLPh = document.getElementById("bLPh");
   if (bLPh && ph) bLPh.addEventListener("click", (e) => { e.stopPropagation(); spk(ph.ca, isDuo && ph.es && ph.es !== "—" ? ph.es : null); });
@@ -1929,12 +1928,8 @@ function renderRecall(item, isDuo) {
       fb.className = "fb-bar ko";
       fb.textContent = koMsgs[0] + " " + w.ca;
     }
-    document.getElementById("btnCheck").style.display = "none";
-    document.getElementById("btnNext").style.display = "block";
-    document.getElementById("btnNext").addEventListener("click", () => applyRating(correct ? 3 : 1, correct));
   }
 
-  document.getElementById("btnCheck").addEventListener("click", check);
   inp.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
 }
 
@@ -2152,6 +2147,7 @@ function editProfile(profId) {
 }
 
 function initCreate() {
+  try {
   selAva = AVATARS[0]; selAge = "9-12"; selCogn = "standard"; selLang = "duo";
   document.getElementById("inpName").value = "";
 
@@ -2190,7 +2186,8 @@ function initCreate() {
     b.addEventListener("click", () => { selLang = o.v; document.querySelectorAll(".lang-btn").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); });
     lr.appendChild(b);
   });
-}
+
+  } catch(e) { console.error("initCreate error:", e); }}
 
 function createProfile() {
   const name = document.getElementById("inpName").value.trim();
@@ -2320,58 +2317,7 @@ function confetti(n) {
 // EVENT LISTENERS
 // ═══════════════════════════════════════════════════════════════
 // Auth Magic Link
-document.getElementById("btnAuthGo").addEventListener("click", () => {
-  const email = document.getElementById("authEmail").value.trim()
-  if (!email || !email.includes("@")) {
-    const e = document.getElementById("authError")
-    e.textContent = "Email invalide — vérifie le format."
-    e.style.display = "block"
-    return
-  }
-  sendMagicLink(email)
-})
-document.getElementById("authEmail").addEventListener("keydown", e => {
-  if (e.key === "Enter") document.getElementById("btnAuthGo").click()
-})
-document.getElementById("btnAuthRetry").addEventListener("click", () => {
-  const email = document.getElementById("authEmailDisplay").textContent
-  if (email) sendMagicLink(email)
-})
-document.getElementById("btnAuthChangeEmail").addEventListener("click", () => {
-  document.getElementById("authStep1").style.display = "block"
-  document.getElementById("authStep2").style.display = "none"
-  const btn = document.getElementById("btnAuthGo")
-  btn.disabled = false
-  btn.textContent = "Envoyer mon lien magique 🔗"
-  document.getElementById("authEmail").value = ""
-  document.getElementById("authEmail").focus()
-})
 
-document.getElementById("btnStart").addEventListener("click", () => {
-  // Mode nouveau compte
-  const label = document.getElementById("authModeLabel");
-  const infoBox = document.getElementById("authInfoBox");
-  const btn = document.getElementById("btnAuthGo");
-  if (label) label.textContent = "Créer mon compte 🐉";
-  if (infoBox) infoBox.style.display = "flex";
-  if (btn) btn.textContent = "Envoyer mon lien magique 🔗";
-  document.getElementById("authEmail").placeholder = "Ton adresse email";
-  initCreate(); show('sCreate');
-});
-document.getElementById("btnAlreadyAccount").addEventListener("click", () => {
-  // Mode reconnexion
-  const label = document.getElementById("authModeLabel");
-  const infoBox = document.getElementById("authInfoBox");
-  const btn = document.getElementById("btnAuthGo");
-  if (label) label.textContent = "Se reconnecter 👋";
-  if (infoBox) infoBox.style.display = "none";
-  if (btn) btn.textContent = "Recevoir mon lien de connexion 🔗";
-  document.getElementById("authEmail").placeholder = "Ton adresse email";
-  document.getElementById("authEmail").value = "";
-  document.getElementById("authError").style.display = "none";
-  initCreate(); show('sCreate');
-  setTimeout(() => document.getElementById("authEmail").focus(), 200);
-});
 // Afficher banner bêta sur l'onboarding si applicable
 setTimeout(() => {
   if (getBetaTester()) showBetaWelcome();
@@ -2398,26 +2344,6 @@ window.addEventListener("appinstalled", () => {
 });
 
 // Bouton install sur l'écran d'accueil
-document.getElementById("btnInstallHome").addEventListener("click", async () => {
-  if (deferredInstallPrompt) {
-    // Android / Chrome : prompt natif
-    deferredInstallPrompt.prompt();
-    const { outcome } = await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-  } else {
-    // iOS Safari ou déjà installé
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    const isInStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
-    if (isInStandalone) {
-      showToast("✅ Drac est déjà installé sur ton téléphone !");
-    } else if (isIOS) {
-      showModal("📲", "Installer sur iPhone", "1. Appuie sur le bouton Partager ↑ en bas de Safari\n2. Choisis \u00ab Sur l'\u00e9cran d'accueil \u00bb\n3. Appuie sur \u00ab Ajouter \u00bb");
-    } else {
-      showModal("📲", "Installer Drac",
-        "Dans ton navigateur, ouvre le menu (⋮) et choisis « Ajouter à l'écran d'accueil » ou « Installer l'application ».");
-    }
-  }
-});
 
 document.getElementById("btnInstall").addEventListener("click", async () => {
   if (!deferredInstallPrompt) {
@@ -2469,7 +2395,6 @@ window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js").catch(() => {});
   }
-});
-</script>
+});</script>
 </body>
 </html>
