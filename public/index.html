@@ -378,7 +378,7 @@ body.m-adult .btn-prim{background:linear-gradient(135deg,#2DD4A0,#1A8A6F);}
 </div>
 
 <!-- ═══ CRÉER PROFIL ═══ -->
-<div class="screen" id="sCreate">
+<div class="screen on" id="sCreate">
   <div class="page-hd">
     <button class="btn-back" id="btnBackC">←</button>
     <div><div class="page-title">Nouveau profil</div><div class="page-sub">Qui va apprendre ?</div></div>
@@ -1064,12 +1064,17 @@ function logout() {
 }
 
 function initAuth() {
-  checkBetaMode();
-  if (profiles.length > 0) {
-    const p = prof();
-    if (p) { applyMode(p); renderMap(); show('sMap'); }
-    else goHome();
-  } else {
+  try {
+    checkBetaMode();
+    if (profiles.length > 0) {
+      const p = prof();
+      if (p) { applyMode(p); renderMap(); show('sMap'); }
+      else { renderHome(); show('sHome'); }
+    } else {
+      initCreate(); show('sCreate');
+    }
+  } catch(e) {
+    console.error('initAuth error:', e);
     initCreate(); show('sCreate');
   }
 }
